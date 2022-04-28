@@ -3,7 +3,7 @@ entries:
   kubeslice-controller:
   - apiVersion: v2
     appVersion: latest
-    created: "2022-04-28T19:41:20.200859537+05:30"
+    created: "2022-04-28T19:50:54.851797092+05:30"
     description: A Helm chart for kubeslice-controller
     digest: fad8555e7293d297d050a07fe955ed957a87eef7d645e8d7fa6f0833871a3a70
     name: kubeslice-controller
@@ -11,4 +11,4 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/tree/master/kubeslice-controller/kubeslice-controller-1.0.0.tgz
     version: 1.0.0
-generated: "2022-04-28T19:41:20.200006946+05:30"
+generated: "2022-04-28T19:50:54.851328457+05:30"
