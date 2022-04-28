@@ -1,0 +1,1 @@
+kubeslice controller installation successful!

@@ -1,0 +1,19 @@
+# Default values for k-native.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+kubeslice:
+  rbacproxy:
+    image: gcr.io/kubebuilder/kube-rbac-proxy
+    tag: v0.8.0
+  controller:
+    loglevel: info
+    rbacResourcePrefix: kubeslice-rbac
+    projectnsPrefix: kubeslice
+    endpoint: https://127.0.0.1:36515
+    image: aveshasystems/kubeslice-controller
+    tag: latest
+    pullPolicy: Always
+  ovpnJob:
+    image: aveshasystems/gateway-certs-generator
+    tag: latest
