@@ -1,0 +1,26 @@
+name: Update Index
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '**.tgz'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Helm Installation
+        uses: azure/setup-helm@v1.1
+        with:
+          version: v3.7.0
+      - name: Update Index
+        run: |
+          helm repo index .
+          git config --global user.email "avesha-bot@aveshasystems.com"
+          git config --global user.name "Avesha Bot"
+          git add index.yaml
+          git commit -m "Update chart index"
+          git push
