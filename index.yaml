@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-02T11:05:08.23887768+05:30"
+    created: "2022-05-02T11:16:37.066810516+05:30"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -27,7 +27,7 @@ entries:
   kubeslice-controller:
   - apiVersion: v2
     appVersion: latest
-    created: "2022-05-02T11:05:08.24085277+05:30"
+    created: "2022-05-02T11:16:37.067132384+05:30"
     description: A Helm chart for kubeslice-controller
     digest: fad8555e7293d297d050a07fe955ed957a87eef7d645e8d7fa6f0833871a3a70
     name: kubeslice-controller
@@ -35,4 +35,4 @@ entries:
     urls:
     - kubeslice-controller-1.0.0.tgz
     version: 1.0.0
-generated: "2022-05-02T11:05:08.234709918+05:30"
+generated: "2022-05-02T11:16:37.06444827+05:30"
