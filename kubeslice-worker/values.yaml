@@ -1,0 +1,56 @@
+operator:
+  image: docker.io/aveshasystems/kubeslice-operator
+  tag: 1.17.0
+  pullPolicy: IfNotPresent
+  logLevel: INFO
+
+## Base64 encoded secret values from hub cluster
+hubSecret:
+  namespace:
+  endpoint:
+  ca.crt:
+  token:
+
+cluster:
+  name:
+  nodeIp:
+
+router:
+  image: docker.io/aveshasystems/kubeslice-vl3_ucnf-nse
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+routerSidecar:
+  image: nexus.dev.aveshalabs.io/kubeslice-router-sidecar
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+netop:
+  networkInterface: eth0
+  image: docker.io/aveshasystems/kubeslice-netops
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+gateway:
+  image: docker.io/aveshasystems/kubeslice-gw-sidecar
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+  logLevel: INFO
+
+openvpn:
+  server:
+    image: docker.io/aveshasystems/kubeslice-openvpn-server.ubuntu.18.04
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+  client:
+    image: docker.io/aveshasystems/kubeslice-openvpn-client.alpine.amd64
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+
+nsm:
+  forwardingPlane: kernel
+
+jaeger:
+  enabled: false
+
+imagePullSecrets: []

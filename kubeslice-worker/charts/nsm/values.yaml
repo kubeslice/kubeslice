@@ -1,0 +1,31 @@
+---
+# Default values for nsm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+registry: nexus.dev.aveshalabs.io
+org: avesha
+tag: 0.6.1
+pullPolicy: Always
+
+forwardingPlane: kernel
+insecure: true
+preferredRemoteMechanism:
+
+vpp:
+  image: vppagent-forwarder
+
+kernel:
+  image: kernel-forwarder
+  resources:
+    limitCPU: 1
+    requestsCPU: 1m
+
+global:
+  # set to true to enable Jaeger tracing for NSM components
+  JaegerTracing: true
+
+metricsCollectorEnabled: false
+
+imagePullSecrets:
+- name: avesha-nexus

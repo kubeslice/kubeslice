@@ -1,0 +1,9 @@
+apiVersion: v2
+name: kubeslice-operator
+description: KubeSlice Operator
+
+type: application
+
+version: 1.17.1
+
+appVersion: 1.17.0

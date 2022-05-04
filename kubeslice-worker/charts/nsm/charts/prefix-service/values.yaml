@@ -1,0 +1,13 @@
+---
+# Default values for prefix-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# NOTE: the variables might be overriden by helm command line options, see helm.mk
+registry: nexus.dev.aveshalabs.io
+org: avesha
+tag: 0.6.1
+pullPolicy: IfNotPresent
+
+serviceAccount:
+  name: nsmgr-acc
