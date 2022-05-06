@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-02T11:16:37.066810516+05:30"
+    created: "2022-05-06T14:32:48.486536303Z"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -24,10 +24,42 @@ entries:
     urls:
     - cert-manager-v1.7.0.tgz
     version: v1.7.0
+  istio-base:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-06T14:32:48.490441175Z"
+    description: Helm chart for deploying Istio cluster resources and CRDs
+    digest: 8df01c40144b29c7e7f3ea9a96758c26338ee42214a92aff83b23f7f7ab456d9
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    name: istio-base
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - istio-base-1.13.3.tgz
+    version: 1.13.3
+  istio-discovery:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-06T14:32:48.492937693Z"
+    description: Helm chart for istio control plane
+    digest: ea3519597f8ffc547820172141038543e774dbbd21f53cf7542ade8669688108
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istiod
+    - istio-discovery
+    name: istio-discovery
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - istio-discovery-1.13.3.tgz
+    version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
     appVersion: latest
-    created: "2022-05-02T11:16:37.067132384+05:30"
+    created: "2022-05-06T14:32:48.493446976Z"
     description: A Helm chart for kubeslice-controller
     digest: fad8555e7293d297d050a07fe955ed957a87eef7d645e8d7fa6f0833871a3a70
     name: kubeslice-controller
@@ -35,4 +67,4 @@ entries:
     urls:
     - kubeslice-controller-1.0.0.tgz
     version: 1.0.0
-generated: "2022-05-02T11:16:37.06444827+05:30"
+generated: "2022-05-06T14:32:48.482297642Z"
