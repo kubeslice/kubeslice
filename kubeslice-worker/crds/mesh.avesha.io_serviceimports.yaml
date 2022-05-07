@@ -1,0 +1,147 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  name: serviceimports.mesh.avesha.io
+spec:
+  group: mesh.avesha.io
+  names:
+    kind: ServiceImport
+    listKind: ServiceImportList
+    plural: serviceimports
+    shortNames:
+    - svcim
+    singular: serviceimport
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.slice
+      name: Slice
+      type: string
+    - jsonPath: .status.exposedPorts
+      name: Port(s)
+      type: string
+    - jsonPath: .status.availableEndpoints
+      name: Endpoints
+      type: integer
+    - jsonPath: .status.importStatus
+      name: Status
+      type: string
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: ServiceImport is the Schema for the serviceimports API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ServiceImportSpec defines the desired state of ServiceImport
+            properties:
+              dnsName:
+                description: DNSName shows the FQDN to reach the service
+                type: string
+              ports:
+                description: Ports which should be exposed through the service
+                items:
+                  description: ServicePort is the port exposed by ServicePod
+                  properties:
+                    containerPort:
+                      description: Port number exposed from the container
+                      format: int32
+                      type: integer
+                    name:
+                      description: Name of the port
+                      type: string
+                    protocol:
+                      default: TCP
+                      description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
+                        to "TCP".
+                      type: string
+                  required:
+                  - containerPort
+                  type: object
+                type: array
+              slice:
+                description: Slice denotes the slice which the app is part of
+                type: string
+            required:
+            - dnsName
+            - ports
+            - slice
+            type: object
+          status:
+            description: ServiceImportStatus defines the observed state of ServiceImport
+            properties:
+              availableEndpoints:
+                description: AvailableEndpoints shows the number of available endpoints
+                type: integer
+              endpoints:
+                description: Endpoints which provide the service
+                items:
+                  description: ServiceEndpoint contains details of a single endpoint
+                    which offers a particular service
+                  properties:
+                    clusterId:
+                      description: ClusterID which the endpoint belongs to
+                      type: string
+                    dnsName:
+                      description: DNSName
+                      type: string
+                    ip:
+                      description: IP of the pod which is reachable within slice
+                      type: string
+                    name:
+                      description: Name of the endpoint
+                      type: string
+                    port:
+                      description: Port to reach the endpoint
+                      format: int32
+                      type: integer
+                  required:
+                  - clusterId
+                  - dnsName
+                  - ip
+                  - port
+                  type: object
+                type: array
+              exposedPorts:
+                description: ExposedPorts shows a one line representation of ports
+                  and protocols exposed only used to show as a printercolumn
+                type: string
+              importStatus:
+                description: ImportStatus denotes the status of the imported service
+                type: string
+              lastSync:
+                description: Last sync time with backend
+                format: int64
+                type: integer
+              updatedOn:
+                description: Used to match if the service is updated from backend
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

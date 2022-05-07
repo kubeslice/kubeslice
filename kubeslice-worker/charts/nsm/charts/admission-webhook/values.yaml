@@ -1,0 +1,13 @@
+---
+# Default values for admission-webhook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+initContainerRegistry: docker.io/aveshasystems
+initContainerTag: 1.0.0
+
+dnsSidecarContainerRegistry: docker.io/aveshasystems
+dnsSidecarContainerTag: 1.0.0
+
+pullPolicy: IfNotPresent
+clientNamespace: kubeslice-system

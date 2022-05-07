@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: avesha-netop
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: app_net_op
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "18080"
+        prometheus.io/scrape: "true"
+      labels:
+        app: app_net_op
+        avesha.io/pod-type: netop
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: avesha/node-type
+                operator: In
+                values:
+                - gateway
+      hostNetwork: true
+      serviceAccount: nsmgr-acc
+      containers:
+      - env:
+        - name: POD_TYPE
+          value: NETOP_POD
+        - name: NETWORK_INTERFACE
+          value: {{ .Values.netop.networkInterface }}
+        image: {{ .Values.netop.image }}:{{ .Values.netop.tag }}
+        imagePullPolicy: {{ .Values.netop.pullPolicy }}
+        name: avesha-sidecar
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+      tolerations:
+        - key: "avesha/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoSchedule"
+        - key: "avesha/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoExecute"

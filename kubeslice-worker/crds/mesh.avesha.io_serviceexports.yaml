@@ -1,0 +1,194 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  name: serviceexports.mesh.avesha.io
+spec:
+  group: mesh.avesha.io
+  names:
+    kind: ServiceExport
+    listKind: ServiceExportList
+    plural: serviceexports
+    shortNames:
+    - svcex
+    singular: serviceexport
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.slice
+      name: Slice
+      type: string
+    - jsonPath: .spec.ingressEnabled
+      name: Ingress
+      type: boolean
+    - jsonPath: .status.exposedPorts
+      name: Port(s)
+      type: string
+    - jsonPath: .status.availableEndpoints
+      name: Endpoints
+      type: integer
+    - jsonPath: .status.exportStatus
+      name: Status
+      type: string
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: ServiceExport is the Schema for the serviceexports API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ServiceExportSpec defines the desired state of ServiceExport
+            properties:
+              ingressEnabled:
+                description: IngressEnabled denotes whether the traffic should be
+                  proxied through an ingress gateway
+                type: boolean
+              meshType:
+                description: MeshType denotes the type of service mesh the app pods
+                  are part of
+                type: string
+              ports:
+                description: Ports which should be exposed through the service
+                items:
+                  description: ServicePort is the port exposed by ServicePod
+                  properties:
+                    containerPort:
+                      description: Port number exposed from the container
+                      format: int32
+                      type: integer
+                    name:
+                      description: Name of the port
+                      type: string
+                    protocol:
+                      default: TCP
+                      description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
+                        to "TCP".
+                      type: string
+                  required:
+                  - containerPort
+                  type: object
+                type: array
+              selector:
+                description: Selector is a label query over pods that should be exposed
+                  as a service
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+              slice:
+                description: Slice denotes the slice which the app is part of
+                type: string
+            required:
+            - ports
+            - selector
+            - slice
+            type: object
+          status:
+            description: ServiceExportStatus defines the observed state of ServiceExport
+            properties:
+              availableEndpoints:
+                description: AvailableEndpoints shows the number of available endpoints
+                type: integer
+              dnsName:
+                description: DNSName is the FQDN to reach the service
+                type: string
+              exportStatus:
+                description: ExportStatus denotes the export status of the service
+                type: string
+              exposedPorts:
+                description: ExposedPorts shows a one line representation of ports
+                  and protocols exposed only used to show as a printercolumn
+                type: string
+              lastSync:
+                description: Last sync time with backend
+                format: int64
+                type: integer
+              pods:
+                description: Pods denotes the service endpoint pods
+                items:
+                  description: ServicePod contains pod information which offers a
+                    service
+                  properties:
+                    dnsName:
+                      description: DNSName is the dns A record name for the pod
+                      type: string
+                    name:
+                      description: Name of the pod
+                      type: string
+                    nsmIp:
+                      description: NsmIP of the pod which is reachable within slice
+                      type: string
+                    podIp:
+                      description: PodIp of the pod which is reachable within cluster
+                      type: string
+                  required:
+                  - dnsName
+                  - name
+                  - podIp
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

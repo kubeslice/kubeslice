@@ -1,0 +1,9 @@
+---
+dependencies:
+  - name: spire
+    version: 0.1.0
+    condition: spire.enabled
+  - name: prefix-service
+    version: 0.1.0
+  - name: config
+    version: 0.1.0

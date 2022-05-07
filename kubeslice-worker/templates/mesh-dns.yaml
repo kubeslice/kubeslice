@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mesh-dns
+  labels:
+    app: mesh-dns
+data:
+  Corefile: |-
+    slice.local {
+        log
+        errors
+        health {
+            lameduck 5s
+        }
+        ready
+        prometheus 0.0.0.0:9153
+        loadbalance round_robin
+        file /etc/coredns/slice.db {
+          reload 10s
+        }
+        loop
+        reload
+    }
+  slice.db: |-
+    slice.local. IN SOA dns.avesha.io. admin.avesha.io. 1000 7200 3600 1209600 3600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mesh-dns
+  labels:
+    app: mesh-dns
+spec:
+  type: ClusterIP
+  selector:
+    app: mesh-dns
+  ports:
+  - port: 53
+    protocol: UDP
+    name: udp-53
+  - port: 53
+    protocol: TCP
+    name: tcp-53
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mesh-dns
+  labels:
+    app: mesh-dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mesh-dns
+  template:
+    metadata:
+      labels:
+        app: mesh-dns
+        avesha.io/pod-type: dns
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: avesha/node-type
+                operator: In
+                values:
+                - gateway
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: Default
+      containers:
+      - name: "coredns"
+        image: "coredns/coredns:1.8.0"
+        imagePullPolicy: IfNotPresent
+        args: [ "-conf", "/etc/coredns/Corefile" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/coredns
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 53
+          protocol: UDP
+          name: udp-53
+        - containerPort: 53
+          protocol: TCP
+          name: tcp-53
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8181
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mesh-dns
+            items:
+            - key: Corefile
+              path: Corefile
+            - key: slice.db
+              path: slice.db
+      tolerations:
+        - key: "avesha/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoSchedule"
+        - key: "avesha/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoExecute"
