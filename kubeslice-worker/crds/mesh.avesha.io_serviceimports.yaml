@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: serviceimports.networking.kubeslice.io
+  name: serviceimports.mesh.avesha.io
 spec:
-  group: networking.kubeslice.io
+  group: mesh.avesha.io
   names:
     kind: ServiceImport
     listKind: ServiceImportList
