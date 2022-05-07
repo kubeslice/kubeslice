@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: slicegateways.mesh.avesha.io
+  name: slicegateways.networking.kubeslice.io
 spec:
-  group: mesh.avesha.io
+  group: networking.kubeslice.io
   names:
     kind: SliceGateway
     listKind: SliceGatewayList

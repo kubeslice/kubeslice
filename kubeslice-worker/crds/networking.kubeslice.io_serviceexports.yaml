@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: serviceexports.mesh.avesha.io
+  name: serviceexports.networking.kubeslice.io
 spec:
-  group: mesh.avesha.io
+  group: networking.kubeslice.io
   names:
     kind: ServiceExport
     listKind: ServiceExportList
@@ -58,10 +58,6 @@ spec:
                 description: IngressEnabled denotes whether the traffic should be
                   proxied through an ingress gateway
                 type: boolean
-              meshType:
-                description: MeshType denotes the type of service mesh the app pods
-                  are part of
-                type: string
               ports:
                 description: Ports which should be exposed through the service
                 items:
