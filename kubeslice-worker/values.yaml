@@ -4,8 +4,8 @@ operator:
   pullPolicy: IfNotPresent
   logLevel: INFO
 
-## Base64 encoded secret values from hub cluster
-hubSecret:
+## Base64 encoded secret values from controller cluster
+controllerSecret:
   namespace:
   endpoint:
   ca.crt:
