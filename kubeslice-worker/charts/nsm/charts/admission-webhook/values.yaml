@@ -3,10 +3,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-initContainerRegistry: nexus.aveshalabs.io/kubeslice
+initContainerRegistry: docker.io/aveshasystems
 initContainerTag: 1.0.0
 
-dnsSidecarContainerRegistry: nexus.aveshalabs.io/kubeslice
+dnsSidecarContainerRegistry: docker.io/aveshasystems
 dnsSidecarContainerTag: 1.0.0
 
 pullPolicy: IfNotPresent

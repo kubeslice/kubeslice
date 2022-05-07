@@ -16,7 +16,7 @@ cluster:
   nodeIp:
 
 router:
-  image: docker.io/aveshasystems/kubeslice-vl3_ucnf-nse
+  image: docker.io/aveshasystems/vl3_ucnf-nse
   tag: 1.0.0
   pullPolicy: IfNotPresent
 
@@ -39,11 +39,11 @@ gateway:
 
 openvpn:
   server:
-    image: docker.io/aveshasystems/kubeslice-openvpn-server.ubuntu.18.04
+    image: docker.io/aveshasystems/openvpn-server.ubuntu.18.04
     tag: 1.0.0
     pullPolicy: IfNotPresent
   client:
-    image: docker.io/aveshasystems/kubeslice-openvpn-client.alpine.amd64
+    image: docker.io/aveshasystems/openvpn-client.alpine.amd64
     tag: 1.0.0
     pullPolicy: IfNotPresent
 

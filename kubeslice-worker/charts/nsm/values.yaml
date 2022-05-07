@@ -3,10 +3,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-registry: nexus.dev.aveshalabs.io
-org: avesha
+registry: docker.io
+org: aveshasystems
 tag: 0.6.1
-pullPolicy: Always
+pullPolicy: IfNotPresent
 
 forwardingPlane: kernel
 insecure: true
@@ -27,5 +27,4 @@ global:
 
 metricsCollectorEnabled: false
 
-imagePullSecrets:
-- name: avesha-nexus
+imagePullSecrets: []
