@@ -1,6 +1,6 @@
 operator:
   image: docker.io/aveshasystems/worker-operator
-  tag: 1.17.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
   logLevel: INFO
 
@@ -22,18 +22,18 @@ router:
 
 routerSidecar:
   image: docker.io/aveshasystems/router-sidecar
-  tag: 1.0.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
 
 netop:
   networkInterface: eth0
   image: docker.io/aveshasystems/netops
-  tag: 1.0.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
 
 gateway:
   image: docker.io/aveshasystems/gw-sidecar
-  tag: 1.0.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
   logLevel: INFO
 
