@@ -12,8 +12,8 @@ kubeslice:
     projectnsPrefix: kubeslice
     endpoint: https://127.0.0.1:36515
     image: aveshasystems/kubeslice-controller
-    tag: latest
+    tag: 0.1.0
     pullPolicy: Always
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
-    tag: latest
+    tag: 0.1.0
