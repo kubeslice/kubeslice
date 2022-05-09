@@ -1,1 +1,0 @@
-Kubeslice Operator installation successful!
