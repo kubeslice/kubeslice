@@ -1,6 +1,6 @@
 operator:
   image: docker.io/aveshasystems/worker-operator
-  tag: 0.1.0
+  tag: 0.2.0
   pullPolicy: IfNotPresent
   logLevel: INFO
 
