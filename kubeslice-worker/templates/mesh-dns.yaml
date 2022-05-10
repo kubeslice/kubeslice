@@ -68,6 +68,7 @@ spec:
                 operator: In
                 values:
                 - gateway
+      serviceAccount: kubeslice-dns
       terminationGracePeriodSeconds: 30
       dnsPolicy: Default
       containers:
