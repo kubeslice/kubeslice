@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-10T07:41:07.183277316Z"
+    created: "2022-05-10T16:43:51.662674154Z"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -27,7 +27,7 @@ entries:
   istio-base:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-10T07:41:07.186544147Z"
+    created: "2022-05-10T16:43:51.666071403Z"
     description: Helm chart for deploying Istio cluster resources and CRDs
     digest: 8df01c40144b29c7e7f3ea9a96758c26338ee42214a92aff83b23f7f7ab456d9
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -42,7 +42,7 @@ entries:
   istio-discovery:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-10T07:41:07.189603564Z"
+    created: "2022-05-10T16:43:51.668358504Z"
     description: Helm chart for istio control plane
     digest: ea3519597f8ffc547820172141038543e774dbbd21f53cf7542ade8669688108
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -58,10 +58,10 @@ entries:
     version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
-    appVersion: 0.1.0
-    created: "2022-05-10T07:41:07.190556131Z"
+    appVersion: 0.1.1
+    created: "2022-05-10T16:43:51.668993132Z"
     description: A Helm chart for kubeslice-controller
-    digest: 068e6810d0b37ecdc047a7286ff0c918a9a9d07d3bcb0592f94a5e825aa8ffdb
+    digest: 9d5d2b717e126b336c0bc47490f2a287062222f454622c7316f8573a3b2ec170
     name: kubeslice-controller
     type: application
     urls:
@@ -70,7 +70,7 @@ entries:
   kubeslice-worker:
   - apiVersion: v2
     appVersion: 0.2.1
-    created: "2022-05-10T07:41:07.192788689Z"
+    created: "2022-05-10T16:43:51.670418895Z"
     description: KubeSlice Operator
     digest: f1e4bc7f0760b65834599ce4c25cf9dc9d8fdda652a7f19ee6077fcbfad7b6fd
     name: kubeslice-worker
@@ -78,4 +78,4 @@ entries:
     urls:
     - kubeslice-worker-0.2.0.tgz
     version: 0.2.0
-generated: "2022-05-10T07:41:07.178056647Z"
+generated: "2022-05-10T16:43:51.659293405Z"
