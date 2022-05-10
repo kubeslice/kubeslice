@@ -21,7 +21,7 @@ router:
   pullPolicy: IfNotPresent
 
 routerSidecar:
-  image: docker.io/aveshasystems/router-sidecar
+  image: docker.io/aveshasystems/kubeslice-router-sidecar
   tag: 0.1.0
   pullPolicy: IfNotPresent
 
