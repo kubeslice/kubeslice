@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-10T16:43:51.662674154Z"
+    created: "2022-05-10T21:36:49.48163519Z"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -27,7 +27,7 @@ entries:
   istio-base:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-10T16:43:51.666071403Z"
+    created: "2022-05-10T21:36:49.484348559Z"
     description: Helm chart for deploying Istio cluster resources and CRDs
     digest: 8df01c40144b29c7e7f3ea9a96758c26338ee42214a92aff83b23f7f7ab456d9
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -42,7 +42,7 @@ entries:
   istio-discovery:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-10T16:43:51.668358504Z"
+    created: "2022-05-10T21:36:49.487927417Z"
     description: Helm chart for istio control plane
     digest: ea3519597f8ffc547820172141038543e774dbbd21f53cf7542ade8669688108
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -59,9 +59,9 @@ entries:
   kubeslice-controller:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2022-05-10T16:43:51.668993132Z"
+    created: "2022-05-10T21:36:49.488612309Z"
     description: A Helm chart for kubeslice-controller
-    digest: 9d5d2b717e126b336c0bc47490f2a287062222f454622c7316f8573a3b2ec170
+    digest: 897e40ab15fe00a3604081d771b9113821cc3e27f0f1e22f94c871b2b7c5a670
     name: kubeslice-controller
     type: application
     urls:
@@ -70,7 +70,7 @@ entries:
   kubeslice-worker:
   - apiVersion: v2
     appVersion: 0.2.1
-    created: "2022-05-10T16:43:51.670418895Z"
+    created: "2022-05-10T21:36:49.490148291Z"
     description: KubeSlice Operator
     digest: f1e4bc7f0760b65834599ce4c25cf9dc9d8fdda652a7f19ee6077fcbfad7b6fd
     name: kubeslice-worker
@@ -78,4 +78,4 @@ entries:
     urls:
     - kubeslice-worker-0.2.0.tgz
     version: 0.2.0
-generated: "2022-05-10T16:43:51.659293405Z"
+generated: "2022-05-10T21:36:49.476969845Z"
