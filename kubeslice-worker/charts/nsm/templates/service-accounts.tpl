@@ -45,7 +45,7 @@ kind: ServiceAccount
 metadata:
   name: vpn-gateway-client
   namespace: {{ .Release.Namespace }}
- ---
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
