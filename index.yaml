@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-11T05:47:55.28375252Z"
+    created: "2022-05-11T06:03:25.893003417Z"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -27,7 +27,7 @@ entries:
   istio-base:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-11T05:47:55.286356039Z"
+    created: "2022-05-11T06:03:25.895866052Z"
     description: Helm chart for deploying Istio cluster resources and CRDs
     digest: 8df01c40144b29c7e7f3ea9a96758c26338ee42214a92aff83b23f7f7ab456d9
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -42,7 +42,7 @@ entries:
   istio-discovery:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-11T05:47:55.288665955Z"
+    created: "2022-05-11T06:03:25.898953889Z"
     description: Helm chart for istio control plane
     digest: ea3519597f8ffc547820172141038543e774dbbd21f53cf7542ade8669688108
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -59,7 +59,7 @@ entries:
   kubeslice-controller:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2022-05-11T05:47:55.289610362Z"
+    created: "2022-05-11T06:03:25.900320006Z"
     description: A Helm chart for kubeslice-controller
     digest: b5fd8483f869b4369260eb8a14ac7673006fa76f2640070ac2560a37db451ef1
     name: kubeslice-controller
@@ -70,12 +70,12 @@ entries:
   kubeslice-worker:
   - apiVersion: v2
     appVersion: 0.2.1
-    created: "2022-05-11T05:47:55.291788077Z"
+    created: "2022-05-11T06:03:25.901928325Z"
     description: KubeSlice Operator
-    digest: f1e4bc7f0760b65834599ce4c25cf9dc9d8fdda652a7f19ee6077fcbfad7b6fd
+    digest: 0188b1d148974bb40778ec3dc4f7adcf5afcb77fe13f36b6d4eeffb552f78bcd
     name: kubeslice-worker
     type: application
     urls:
-    - kubeslice-worker-0.2.0.tgz
-    version: 0.2.0
-generated: "2022-05-11T05:47:55.279073787Z"
+    - kubeslice-worker-0.2.1.tgz
+    version: 0.2.1
+generated: "2022-05-11T06:03:25.888582364Z"
