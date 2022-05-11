@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: avesha-netop
+  name: kubeslice-netop
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
