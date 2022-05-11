@@ -7,7 +7,7 @@ kubeslice:
     image: gcr.io/kubebuilder/kube-rbac-proxy
     tag: v0.8.0
   controller:
-    loglevel: info
+    logLevel: info
     rbacResourcePrefix: kubeslice-rbac
     projectnsPrefix: kubeslice
     endpoint: https://127.0.0.1:36515
