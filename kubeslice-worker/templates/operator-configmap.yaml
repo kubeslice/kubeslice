@@ -11,7 +11,7 @@ data:
       port: 9443
     leaderElection:
       leaderElect: true
-      resourceName: f7425d89.avesha.io
+      resourceName: f7425d89.kubeslice.io
 kind: ConfigMap
 metadata:
   name: kubeslice-manager-config

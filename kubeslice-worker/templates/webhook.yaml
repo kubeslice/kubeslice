@@ -40,7 +40,7 @@ webhooks:
       namespace: {{ .Release.Namespace }}
       path: /mutate-appsv1-deploy
   failurePolicy: Fail
-  name: mdeploy.avesha.io
+  name: mdeploy.kubeslice.io
   rules:
   - apiGroups:
     - apps

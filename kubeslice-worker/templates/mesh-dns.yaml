@@ -22,7 +22,7 @@ data:
         reload
     }
   slice.db: |-
-    slice.local. IN SOA dns.avesha.io. admin.avesha.io. 1000 7200 3600 1209600 3600
+    slice.local. IN SOA dns.kubeslice.io. admin.kubeslice.io. 1000 7200 3600 1209600 3600
 ---
 apiVersion: v1
 kind: Service
@@ -57,7 +57,7 @@ spec:
     metadata:
       labels:
         app: mesh-dns
-        avesha.io/pod-type: dns
+        kubeslice.io/pod-type: dns
     spec:
       affinity:
         nodeAffinity:

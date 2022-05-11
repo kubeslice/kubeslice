@@ -14,7 +14,7 @@ spec:
         prometheus.io/scrape: "true"
       labels:
         app: app_net_op
-        avesha.io/pod-type: netop
+        kubeslice.io/pod-type: netop
     spec:
       affinity:
         nodeAffinity:
