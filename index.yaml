@@ -5,7 +5,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v1
     appVersion: v1.7.0
-    created: "2022-05-09T13:20:19.814006088Z"
+    created: "2022-05-11T05:47:55.28375252Z"
     description: A Helm chart for cert-manager
     digest: 2277753896e3881e658fe7f1f1d7acf31f683c628bf4bd01c835ecaf22b47507
     home: https://github.com/jetstack/cert-manager
@@ -27,7 +27,7 @@ entries:
   istio-base:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-09T13:20:19.816769942Z"
+    created: "2022-05-11T05:47:55.286356039Z"
     description: Helm chart for deploying Istio cluster resources and CRDs
     digest: 8df01c40144b29c7e7f3ea9a96758c26338ee42214a92aff83b23f7f7ab456d9
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -42,7 +42,7 @@ entries:
   istio-discovery:
   - apiVersion: v1
     appVersion: 1.13.3
-    created: "2022-05-09T13:20:19.820198208Z"
+    created: "2022-05-11T05:47:55.288665955Z"
     description: Helm chart for istio control plane
     digest: ea3519597f8ffc547820172141038543e774dbbd21f53cf7542ade8669688108
     icon: https://istio.io/latest/favicons/android-192x192.png
@@ -58,10 +58,10 @@ entries:
     version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
-    appVersion: 0.1.0
-    created: "2022-05-09T13:20:19.820924422Z"
+    appVersion: 0.1.1
+    created: "2022-05-11T05:47:55.289610362Z"
     description: A Helm chart for kubeslice-controller
-    digest: 068e6810d0b37ecdc047a7286ff0c918a9a9d07d3bcb0592f94a5e825aa8ffdb
+    digest: b5fd8483f869b4369260eb8a14ac7673006fa76f2640070ac2560a37db451ef1
     name: kubeslice-controller
     type: application
     urls:
@@ -70,12 +70,12 @@ entries:
   kubeslice-worker:
   - apiVersion: v2
     appVersion: 0.2.1
-    created: "2022-05-09T13:20:19.822484653Z"
+    created: "2022-05-11T05:47:55.291788077Z"
     description: KubeSlice Operator
-    digest: e550cda8a8db603fddc421b73063fb4f455c397bba184b9fd9de38bc71152048
+    digest: f1e4bc7f0760b65834599ce4c25cf9dc9d8fdda652a7f19ee6077fcbfad7b6fd
     name: kubeslice-worker
     type: application
     urls:
-    - kubeslice-worker-0.1.0.tgz
-    version: 0.1.0
-generated: "2022-05-09T13:20:19.808840188Z"
+    - kubeslice-worker-0.2.0.tgz
+    version: 0.2.0
+generated: "2022-05-11T05:47:55.279073787Z"

@@ -1246,10 +1246,10 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
-        - --log-level={{ .Values.kubeslice.controller.logLevel }}
-        - --rbac-resource-prefix={{ .Values.kubeslice.controller.rbacResourcePrefix }}
-        - --project-namespace-prefix={{ .Values.kubeslice.controller.projectnsPrefix }}
-        - --controller-end-point={{ .Values.kubeslice.controller.endpoint }}
+        - --log-level={{ required "A valid value is required!" .Values.kubeslice.controller.logLevel }}
+        - --rbac-resource-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.rbacResourcePrefix }}
+        - --project-namespace-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.projectnsPrefix }}
+        - --controller-end-point={{ required "A valid value is required!" .Values.kubeslice.controller.endpoint }}
         - --ovpn-job-image={{ .Values.kubeslice.ovpnJob.image }}:{{ .Values.kubeslice.ovpnJob.tag }}
         command:
         - /manager
