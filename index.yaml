@@ -69,7 +69,7 @@ entries:
     version: 0.1.0
   kubeslice-worker:
   - apiVersion: v2
-    appVersion: 0.2.2
+    appVersion: 0.2.3
     created: "2022-05-12T10:52:24.769542703Z"
     description: KubeSlice Operator
     digest: 19ccc82e81f07d23fa80b4d03741bf8d6abc57c22f25b7a97de5b92000fca901
