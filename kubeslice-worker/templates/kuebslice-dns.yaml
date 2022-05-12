@@ -35,7 +35,7 @@ spec:
     metadata:
       labels:
         app: kubeslice-dns
-        avesha.io/pod-type: dns
+        kubeslice.io/pod-type: dns
     spec:
       serviceAccount: kubeslice-dns
       affinity:
