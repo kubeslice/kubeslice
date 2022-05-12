@@ -22,7 +22,6 @@ You can then run `helm search repo avesha` to see the charts.
 Quick Start
 ---
 
-#### Testing
 See [Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using kind for non-production use.
 
 For setting up Kubeslice on other cloud platforms refer to the [getting started with cloud](https://docs.avesha.io/opensource/getting-started-with-cloud-clusters)
