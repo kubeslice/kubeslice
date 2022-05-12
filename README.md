@@ -25,6 +25,8 @@ Quick Start
 #### Testing
 See [Learn: Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using kind for non-production use.
 
+For setting up Kubeslice on other cloud platforms refer to the [getting started with cloud](https://docs.avesha.io/opensource/getting-started-with-cloud-clusters)
+
 Guide
 ---
 Full, comprehensive documentation is available on the our opensource documentation website: https://docs.avesha.io/opensource/
