@@ -3,7 +3,7 @@
 KubeSlice provides network services to applications that need secure and highly available connectivity between multiple clusters. KubeSlice creates a flat overlay network to connect the clusters. The overlay network can be described as an application slice that provides a slice of connectivity between the pods of an application running in multiple clusters. It can also be described as an application-specific VPC that spans across clusters. Pods can connect to the slice overlay network and communicate with each other seamlessly across cluster boundaries.
 
 #### Architecture
-See [Learn: Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and core components.
+See [Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and core components.
 
 ## Usage
 
@@ -23,7 +23,7 @@ Quick Start
 ---
 
 #### Testing
-See [Learn: Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using kind for non-production use.
+See [Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using kind for non-production use.
 
 For setting up Kubeslice on other cloud platforms refer to the [getting started with cloud](https://docs.avesha.io/opensource/getting-started-with-cloud-clusters)
 
