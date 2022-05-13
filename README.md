@@ -30,4 +30,4 @@ For setting up Kubeslice on other cloud platforms refer to the [getting started 
 
 Guide
 ---
-Full, comprehensive documentation is available on our opensource ![documentation](https://docs.avesha.io/opensource/) website.
+Full, comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/opensource/) website.
