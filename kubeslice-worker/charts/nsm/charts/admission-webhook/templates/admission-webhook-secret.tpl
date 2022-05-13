@@ -53,6 +53,8 @@ spec:
               value: jaeger.{{ .Release.Namespace }}
             - name: JAEGER_AGENT_PORT
               value: "6831"
+            - name: CABUNDLE
+              value: {{ $ca.Cert | b64enc }}
           volumeMounts:
             - name: webhook-certs
               mountPath: /etc/webhook/certs
