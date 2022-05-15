@@ -1,0 +1,81 @@
+apiVersion: v1
+entries:
+  cert-manager:
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v1
+    appVersion: v1.7.0
+    created: "2022-05-15T18:59:32.837520918Z"
+    description: A Helm chart for cert-manager
+    digest: e939c86f05459111868d3bc406573e4cf112c5e5a5bf2d1bc93481bc7677e65e
+    home: https://github.com/jetstack/cert-manager
+    icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+    keywords:
+    - cert-manager
+    - kube-lego
+    - letsencrypt
+    - tls
+    maintainers:
+    - email: cert-manager-maintainers@googlegroups.com
+      name: cert-manager-maintainers
+    name: cert-manager
+    sources:
+    - https://github.com/jetstack/cert-manager
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/cert-manager-v1.7.0/cert-manager-v1.7.0.tgz
+    version: v1.7.0
+  istio-base:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-15T18:59:33.003607386Z"
+    description: Helm chart for deploying Istio cluster resources and CRDs
+    digest: 64f3601119afb58968ce2e57c81f82b1ab4a6ec419b60af85704df1be9fce2ca
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    name: istio-base
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/istio-base-1.13.3/istio-base-1.13.3.tgz
+    version: 1.13.3
+  istio-discovery:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-15T18:59:33.152134899Z"
+    description: Helm chart for istio control plane
+    digest: 137a4aa890df3dc045cdd00badd0e671048528bdc14b8943dc3ac2b3cc1f2c2c
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istiod
+    - istio-discovery
+    name: istio-discovery
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/istio-discovery-1.13.3/istio-discovery-1.13.3.tgz
+    version: 1.13.3
+  kubeslice-controller:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2022-05-15T18:59:33.303150334Z"
+    description: A Helm chart for kubeslice-controller
+    digest: 0e7c3a1bb7ad129191b7ac4fd9a1a8531740f1b643bbea30723ab8ca8dfb6b3a
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-controller-0.1.0/kubeslice-controller-0.1.0.tgz
+    version: 0.1.0
+  kubeslice-worker:
+  - apiVersion: v2
+    appVersion: 0.2.2
+    created: "2022-05-15T18:59:33.459001611Z"
+    description: KubeSlice Operator
+    digest: 2905e8b29a78e0dff1970f9b4f94ee4bf909c359d8bebcf47a19348b5c835771
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.2.3/kubeslice-worker-0.2.3.tgz
+    version: 0.2.3
+generated: "2022-05-15T18:59:33.459006912Z"
