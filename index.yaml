@@ -1,0 +1,49 @@
+apiVersion: v1
+entries:
+  cert-manager:
+  - annotations:
+      artifacthub.io/prerelease: "false"
+    apiVersion: v1
+    appVersion: v1.7.0
+    created: "2022-05-15T14:15:29.679466481Z"
+    description: A Helm chart for cert-manager
+    digest: d8c77e6d3524ade3d2497ae038fe59d29742713c0e1cf85ab9c34e9de28c8cbc
+    home: https://github.com/jetstack/cert-manager
+    icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+    keywords:
+    - cert-manager
+    - kube-lego
+    - letsencrypt
+    - tls
+    maintainers:
+    - email: cert-manager-maintainers@googlegroups.com
+      name: cert-manager-maintainers
+    name: cert-manager
+    sources:
+    - https://github.com/jetstack/cert-manager
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/cert-manager-v1.7.0/cert-manager-v1.7.0.tgz
+    version: v1.7.0
+  kubeslice-controller:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2022-05-15T14:15:29.837242917Z"
+    description: A Helm chart for kubeslice-controller
+    digest: 8ac20fefd356b45fee9440e21ef731fad046d43025762f878d25ceb6cff667ce
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-controller-0.1.0/kubeslice-controller-0.1.0.tgz
+    version: 0.1.0
+  kubeslice-worker:
+  - apiVersion: v2
+    appVersion: 0.2.2
+    created: "2022-05-15T14:15:29.995893459Z"
+    description: KubeSlice Operator
+    digest: f1deba1a60913b815d37141c6a2181c09cea23081ca2ce903fc0b17f8b4042ef
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.2.3/kubeslice-worker-0.2.3.tgz
+    version: 0.2.3
+generated: "2022-05-15T14:15:29.995898859Z"
