@@ -24,6 +24,38 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/releases/download/cert-manager-v1.7.0/cert-manager-v1.7.0.tgz
     version: v1.7.0
+  istio-base:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-15T17:30:09.260918684Z"
+    description: Helm chart for deploying Istio cluster resources and CRDs
+    digest: 3f7e8c8c75aaa14e0aea9031856c3dc3abf6eebb70a2883041ab563fe4665bc3
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    name: istio-base
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/istio-base-1.13.3/istio-base-1.13.3.tgz
+    version: 1.13.3
+  istio-discovery:
+  - apiVersion: v1
+    appVersion: 1.13.3
+    created: "2022-05-15T17:30:09.429831747Z"
+    description: Helm chart for istio control plane
+    digest: 372eec8a7cc203db26fd79dc34ed3a2ca236350e3f0280e72dd9c7269bf19577
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istiod
+    - istio-discovery
+    name: istio-discovery
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/istio-discovery-1.13.3/istio-discovery-1.13.3.tgz
+    version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
     appVersion: 0.1.1
@@ -46,4 +78,4 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.2.3/kubeslice-worker-0.2.3.tgz
     version: 0.2.3
-generated: "2022-05-15T14:15:29.995898859Z"
+generated: "2022-05-15T17:30:09.429842447Z"
