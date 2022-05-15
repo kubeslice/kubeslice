@@ -1,37 +1,33 @@
-## Welcome to GitHub Pages
+# Kubeslice Community Kubernetes Helm Charts
 
-You can use the [editor on GitHub](https://github.com/kubeslice/charts/edit/gh-pages/README.md) to maintain and preview the content for your website in Markdown files.
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+KubeSlice provides network services to applications that need secure and highly available connectivity between multiple clusters. KubeSlice creates a flat overlay network to connect the clusters. The overlay network can be described as an application slice that provides a slice of connectivity between the pods of an application running in multiple clusters. It can also be described as an application-specific VPC that spans across clusters. Pods can connect to the slice overlay network and communicate with each other seamlessly across cluster boundaries.
 
-### Markdown
+# Architecture overview
+See [Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and core components.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# Usage
 
-```markdown
-Syntax highlighted code block
+[Helm](https://helm.sh) must be installed to use the charts.
+Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 
-# Header 1
-## Header 2
-### Header 3
+Once Helm is set up properly, add the repo as follows:
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```console
+helm repo add avesha https://kubeslice.github.io/charts/
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+You can then run `helm search repo avesha` to see the charts.
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kubeslice/charts/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Quick Start
+---
 
-### Support or Contact
+See [Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud](https://docs.avesha.io/opensource/getting-started-with-cloud-clusters).
+
+Guide
+---
+A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/opensource/) website.
