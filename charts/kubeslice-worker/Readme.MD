@@ -20,16 +20,15 @@ helm repo add avesha https://kubeslice.github.io/charts/
 
 You can then run `helm search repo avesha` to see the charts.
 
-Worker Operator Installation
----
+## Worker Operator Installation
 
-## Install Chart
+### Install Chart
 
 See [Worker Operator Installation](https://docs.avesha.io/opensource/getting-started-with-kind-clusters#Bookmark93) for instructions on istalling worker operator on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
 For setting up Worker Operator on other cloud platforms, refer to the [Worker Operator Installation on Cloud](https://docs.avesha.io/opensource/registering-the-worker-cluster#Bookmark228).
 
-## Uninstall Chart
+### Uninstall Chart
 
 Please refer the following worker operator [uninstallation] (https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps 
 
