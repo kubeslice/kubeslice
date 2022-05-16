@@ -17,4 +17,3 @@ kubeslice:
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
     tag: 0.1.0
-
