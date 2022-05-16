@@ -30,7 +30,7 @@ For setting up Worker Operator on other cloud platforms, refer to the [Worker Op
 
 ### Uninstall Chart
 
-Please refer the following worker operator [uninstallation] (https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps 
+Please refer the following worker operator [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps 
 
 Guide
 ---
