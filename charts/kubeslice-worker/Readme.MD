@@ -4,9 +4,6 @@
 
 The Slice Operator, also known as a Worker Operator is a Kubernetes Operator component that manages the life-cycle of the KubeSlice related Custom Resource Definitions (CRDs). Please refer to the [documentation](https://docs.avesha.io/opensource/kube-slice-architecture#Bookmark16) for more details.
 
-# Architecture overview
-See [Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and Worker Operator components.
-
 # Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.
@@ -30,7 +27,13 @@ For setting up Worker Operator on other cloud platforms, refer to the [Worker Op
 
 ### Uninstall Chart
 
-Please refer the following worker operator [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps 
+Please refer the following worker operator [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps
+
+### Upgrading Chart
+
+```console
+helm upgrade [RELEASE_NAME] avesha/worker-operator [flags]
+```
 
 Guide
 ---
