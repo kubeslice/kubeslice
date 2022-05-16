@@ -21,12 +21,17 @@ helm repo add avesha https://kubeslice.github.io/charts/
 You can then run `helm search repo avesha` to see the charts.
 
 
-Quick Start
----
+## Kubeslice Controller Installation
+
+### Install Chart
 
 See [Kubeslice Controller Installation](https://docs.avesha.io/opensource/getting-started-with-kind-clusters#Bookmark56) for instructions on installing kubeslice controller on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
 For setting up Kubeslice Controller on other cloud platforms, refer to the [Kubeslice Controller Installation on Cloud](https://docs.avesha.io/opensource/installing-the-kubeslice-controller).
+
+### Uninstall Chart
+
+Please refer the following Kubeslice controller [uninstallation](https://docs.avesha.io/opensource/uninstalling-the-kubeslice-controller) steps 
 
 Guide
 ---
