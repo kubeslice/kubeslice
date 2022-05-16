@@ -32,7 +32,7 @@ Please refer the following worker operator [uninstallation](https://docs.avesha.
 ### Upgrading Chart
 
 ```console
-helm upgrade [RELEASE_NAME] avesha/worker-operator [flags]
+helm upgrade [RELEASE_NAME] avesha/kubeslice-worker [flags]
 ```
 
 Guide
