@@ -18,7 +18,7 @@ helm repo add avesha https://kubeslice.github.io/charts/
 You can then run `helm search repo avesha` to see the charts.
 
 
-## Kubeslice Controller Installation
+## Setting Up Kubeslice Controller
 
 ### Install Chart
 
