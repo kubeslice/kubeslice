@@ -1,8 +1,8 @@
-# Worker Operator Helm Charts
+# Kubeslice Worker Helm Charts
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The Slice Operator, also known as a Worker Operator is a Kubernetes Operator component that manages the life-cycle of the KubeSlice related Custom Resource Definitions (CRDs). Please refer to the [documentation](https://docs.avesha.io/opensource/kube-slice-architecture#Bookmark16) for more details.
+The Slice Operator, also known as a Kubeslice Worker is a Kubernetes Operator component that manages the life-cycle of the KubeSlice related Custom Resource Definitions (CRDs). Please refer to the [documentation](https://docs.avesha.io/opensource/kube-slice-architecture#Bookmark16) for more details.
 
 # Usage
 
@@ -17,17 +17,17 @@ helm repo add avesha https://kubeslice.github.io/charts/
 
 You can then run `helm search repo avesha` to see the charts.
 
-## Setting Up Worker Operator
+## Setting Up Kubeslice Worker
 
 ### Install Chart
 
-See [Worker Operator Installation](https://docs.avesha.io/opensource/getting-started-with-kind-clusters#Bookmark93) for instructions on istalling worker operator on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
+See [Kubeslice Worker Installation](https://docs.avesha.io/opensource/getting-started-with-kind-clusters#Bookmark93) for instructions on istalling worker operator on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
-For setting up Worker Operator on other cloud platforms, refer to the [Worker Operator Installation on Cloud](https://docs.avesha.io/opensource/registering-the-worker-cluster#Bookmark228).
+For setting up Worker Operator on other cloud platforms, refer to the [Kubeslice Worker Installation on Cloud](https://docs.avesha.io/opensource/registering-the-worker-cluster#Bookmark228).
 
 ### Uninstall Chart
 
-Please refer the following worker operator [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps
+Please refer the following Kubeslice Worker [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps
 
 ### Upgrading Chart
 
