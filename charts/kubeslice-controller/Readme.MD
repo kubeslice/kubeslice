@@ -4,9 +4,6 @@
 
 The KubeSlice Controller is installed in one of the clusters and provides a central configuration management system, for slices across multiple clusters. Please refer to the [documentation](https://docs.avesha.io/opensource/kube-slice-architecture#Bookmark11) for more details.
 
-# Architecture overview
-See [Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and Kubeslice Controller component.
-
 # Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.
@@ -31,7 +28,13 @@ For setting up Kubeslice Controller on other cloud platforms, refer to the [Kube
 
 ### Uninstall Chart
 
-Please refer the following Kubeslice controller [uninstallation](https://docs.avesha.io/opensource/uninstalling-the-kubeslice-controller) steps 
+Please refer the following Kubeslice controller [uninstallation](https://docs.avesha.io/opensource/uninstalling-the-kubeslice-controller) steps
+
+### Upgrading Chart
+
+```console
+helm upgrade [RELEASE_NAME] avesha/kubeslice-controller [flags]
+```
 
 Guide
 ---
