@@ -59,6 +59,16 @@ entries:
   kubeslice-controller:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2022-05-16T14:23:16.934759708Z"
+    description: A Helm chart for kubeslice-controller
+    digest: ac9720b21ce42735fb332a4c5531684ebad4301f8da599a82da6381814548174
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-controller-0.1.1/kubeslice-controller-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2022-05-15T18:59:33.303150334Z"
     description: A Helm chart for kubeslice-controller
     digest: 0e7c3a1bb7ad129191b7ac4fd9a1a8531740f1b643bbea30723ab8ca8dfb6b3a
@@ -78,4 +88,4 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.2.3/kubeslice-worker-0.2.3.tgz
     version: 0.2.3
-generated: "2022-05-15T18:59:33.459006912Z"
+generated: "2022-05-16T14:23:16.934800709Z"
