@@ -17,7 +17,7 @@ helm repo add avesha https://kubeslice.github.io/charts/
 
 You can then run `helm search repo avesha` to see the charts.
 
-## Worker Operator Installation
+## Setting Up Worker Operator
 
 ### Install Chart
 
