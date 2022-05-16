@@ -34,9 +34,9 @@ A full and comprehensive documentation is available on our opensource [documenta
 
 Release Notes for KubeSlice
 ---
-[link](https://docs.avesha.io/opensource/release-notes-for-kubeSlice)
+Please refer the [link](https://docs.avesha.io/opensource/release-notes-for-kubeSlice)
 
 
 Community
 ---
-[link](https://docs.avesha.io/opensource/community)
+Please refer the [link](https://docs.avesha.io/opensource/community)
