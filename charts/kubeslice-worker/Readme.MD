@@ -26,20 +26,18 @@ See [Worker Operator Installation](https://docs.avesha.io/opensource/getting-sta
 
 For setting up Worker Operator on other cloud platforms, refer to the [Worker Operator Installation on Cloud](https://docs.avesha.io/opensource/registering-the-worker-cluster#Bookmark228).
 
----
 ### Uninstall Chart
 ---
 
 Please refer the following worker operator [uninstallation](https://docs.avesha.io/opensource/de-registering-the-worker-cluster#Bookmark336) steps
 
----
 ### Upgrading Chart
 ---
 
 ```console
 helm upgrade [RELEASE_NAME] avesha/kubeslice-worker [flags]
 ```
----
+
 Guide
 ---
 A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/opensource/) website.
