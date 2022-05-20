@@ -21,4 +21,3 @@ kind: ServiceAccount
 metadata:
   name: forward-plane-acc
   namespace: {{ .Release.Namespace }}
----
