@@ -49,7 +49,7 @@ openvpn:
 
 dns:
   image: docker.io/aveshasystems/dns
-  tag: 0.0.1
+  tag: 0.0.2
   pullPolicy: IfNotPresent
 
 nsm:
