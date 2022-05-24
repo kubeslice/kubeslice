@@ -69,6 +69,16 @@ entries:
     version: 0.1.0
   kubeslice-worker:
   - apiVersion: v2
+    appVersion: 0.2.5
+    created: "2022-05-24T16:10:40.241092546Z"
+    description: KubeSlice Operator
+    digest: 1baee6115886c407a93137990e27be1f7c38c51363dc66481bf2b32a03191e0e
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.1.1/kubeslice-worker-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 0.2.2
     created: "2022-05-16T17:35:03.397478651Z"
     description: KubeSlice Operator
@@ -78,4 +88,4 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.1.0/kubeslice-worker-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-16T17:35:03.397539752Z"
+generated: "2022-05-24T16:10:40.241108846Z"
