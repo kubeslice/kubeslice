@@ -9,5 +9,8 @@ initContainerTag: 1.0.0
 dnsSidecarContainerRegistry: docker.io/aveshasystems
 dnsSidecarContainerTag: 1.0.0
 
+webhookContainerRegistry: docker.io/aveshasystems
+webhookContainerTag: 1.0.2
+
 pullPolicy: IfNotPresent
 clientNamespace: kubeslice-system
