@@ -1,0 +1,81 @@
+# This is a basic workflow to help you get started with Actions
+# Automation pipeline for validating the Opensource Charts
+
+name: Opensource Charts Validation
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - master
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - kubeslice-controller-*
+      - kubeslice-worker-*
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "validate" which validates the kubeslice/charts or kubeslice/dev-charts and runs on ubuntu-latest
+  validate-on-ubuntu:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script that will configure multiple kind clusters and interconnect them with KubeSlice.
+        run: |
+
+          # prerequisites
+          sudo git clone https://github.com/ahmetb/kubectx /usr/local/kubectx
+          sudo ln -s /usr/local/kubectx/kubectx /usr/local/bin/kubectx
+          sudo ln -s /usr/local/kubectx/kubens /usr/local/bin/kubens
+          
+          # Increase the inotify.max_user_instances and inotify.max_user_watches sysctls on a Linux host
+          sudo sysctl fs.inotify.max_user_instances=8192
+          sudo sysctl fs.inotify.max_user_watches=524288
+          sudo sysctl -p
+
+          # Clone the examples repo
+          git clone https://github.com/kubeslice/examples.git
+          cd examples/kind
+
+          # Create custom.env file
+          sudo sed -i "s|PREFIX=.*|PREFIX=$PREFIX|" kind.env
+          sudo sed -i "s|CONTROLLER=.*|CONTROLLER=$CONTROLLER|" kind.env
+          sudo sed -i "s|WORKERS=.*|WORKERS=${{secrets.WORKERS}}|" kind.env
+          sudo sed -i "s|KIND_K8S_VERSION=.*|KIND_K8S_VERSION=$KIND_K8S_VERSION|" kind.env
+          sudo cat kind.env
+
+          # Validate the charts before release
+          sudo sed -i "/helm repo update/ a $GIT_CLONE" kind.sh
+          sudo sed -i "/git clone/ a ls && pwd" kind.sh
+          sudo sed -i "s|kubeslice/cert-manager|$CERT_MGR|" kind.sh
+          sudo sed -i "s|kubeslice/kubeslice-controller|$KBS_CTRL|" kind.sh
+          sudo sed -i "s|kubeslice/kubeslice-worker|$KBS_WRKR|" kind.sh
+
+           # A script that will configure multiple kind clusters and interconnect them with KubeSlice
+          sudo bash kind.sh
+          
+        env:
+          PREFIX: '"kind-"'
+          CONTROLLER: '("controller")'
+          KIND_K8S_VERSION: '"--image=kindest/node:v1.22.7"'
+
+          GIT_CLONE: git clone https://github.com/kubeslice/charts.git
+          CERT_MGR: charts/charts/cert-manager
+          KBS_CTRL: charts/charts/kubeslice-controller
+          KBS_WRKR: charts/charts/kubeslice-worker
