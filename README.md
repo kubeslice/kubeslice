@@ -15,10 +15,10 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add avesha https://kubeslice.github.io/charts/
+helm repo add kubeslice https://kubeslice.github.io/charts/
 ```
 
-You can then run `helm search repo avesha` to see the charts.
+You can then run `helm search repo kubeslice` to see the charts.
 
 
 Quick Start

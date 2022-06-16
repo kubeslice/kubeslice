@@ -102,6 +102,16 @@ spec:
                 items:
                   type: string
                 type: array
+              namespaces:
+                description: Namespaces present in cluster
+                items:
+                  properties:
+                    name:
+                      type: string
+                    sliceName:
+                      type: string
+                  type: object
+                type: array
               secretName:
                 description: SecretName is the name of the secret for the worker cluster.
                 type: string
@@ -389,6 +399,7 @@ spec:
                       type: object
                     type: array
                   isolationEnabled:
+                    default: false
                     type: boolean
                 type: object
               qosProfileDetails:
@@ -639,6 +650,7 @@ spec:
                       type: string
                     type: array
                   isolationEnabled:
+                    default: false
                     type: boolean
                 type: object
               qosProfileDetails:
@@ -718,6 +730,13 @@ spec:
                       type: string
                     podNamespace:
                       description: PodNamespace is App Pod Namespace
+                      type: string
+                  type: object
+                type: array
+              onboardedAppNamespaces:
+                items:
+                  properties:
+                    name:
                       type: string
                   type: object
                 type: array
@@ -920,6 +939,7 @@ rules:
   resources:
   - secrets
   verbs:
+  - create
   - delete
   - escalate
   - get
@@ -1535,6 +1555,7 @@ webhooks:
     operations:
     - CREATE
     - UPDATE
+    - DELETE
     resources:
     - sliceconfigs
   sideEffects: None
