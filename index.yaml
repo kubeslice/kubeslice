@@ -58,6 +58,16 @@ entries:
     version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
+    appVersion: 0.3.6
+    created: "2022-06-16T12:09:27.533324003Z"
+    description: A Helm chart for kubeslice-controller
+    digest: c2e5e4155292b6c38a8ace3d3a7239b5f91b97e4dbffacee698fa3f88c3d0c62
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-controller-0.2.0/kubeslice-controller-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.1
     created: "2022-05-16T17:35:03.214227931Z"
     description: A Helm chart for kubeslice-controller
@@ -69,6 +79,16 @@ entries:
     version: 0.1.0
   kubeslice-worker:
   - apiVersion: v2
+    appVersion: 0.4.1
+    created: "2022-06-16T12:09:27.688168082Z"
+    description: KubeSlice Operator
+    digest: 1669094376c4b7dc7ad5fc7f8032b99732fb8e75a070f673b2848aa33a982c40
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.2.0/kubeslice-worker-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.2.2
     created: "2022-05-16T17:35:03.397478651Z"
     description: KubeSlice Operator
@@ -78,4 +98,4 @@ entries:
     urls:
     - https://github.com/kubeslice/charts/releases/download/kubeslice-worker-0.1.0/kubeslice-worker-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-24T16:10:40.241108846Z"
+generated: "2022-06-16T12:09:27.688177482Z"
