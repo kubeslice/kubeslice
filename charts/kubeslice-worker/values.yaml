@@ -1,6 +1,6 @@
 operator:
   image: docker.io/aveshasystems/worker-operator
-  tag: 0.2.3
+  tag: 0.4.1
   pullPolicy: IfNotPresent
   logLevel: INFO
 
@@ -22,7 +22,7 @@ router:
 
 routerSidecar:
   image: docker.io/aveshasystems/kubeslice-router-sidecar
-  tag: 0.1.0
+  tag: 0.1.1
   pullPolicy: IfNotPresent
 
 netop:
@@ -46,6 +46,11 @@ openvpn:
     image: docker.io/aveshasystems/openvpn-client.alpine.amd64
     tag: 1.0.0
     pullPolicy: IfNotPresent
+
+dns:
+  image: docker.io/aveshasystems/dns
+  tag: 0.0.2
+  pullPolicy: IfNotPresent
 
 nsm:
   forwardingPlane: kernel

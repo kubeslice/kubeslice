@@ -1,14 +1,38 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: kubeslice-netop
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vpn-gateway-server
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vpn-gateway-client
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: slice-router
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: kubeslice-controller-manager
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: kubeslice-leader-election-role
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups:
   - ""
@@ -300,6 +324,32 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - get
+  - list
+  - update
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -333,7 +383,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: kubeslice-leader-election-rolebinding
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -341,7 +391,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubeslice-controller-manager
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -354,7 +404,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubeslice-controller-manager
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -367,4 +417,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubeslice-controller-manager
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
