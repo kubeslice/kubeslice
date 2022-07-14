@@ -1,8 +1,5 @@
 name: Create Pull Request
 on:
-  push:
-    branches:
-      - validate-charts
   workflow_run:
     workflows: ["Opensource Charts Validation"]
     types:
