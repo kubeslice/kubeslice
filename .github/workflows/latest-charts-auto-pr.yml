@@ -1,0 +1,28 @@
+name: Raise PR from Latest-Charts against master
+on:
+  push:
+    branches: ['latest-charts']
+
+jobs:
+  pull-request:
+    name: Raise PR against master
+    runs-on: ubuntu-latest
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+
+    # https://github.com/marketplace/actions/github-pull-request-action
+      - name: raise pull request
+        id: automerge
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: ${{ github.event.repository.default_branch }}
+          pr_title: "[Automated] Merge ${{ github.ref_name }} into ${{ github.event.repository.default_branch }}"
+          pr_body: ":robot: _Automated Pull Request_ :robot: <br><br>Merging **${{ github.ref_name }}** into **${{ github.event.repository.default_branch }}**. <br><br> :warning: _If there are conflicts, close this PR, resolve the conflicts manually on an intermediate branch, then open a new PR._"
+          pr_label: "automerge"
+          pr_reviewer: "richiesebastian"
+          pr_assignee: "KRANTHI0918"
+          pr_draft: false
+          github_token: ${{ secrets.TOKEN }}
