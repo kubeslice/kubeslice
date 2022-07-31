@@ -86,7 +86,7 @@ entries:
     name: kubeslice-worker
     type: application
     urls:
-    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.2.0/kubeslice-worker-0.2.0.tar.gz
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.2.0/kubeslice-worker-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
     appVersion: 0.2.2
