@@ -7,7 +7,7 @@ on:
   push:
     # Sequence of patterns matched against refs/heads
     branches:
-      - master
+      - master-test
     # Sequence of patterns matched against refs/tags
     tags:
       - kubeslice-controller-*
@@ -18,7 +18,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "validate" which validates the kubeslice/charts or kubeslice/dev-charts and runs on ubuntu-latest
+  # This workflow contains a single job called "validate" which validates the kubeslice/kubeslice or kubeslice/dev-charts and runs on ubuntu-latest
   validate-on-ubuntu:
     runs-on: ubuntu-latest
 
@@ -75,7 +75,7 @@ jobs:
           CONTROLLER: '("controller")'
           KIND_K8S_VERSION: '"--image=kindest/node:v1.22.7"'
 
-          GIT_CLONE: git clone https://github.com/kubeslice/charts.git
-          CERT_MGR: charts/charts/cert-manager
-          KBS_CTRL: charts/charts/kubeslice-controller
-          KBS_WRKR: charts/charts/kubeslice-worker
+          GIT_CLONE: git clone https://github.com/kubeslice/kubeslice.git
+          CERT_MGR: kubeslice/charts/cert-manager
+          KBS_CTRL: kubeslice/charts/kubeslice-controller
+          KBS_WRKR: kubeslice/charts/kubeslice-worker
