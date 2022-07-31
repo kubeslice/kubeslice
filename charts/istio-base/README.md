@@ -5,7 +5,7 @@ This chart installs resources shared by all Istio revisions. This includes Istio
 ## Setup Repo Info
 
 ```console
-helm repo add kubeslice https://nexus.dev.aveshalabs.io/repository/kubeslice-helm/ --username <username> --password "<password>"
+helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 helm repo update
 ```
 
