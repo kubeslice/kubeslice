@@ -5,7 +5,7 @@ This chart installs an Istiod deployment.
 ## Setup Repo Info
 
 ```console
-helm repo add kubeslice https://nexus.dev.aveshalabs.io/repository/kubeslice-helm/ --username <username> --password "<password>"
+helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 helm repo update
 ```
 
