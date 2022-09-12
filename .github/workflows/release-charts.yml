@@ -1,19 +1,30 @@
 name: Release Helm Charts
 
-# on:
-#  workflow_run:
-#    workflows: ["Opensource Charts Validation"]
-#    types:
-#      - completed
 on:
-  push:
-    branches:
-      - master
-      
+  workflow_run:
+    workflows: ["Opensource Charts Validation"]
+    types:
+      - completed
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      chart-releaser:
+        type: choice
+        # Friendly description to be shown in the Release Helm Charts'
+        description: 'Release Helm Charts'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
 
 jobs:
   release:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      ${{ github.event.workflow_run.conclusion == 'success' }}||
+      ${{ github.event.inputs.chart-releaser == 'Yes' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
