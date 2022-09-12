@@ -148,6 +148,22 @@ spec:
                 description: ExposedPorts shows a one line representation of ports
                   and protocols exposed only used to show as a printercolumn
                 type: string
+              ingressGwEnabled:
+                description: IngressGwEnabled denotes ingress gw is enabled for the
+                  serviceexport
+                type: boolean
+              ingressGwPod:
+                description: IngressGwPod contains ingress gateway pod info
+                properties:
+                  name:
+                    description: Name of the pod
+                    type: string
+                  nsmIp:
+                    description: NsmIP of the pod which is reachable within slice
+                    type: string
+                required:
+                - name
+                type: object
               lastSync:
                 description: Last sync time with backend
                 format: int64

@@ -1,6 +1,6 @@
 operator:
   image: docker.io/aveshasystems/worker-operator
-  tag: 0.4.1
+  tag: 0.10.0
   pullPolicy: IfNotPresent
   logLevel: INFO
 
@@ -14,6 +14,7 @@ controllerSecret:
 cluster:
   name:
   nodeIp:
+  endpoint:
 
 router:
   image: docker.io/aveshasystems/vl3_ucnf-nse
@@ -33,7 +34,7 @@ netop:
 
 gateway:
   image: docker.io/aveshasystems/gw-sidecar
-  tag: 0.1.0
+  tag: 0.1.3
   pullPolicy: IfNotPresent
   logLevel: INFO
 
