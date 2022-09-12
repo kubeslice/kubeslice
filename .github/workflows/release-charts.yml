@@ -1,16 +1,11 @@
 name: Release Helm Charts
 
-#on:
-#  workflow_run:
-#    workflows: ["Opensource Charts Validation"]
-#    types:
-#      - completed
-
 on:
-  push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-       - master
+ workflow_run:
+   workflows: ["Opensource Charts Validation"]
+   types:
+     - completed
+
 
 jobs:
   release:
