@@ -8,7 +8,6 @@ on:
     # Sequence of patterns matched against refs/heads
     branches:
       - master
-      - validate-charts-rev1
     # Sequence of patterns matched against refs/tags
     tags:
       - kubeslice-controller-*
