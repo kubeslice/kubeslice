@@ -5,11 +5,11 @@ name: Release Helm Charts
 #    workflows: ["Opensource Charts Validation"]
 #    types:
 #      - completed
-
 on:
   push:
     branches:
       - master
+      
 
 jobs:
   release:
