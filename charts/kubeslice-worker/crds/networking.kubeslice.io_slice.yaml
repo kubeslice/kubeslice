@@ -89,6 +89,10 @@ spec:
               sliceConfig:
                 description: SliceConfig is the spec for slice received from hub cluster
                 properties:
+                  clusterSubnetCIDR:
+                    description: ClusterSubnetCIDR is the subnet to be used by the
+                      current cluster
+                    type: string
                   externalGatewayConfig:
                     description: ExternalGatewayConfig determines istio ingress/egress
                       configuration

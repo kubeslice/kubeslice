@@ -12,8 +12,8 @@ kubeslice:
     projectnsPrefix: kubeslice
     endpoint: 
     image: aveshasystems/kubeslice-controller
-    tag: 0.3.6
+    tag: 0.5.1
     pullPolicy: IfNotPresent
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
-    tag: 0.1.0
+    tag: 0.1.5
