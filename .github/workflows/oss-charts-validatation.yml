@@ -8,6 +8,7 @@ on:
     # Sequence of patterns matched against refs/heads
     branches:
       - master
+      - validate-dev-charts-rev1
     # Sequence of patterns matched against refs/tags
     tags:
       - kubeslice-controller-*
@@ -43,7 +44,7 @@ jobs:
           sudo git clone https://github.com/ahmetb/kubectx /usr/local/kubectx
           sudo ln -s /usr/local/kubectx/kubectx /usr/local/bin/kubectx
           sudo ln -s /usr/local/kubectx/kubens /usr/local/bin/kubens
-          
+
           # Increase the inotify.max_user_instances and inotify.max_user_watches sysctls on a Linux host
           sudo sysctl fs.inotify.max_user_instances=8192
           sudo sysctl fs.inotify.max_user_watches=524288
@@ -58,11 +59,21 @@ jobs:
           sudo sed -i "s|CONTROLLER=.*|CONTROLLER=$CONTROLLER|" kind.env
           sudo sed -i "s|WORKERS=.*|WORKERS=${{secrets.WORKERS}}|" kind.env
           sudo sed -i "s|KIND_K8S_VERSION=.*|KIND_K8S_VERSION=$KIND_K8S_VERSION|" kind.env
-          sudo cat kind.env
+
+          # Print Kubernetes Clusters
+          sudo echo "Clusters Prefix: $PREFIX"
+          sudo echo "Kubernetes Clusters: $(sudo echo "$CONTROLLER & ${{secrets.WORKERS}}")"
+          # Print Node Count per Cluster
+          sudo echo "Node Count per Cluster: 1 Control-Plane & 1 Worker"
+          # Print Kind Kubernetes Versions
+          sudo echo "Kind Kubernetes Version: $KIND_K8S_VERSION"
 
           # Validate the charts before release
+          sudo sed -i "s|sudo apt install -y ansible|sudo usermod -aG docker $USER|" kind.sh
           sudo sed -i "/helm repo update/ a $GIT_CLONE" kind.sh
-          sudo sed -i "/git clone/ a ls && pwd" kind.sh
+          sudo sed -i '/helm repo update/d' kind.sh
+          sudo sed -i '/helm repo list/d' kind.sh
+          sudo sed -i '/helm search repo/d' kind.sh
           sudo sed -i "s|kubeslice/cert-manager|$CERT_MGR|" kind.sh
           sudo sed -i "s|kubeslice/kubeslice-controller|$KBS_CTRL|" kind.sh
           sudo sed -i "s|kubeslice/kubeslice-worker|$KBS_WRKR|" kind.sh
