@@ -1,15 +1,19 @@
 name: Release Helm Charts
 
-on:
- workflow_run:
-   workflows: ["Opensource Charts Validation"]
-   types:
-     - completed
+# on:
+#  workflow_run:
+#    workflows: ["Opensource Charts Validation"]
+#    types:
+#      - completed
 
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
