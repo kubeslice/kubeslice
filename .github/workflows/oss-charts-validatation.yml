@@ -8,6 +8,7 @@ on:
     # Sequence of patterns matched against refs/heads
     branches:
       - master
+      - validate-charts-rev1
     # Sequence of patterns matched against refs/tags
     tags:
       - kubeslice-controller-*
@@ -69,6 +70,7 @@ jobs:
 
           # Validate the charts before release
           sudo sed -i "/helm repo update/ a $GIT_CLONE" kind.sh
+          sudo sed -i "/helm install/ a helm list -A" kind.sh
           sudo sed -i '/helm repo update/d' kind.sh
           sudo sed -i '/helm repo list/d' kind.sh
           sudo sed -i '/helm search repo/d' kind.sh
