@@ -43,7 +43,6 @@ jobs:
           sudo git clone https://github.com/ahmetb/kubectx /usr/local/kubectx
           sudo ln -s /usr/local/kubectx/kubectx /usr/local/bin/kubectx
           sudo ln -s /usr/local/kubectx/kubens /usr/local/bin/kubens
-          sudo usermod -aG docker $USER
 
           # Increase the inotify.max_user_instances and inotify.max_user_watches sysctls on a Linux host
           sudo sysctl fs.inotify.max_user_instances=8192
@@ -55,15 +54,25 @@ jobs:
           cd examples/kind
 
           # Create custom.env file
-          sudo sed -i "s|PREFIX=.*|PREFIX=$PREFIX|" kind.env
-          sudo sed -i "s|CONTROLLER=.*|CONTROLLER=$CONTROLLER|" kind.env
-          sudo sed -i "s|WORKERS=.*|WORKERS=${{secrets.WORKERS}}|" kind.env
+          sudo sed -i "s|PREFIX=.*|PREFIX=$CLUSTER_PREFIX|" kind.env
+          sudo sed -i "s|CONTROLLER=.*|CONTROLLER=$CONTROLLER_CLUSTER|" kind.env
+          sudo sed -i "s|WORKERS=.*|WORKERS=${{secrets.WORKER_CLUSTER}}|" kind.env
           sudo sed -i "s|KIND_K8S_VERSION=.*|KIND_K8S_VERSION=$KIND_K8S_VERSION|" kind.env
-          sudo cat kind.env
+
+          # Print Kubernetes Clusters
+          sudo echo "Clusters Prefix: $CLUSTER_PREFIX"
+          sudo echo "Kubernetes Clusters: $(sudo echo "$CONTROLLER_CLUSTER & ${{secrets.WORKER_CLUSTER}}")"
+          # Print Node Count per Cluster
+          sudo echo "Node Count per Cluster: 1 Control-Plane & 1 Worker"
+          # Print Kind Kubernetes Versions
+          sudo echo "Kind Kubernetes Version: $KIND_K8S_VERSION"
 
           # Validate the charts before release
           sudo sed -i "/helm repo update/ a $GIT_CLONE" kind.sh
-          sudo sed -i "/git clone/ a ls && pwd" kind.sh
+          sudo sed -i "/helm install/ a helm list -A" kind.sh
+          sudo sed -i '/helm repo update/d' kind.sh
+          sudo sed -i '/helm repo list/d' kind.sh
+          sudo sed -i '/helm search repo/d' kind.sh
           sudo sed -i "s|kubeslice/cert-manager|$CERT_MGR|" kind.sh
           sudo sed -i "s|kubeslice/kubeslice-controller|$KBS_CTRL|" kind.sh
           sudo sed -i "s|kubeslice/kubeslice-worker|$KBS_WRKR|" kind.sh
@@ -72,8 +81,8 @@ jobs:
           sudo bash kind.sh
           
         env:
-          PREFIX: '"kind-"'
-          CONTROLLER: '("controller")'
+          CLUSTER_PREFIX: '"kind-"'
+          CONTROLLER_CLUSTER: '("controller")'
           KIND_K8S_VERSION: '"--image=kindest/node:v1.22.7"'
 
           GIT_CLONE: git clone https://github.com/kubeslice/kubeslice.git
