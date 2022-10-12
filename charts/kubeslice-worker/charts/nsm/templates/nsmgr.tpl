@@ -19,8 +19,8 @@ spec:
       {{- end }}
       containers:
         - name: nsmdp
-          image: {{ .Values.registry }}/{{ .Values.org }}/nsmdp:{{ .Values.tag }}
-          imagePullPolicy: {{ .Values.pullPolicy }}
+          image: {{ .Values.registry }}/{{ .Values.org }}/nsmdp:{{ .Values.nsmdp.tag }}
+          imagePullPolicy: {{ .Values.nsmdp.pullPolicy }}
           env:
             - name: INSECURE
               value: {{ .Values.insecure | default false | quote }}
@@ -46,8 +46,8 @@ spec:
               mountPath: /run/spire/sockets
               readOnly: true
         - name: nsmd
-          image: {{ .Values.registry }}/{{ .Values.org }}/nsmd:{{ .Values.tag }}
-          imagePullPolicy: {{ .Values.pullPolicy }}
+          image: {{ .Values.registry }}/{{ .Values.org }}/nsmd:{{ .Values.nsmd.tag }}
+          imagePullPolicy: {{ .Values.nsmd.pullPolicy }}
           env:
             - name: INSECURE
               value: {{ .Values.insecure | default false | quote }}
@@ -86,8 +86,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
         - name: nsmd-k8s
-          image: {{ .Values.registry }}/{{ .Values.org }}/nsmd-k8s:{{ .Values.tag }}
-          imagePullPolicy: {{ .Values.pullPolicy }}
+          image: {{ .Values.registry }}/{{ .Values.org }}/nsmd-k8s:{{ .Values.nsmdK8s.tag }}
+          imagePullPolicy: {{ .Values.nsmdK8s.pullPolicy }}
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

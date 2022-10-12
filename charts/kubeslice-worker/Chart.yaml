@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 0.10.0
+appVersion: 0.11.0
 description: KubeSlice Operator
 name: kubeslice-worker
 type: application
-version: 0.3.0
+version: 0.4.0
