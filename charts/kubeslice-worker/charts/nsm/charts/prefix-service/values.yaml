@@ -6,7 +6,7 @@
 # NOTE: the variables might be overriden by helm command line options, see helm.mk
 registry: docker.io
 org: aveshasystems
-tag: 0.6.1
+tag: 0.6.2
 pullPolicy: IfNotPresent
 
 serviceAccount:
