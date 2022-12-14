@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  kubeslice-worker:
+  - apiVersion: v2
+    appVersion: 0.11.0
+    created: "2022-12-14T07:06:06.568116645Z"
+    description: KubeSlice Operator
+    digest: 1b11ab5967d8ae430c89b6579019505d80d14773503d7579d4f6dd3cd8aecb1b
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.4.1/kubeslice-worker-0.4.1.tgz
+    version: 0.4.1
+generated: "2022-12-14T07:06:06.568129245Z"
