@@ -1,10 +1,10 @@
 name: Release Helm Charts
 
 on:
-  workflow_run:
-    workflows: ["Opensource Charts Validation"]
-    types:
-      - completed
+#   workflow_run:
+#     workflows: ["Opensource Charts Validation yyyy"]
+#     types:
+#       - completed
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
