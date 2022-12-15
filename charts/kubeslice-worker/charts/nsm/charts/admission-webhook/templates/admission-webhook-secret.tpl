@@ -34,7 +34,7 @@ spec:
         - name: avesha-nexus
       containers:
         - name: nsm-admission-webhook
-          image: docker.io/aveshasystems/nsm-admission-webhook:1.0.1
+          image: docker.io/aveshasystems/nsm-admission-webhook:1.0.2
           imagePullPolicy: {{ .Values.pullPolicy }}
           env:
             - name: INITCONTAINER_REPO

@@ -3,4 +3,4 @@ appVersion: 0.11.0
 description: KubeSlice Operator
 name: kubeslice-worker
 type: application
-version: 0.4.1
+version: 0.4.2

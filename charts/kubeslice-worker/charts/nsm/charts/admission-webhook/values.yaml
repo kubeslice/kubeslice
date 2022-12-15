@@ -4,10 +4,10 @@
 # Declare variables to be passed into your templates.
 
 initContainerRegistry: docker.io/aveshasystems
-initContainerTag: 1.0.0
+initContainerTag: 1.0.1
 
 dnsSidecarContainerRegistry: docker.io/aveshasystems
-dnsSidecarContainerTag: 1.0.0
+dnsSidecarContainerTag: 1.0.1
 
 pullPolicy: IfNotPresent
 clientNamespace: kubeslice-system
