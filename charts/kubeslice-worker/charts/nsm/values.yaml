@@ -17,22 +17,22 @@ vpp:
 
 nsmd:
   image: nsmd
-  tag: 0.6.1
+  tag: 0.6.2
   pullPolicy: IfNotPresent
 
 nsmdp:
   image: nsmdp
-  tag: 0.6.1
+  tag: 0.6.2
   pullPolicy: IfNotPresent
 
 nsmdK8s:
   image: nsmd-k8s
-  tag: 0.6.2
+  tag: 0.6.3
   pullPolicy: IfNotPresent
 
 kernel:
   image: kernel-forwarder
-  tag: 0.6.2
+  tag: 0.6.3
   pullPolicy: IfNotPresent
   resources:
     limitCPU: 1
