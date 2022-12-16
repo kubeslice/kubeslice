@@ -1,5 +1,4 @@
 name: Update Index
-
 on:
   push:
     branches: [ master ]
