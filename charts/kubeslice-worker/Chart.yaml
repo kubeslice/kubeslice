@@ -3,4 +3,4 @@ appVersion: 0.11.0
 description: A Helm chart for KubeSlice Worker
 name: kubeslice-worker
 type: application
-version: 0.4.2
+version: 0.4.1
