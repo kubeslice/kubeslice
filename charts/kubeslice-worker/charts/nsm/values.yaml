@@ -14,7 +14,7 @@ preferredRemoteMechanism:
 
 vpp:
   image: vppagent-forwarder
-  
+
 nsmd:
   image: nsmd
   tag: 0.6.1

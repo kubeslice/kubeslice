@@ -22,8 +22,8 @@ spec:
         - name: {{ (index .Values $fp).image }}
           securityContext:
             privileged: true
-          image: {{ .Values.registry }}/{{ .Values.org }}/{{ (index .Values $fp).image }}:{{ .Values.tag }}
-          imagePullPolicy: {{ .Values.pullPolicy }}
+          image: {{ .Values.registry }}/{{ .Values.org }}/{{ (index .Values $fp).image }}:{{ (index .Values $fp).tag }}
+          imagePullPolicy: {{ (index .Values $fp).pullPolicy }}
           env:
             - name: INSECURE
               value: {{ .Values.insecure | default false | quote }}

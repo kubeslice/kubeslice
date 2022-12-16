@@ -380,6 +380,11 @@ spec:
                       type: object
                   type: object
                 type: array
+              maxClusters:
+                default: 16
+                maximum: 32
+                minimum: 2
+                type: integer
               namespaceIsolationProfile:
                 properties:
                   allowedNamespaces:
@@ -707,6 +712,8 @@ spec:
           spec:
             description: WorkerSliceConfigSpec defines the desired state of Slice
             properties:
+              clusterSubnetCIDR:
+                type: string
               externalGatewayConfig:
                 properties:
                   egress:
@@ -746,6 +753,8 @@ spec:
                     default: false
                     type: boolean
                 type: object
+              octet:
+                type: integer
               qosProfileDetails:
                 description: QOSProfile is the QOS Profile configuration from backend
                 properties:
@@ -798,6 +807,8 @@ spec:
               sliceType:
                 default: Application
                 type: string
+            required:
+            - octet
             type: object
           status:
             description: WorkerSliceConfigStatus defines the observed state of Slice
