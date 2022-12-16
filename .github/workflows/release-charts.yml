@@ -1,17 +1,57 @@
 name: Release Helm Charts
 
 on:
-#   workflow_run:
-#     workflows: ["Opensource Charts Validation yyyy"]
-#     types:
-#       - completed
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      chart-releaser:
+      cert-manager:
         type: choice
-        # Friendly description to be shown in the Release Helm Charts'
-        description: 'Release Helm Charts'
+        # Friendly description to be shown in the UI instead of 'cert-manager'
+        description: 'Release cert-manager Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
+      istio-base:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'istio-base'
+        description: 'Release istio-base Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
+      istio-discovery:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'istio-discovery'
+        description: 'Release istio-discovery Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
+      kubeslice-controller:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'kubeslice-controller'
+        description: 'Release kubeslice-controller Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
+      kubeslice-worker:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'kubeslice-worker'
+        description: 'Release kubeslice-worker Helm Chart'
         # Default value if no value is explicitly provided
         default: 'No'
         # Input has to be provided for the workflow to run
@@ -22,9 +62,6 @@ on:
 
 jobs:
   release:
-    if: |
-      ${{ github.event.workflow_run.conclusion == 'success' }}||
-      ${{ github.event.inputs.chart-releaser == 'Yes' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -43,7 +80,42 @@ jobs:
         with:
           version: v3.8.1
           
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.4.0
+      - name: Run cert-manager chart-releaser
+        if: ${{ github.event.inputs.cert-manager == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/cert-manager
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run istio-base chart-releaser
+        if: ${{ github.event.inputs.istio-base == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/istio-base
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run istio-discovery chart-releaser
+        if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/istio-discovery
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run kubeslice-controller chart-releaser
+        if: ${{ github.event.inputs.kubeslice-controller == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/kubeslice-controller
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run kubeslice-worker chart-releaser
+        if: ${{ github.event.inputs.kubeslice-worker == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/kubeslice-worker
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
