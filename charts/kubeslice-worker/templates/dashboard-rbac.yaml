@@ -1,0 +1,43 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeslice-kubernetes-dashboard
+rules:
+  - verbs:
+      - get
+      - list
+      - watch
+    resources:
+      - "*"
+    apiGroups:
+      - "*"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubeslice-kubernetes-dashboard
+  namespace: kubeslice-system
+secrets:
+  - name: kubeslice-kubernetes-dashboard-creds
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubeslice-kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubeslice-kubernetes-dashboard
+subjects:
+  - kind: ServiceAccount
+    name: kubeslice-kubernetes-dashboard
+    namespace: kubeslice-system
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: kubeslice-kubernetes-dashboard-creds
+  annotations:
+    kubernetes.io/service-account.name: "kubeslice-kubernetes-dashboard"

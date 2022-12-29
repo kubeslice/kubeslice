@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: registry
+  ports:
+    - name: registry
+      protocol: TCP
+      port: 5002
+      targetPort: 5002
+  type: ClusterIP

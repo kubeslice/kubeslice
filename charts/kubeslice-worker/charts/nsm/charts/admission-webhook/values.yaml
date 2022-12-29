@@ -3,11 +3,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-initContainerRegistry: docker.io/aveshasystems
-initContainerTag: 1.0.1
+webhookImageRegistry: docker.io/aveshasystems/cmd-admission-webhook-k8s
+webhookImageTag: 1.5.2
 
-dnsSidecarContainerRegistry: docker.io/aveshasystems
-dnsSidecarContainerTag: 1.0.1
+nsmInjectContainerImageRegistry: docker.io/aveshasystems/cmd-nsc
+nsmInjectContainerImageTag: 1.5.2
 
-pullPolicy: IfNotPresent
-clientNamespace: kubeslice-system
+nsmInjectInitContainerImageRegistry: docker.io/aveshasystems/cmd-nsc-init
+nsmInjectInitContainerImageTag: 1.5.2
+
+
+
+

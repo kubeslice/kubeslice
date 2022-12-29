@@ -1338,6 +1338,33 @@ spec:
   selector:
     control-plane: controller-manager
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubeslice-controller-cleanup
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      serviceAccountName: kubeslice-controller-controller-manager
+      containers:
+        - name: cleanup
+          image: '{{ .Values.kubeslice.controller.image }}:{{ .Values.kubeslice.controller.tag }}'
+          imagePullPolicy: '{{ .Values.kubeslice.controller.pullPolicy }}'
+          command:
+            - /cleanup
+          env:
+            - name: KUBESLICE_CONTROLLER_MANAGER_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+      restartPolicy: Never
+  backoffLimit: 1
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

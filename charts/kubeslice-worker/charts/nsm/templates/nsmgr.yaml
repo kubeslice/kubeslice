@@ -1,0 +1,152 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsmgr
+  labels:
+    app: nsmgr
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: nsmgr
+  template:
+    metadata:
+      labels:
+        app: nsmgr
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      serviceAccountName: nsmgr-acc
+      initContainers:
+        - name: init
+          # This is a small image with wait-for-it, choose whatever image
+          # you prefer that waits for a service to be up. This image is built
+          # from https://github.com/lqhl/wait-for-it
+          image: {{ .Values.nsmgr.waitForItImageRegistry }}:{{ .Values.nsmgr.waitForItImageTag }}
+          imagePullPolicy: IfNotPresent
+          args: [ "-t", "120", "spire-server.spire:8081" ]
+          #command: ['sh', '-c', 'sleep 120']
+          #command: ['sh', '-c', "t=0; until [ -f /run/spire/sockets/agent.sock 2>&1 ] || [ $t -eq 5 ]; do t=`expr $t + 1`; sleep 15; done;"]
+      containers:
+        - image: {{ .Values.nsmgr.imageRegistry }}:{{ .Values.nsmgr.imageTag }}
+          imagePullPolicy: IfNotPresent
+          name: nsmgr
+          ports:
+            - containerPort: 5001
+              hostPort: 5001
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_REGISTRY_URL
+              value: "registry:5002"
+            #            - name: DLV_LISTEN_NSMGR
+            #              value: :40000
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NSM_LISTEN_ON
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock,tcp://:5001
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: INSECURE
+              value: {{ .Values.insecure | default false | quote }}
+            - name: TRACER_ENABLED
+              value: {{ .Values.global.JaegerTracing | default false | quote }}
+            - name: NSM_OPENTELEMETRYENDPOINT
+              value: jaeger.{{ .Release.Namespace }}:6831
+            - name: JAEGER_AGENT_HOST
+              value: jaeger.{{ .Release.Namespace }}
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+            - name: FORWARDER_NAME
+              value: "kernel"
+          volumeMounts:
+            - name: kubelet-socket
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+            - name: nsm-config-volume
+              mountPath: /var/lib/networkservicemesh/config/
+          resources:
+            requests:
+              cpu: 200m
+              memory: 100Mi
+            limits:
+              memory: 200Mi
+              cpu: 400m
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 300
+            initialDelaySeconds: 1
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          startupProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 25
+            periodSeconds: 5
+        - image: {{ .Values.nsmgr.excludePrefixesImageRegistry }}:{{ .Values.nsmgr.excludePrefixesImageTag }}
+          imagePullPolicy: IfNotPresent
+          name: exclude-prefixes
+          env:
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_CONFIG_MAP_NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: NSM_PREFIXES_OUTPUT_TYPE
+              value: config-map
+          volumeMounts:
+            - name: nsm-config-volume
+              mountPath: /var/lib/networkservicemesh/config/
+          resources:
+            limits:
+              memory: 40Mi
+              cpu: 75m
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/device-plugins
+            type: DirectoryOrCreate
+          name: kubelet-socket
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+        - name: nsm-config-volume
+{{/*          emptyDir:*/}}
+{{/*            {}*/}}
+          configMap:
+            name: nsm-config
+      tolerations:
+        - key: "kubeslice.io/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoSchedule"
+        - key: "kubeslice.io/node-type"
+          operator: "Equal"
+          value: "gateway"
+          effect: "NoExecute"

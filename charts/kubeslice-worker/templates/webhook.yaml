@@ -38,12 +38,13 @@ webhooks:
     service:
       name: kubeslice-webhook-service
       namespace: {{ .Release.Namespace }}
-      path: /mutate-corev1-pod
+      path: /mutate-webhook
   failurePolicy: Fail
   name: webhook.kubeslice.io
   rules:
   - apiGroups:
     - ""
+    - apps
     apiVersions:
     - v1
     operations:
@@ -51,16 +52,25 @@ webhooks:
     - UPDATE
     resources:
     - pods
+    - deployments
+    - statefulsets
+    - daemonsets
   sideEffects: NoneOnDryRun
   namespaceSelector:
     matchExpressions:
+    - key: kubeslice.io/slice
+      operator: Exists
     - key: name
       operator: NotIn
       values:
       - kube-system
-      - {{ .Release.Namespace }}
+      - spire
+      - {{ .Release.Namespace | quote}}
+      - {{ .Values.controllerNamespace | quote }}
     - key: kubernetes.io/metadata.name
       operator: NotIn
       values:
       - kube-system
-      - {{ .Release.Namespace }}
+      - spire
+      - {{ .Release.Namespace | quote }}
+      - {{ .Values.controllerNamespace | quote }}

@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 0.11.0
-description: A Helm chart for KubeSlice Worker
+appVersion: 0.15.1
+description: A Helm Chart for kubeslice-worker
 name: kubeslice-worker
 type: application
-version: 0.4.1
+version: 0.5.0

@@ -11,14 +11,13 @@ rules:
     resources:
       - "networkservices"
       - "networkserviceendpoints"
-      - "networkservicemanagers"
     verbs: ["*"]
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["*"]
   - apiGroups: [""]
     resources: ["configmaps"]
-    verbs: ["get", "update"]
+    verbs: ["patch", "get", "list", "watch", "update", "read", "write"]
   - apiGroups: [""]
     resources: ["nodes", "services", "namespaces"]
     verbs: ["get", "list", "watch"]
