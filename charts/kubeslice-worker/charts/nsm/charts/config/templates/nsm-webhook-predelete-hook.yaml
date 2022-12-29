@@ -1,0 +1,128 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nsm-delete-webhooks
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote}}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nsm-delete-webhooks
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nsm-delete-webhooks
+subjects:
+  - kind: ServiceAccount
+    name: nsm-delete-webhooks
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nsm-delete-webhooks
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - "admissionregistration.k8s.io"
+    resources:
+      - mutatingwebhookconfigurations
+    verbs:
+      - get
+      - list
+      - delete
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nsm-delete-webhooks
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+data:
+  delete-admission-webhook.sh: |-
+    #!/usr/bin/env bash
+
+    echo "finding out the admission webhook "
+    WH=$(kubectl get pods -l app=admission-webhook-k8s -n {{ .Release.Namespace }} --template {{`'{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'`}})
+    echo "deleting mutatingwebhookconfiguration ${WH}"
+    kubectl delete mutatingwebhookconfiguration --ignore-not-found ${WH}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nsm-delete-webhooks
+  namespace:  {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "2"
+  labels:
+    app.kubernetes.io/name: nsm
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      name: nsm-delete-webhooks
+      namespace: {{ .Release.Namespace }}
+    spec:
+      serviceAccountName: nsm-delete-webhooks
+      containers:
+        - name: kubectl
+          image: "alpine/k8s:1.22.9"
+          command:
+            - /bin/bash
+            - /tmp/delete-admission-webhook.sh
+          volumeMounts:
+            - mountPath: /tmp
+              name: nsm-delete-webhooks
+      volumes:
+        - name: nsm-delete-webhooks
+          configMap:
+            name: nsm-delete-webhooks
+      restartPolicy: OnFailure

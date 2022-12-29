@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubeslice-delete-webhooks
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote}}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubeslice-delete-webhooks
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubeslice-delete-webhooks
+subjects:
+  - kind: ServiceAccount
+    name: kubeslice-delete-webhooks
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeslice-delete-webhooks
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+  - apiGroups: ["spiffeid.spiffe.io"]
+    resources: ["spiffeids"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: ["spiffeid.spiffe.io"]
+    resources: ["spiffeids/status"]
+    verbs: ["get", "patch", "update"]
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeslice-delete-webhooks
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+data:
+  delete-admission-webhook.sh: |-
+    #!/usr/bin/env bash
+    NAMESPACE={{ .Release.Namespace | quote}}
+    echo "finding and removing spiffeids in namespace $NAMESPACE ..."
+    for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $NAMESPACE -o name); do
+      echo "removing item $item"
+      kubectl patch $item -p '{"metadata":{"finalizers":null}}' --type=merge -n $NAMESPACE
+      kubectl delete $item --ignore-not-found -n $NAMESPACE
+    done
+    # TODO: once we figure out how to keep spire in release ns then we could remove this
+    NAMESPACE="spire"
+    echo "finding and removing spiffeids in namespace $NAMESPACE ..."
+    for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $NAMESPACE -o name); do
+      echo "removing item $item"
+      kubectl patch $item -p '{"metadata":{"finalizers":null}}' --type=merge -n $NAMESPACE
+      kubectl delete $item --ignore-not-found -n $NAMESPACE
+    done
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubeslice-delete-webhooks
+  namespace:  {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "2"
+  labels:
+    app.kubernetes.io/name: nsm
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      name: kubeslice-delete-webhooks
+      namespace: {{ .Release.Namespace }}
+    spec:
+      serviceAccountName: kubeslice-delete-webhooks
+      containers:
+        - name: kubectl
+          image: "alpine/k8s:1.22.9"
+          command:
+            - /bin/bash
+            - /tmp/delete-admission-webhook.sh
+          volumeMounts:
+            - mountPath: /tmp
+              name: kubeslice-delete-webhooks
+      volumes:
+        - name: kubeslice-delete-webhooks
+          configMap:
+            name: kubeslice-delete-webhooks
+      restartPolicy: OnFailure

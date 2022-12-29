@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spire-server
+  namespace: spire
+  labels:
+    app: spire-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spire-server
+  serviceName: spire-server
+  template:
+    metadata:
+      namespace: spire
+      labels:
+        app: spire-server
+    spec:
+      serviceAccountName: spire-server
+      shareProcessNamespace: true
+      containers:
+        - name: spire-server
+          image: {{ .Values.spireServer.imageRegistry }}:{{ .Values.spireServer.imageTag }}
+          args:
+            - -config
+            - /run/spire/config/server.conf
+          ports:
+            - containerPort: 8081
+          volumeMounts:
+            - name: spire-config
+              mountPath: /run/spire/config
+              readOnly: true
+            - name: spire-registration-socket
+              mountPath: /tmp
+              readOnly: false
+          livenessProbe:
+            exec:
+              command:
+                - /opt/spire/bin/spire-server
+                - healthcheck
+            failureThreshold: 2
+            initialDelaySeconds: 15
+            periodSeconds: 60
+            timeoutSeconds: 3
+          readinessProbe:
+            exec:
+              command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
+          # This is a workaround for https://github.com/spiffe/spire/issues/2872
+          # that prevents k8s-workload-registrar container restarts until
+          # https://github.com/spiffe/spire/pull/2921 will come with SPIRE 1.3.0.
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sleep", "2"]
+        - name: k8s-workload-registrar
+          image: {{ .Values.spireServer.k8sWorkloadRegistrarImageRegistry }}:{{ .Values.spireServer.k8sWorkloadRegistrarImageTag }}
+          args:
+            - -config
+            - /run/spire/config/k8s-workload-registrar.conf
+          env:
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - containerPort: 9443
+              name: webhook
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /run/spire/config
+              name: k8s-workload-registrar-config
+              readOnly: true
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
+              readOnly: true
+            - name: spire-registration-socket
+              mountPath: /tmp
+              readOnly: false
+      volumes:
+        - name: spire-config
+          configMap:
+            name: spire-server
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: DirectoryOrCreate
+        - name: k8s-workload-registrar-config
+          configMap:
+            name: k8s-workload-registrar
+        - name: spire-registration-socket
+          emptyDir: {}

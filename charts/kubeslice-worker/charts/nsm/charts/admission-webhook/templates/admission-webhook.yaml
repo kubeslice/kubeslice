@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsm-admission-webhook-k8s
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: admission-webhook-k8s
+spec:
+  selector:
+    matchLabels:
+      app: admission-webhook-k8s
+  template:
+    metadata:
+      labels:
+        app: admission-webhook-k8s
+    spec:
+      serviceAccountName: admission-webhook-sa
+      containers:
+        - name: admission-webhook-k8s
+          image: {{ .Values.webhookImageRegistry }}:{{ .Values.webhookImageTag }}
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 443
+              scheme: HTTPS
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_SERVICE_NAME
+              value: admission-webhook-svc
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NSM_ANNOTATION
+              value: networkservicemesh.io
+{{/*            - name: NSM_CONTAINER_IMAGES*/}}
+{{/*              value: ghcr.io/networkservicemesh/cmd-nsc:v1.5.0*/}}
+            - name: NSM_CONTAINER_IMAGES
+              value: "{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
+            - name: NSM_INIT_CONTAINER_IMAGES
+              value: "{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
+            - name: NSM_LABELS
+              value: spiffe.io/spiffe-id:true
+            - name: NSM_ENVS
+              value: NSM_LOG_LEVEL=TRACE,NSM_LIVENESSCHECKENABLED=false

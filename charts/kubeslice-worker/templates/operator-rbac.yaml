@@ -86,6 +86,30 @@ rules:
   - update
   - watch
 - apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - ""
   resources:
   - endpoints
@@ -157,7 +181,7 @@ rules:
 - apiGroups:
   - networking.kubeslice.io
   resources:
-  - slice
+  - slices
   verbs:
   - create
   - delete
@@ -169,13 +193,13 @@ rules:
 - apiGroups:
   - networking.kubeslice.io
   resources:
-  - slice/finalizers
+  - slices/finalizers
   verbs:
   - update
 - apiGroups:
   - networking.kubeslice.io
   resources:
-  - slice/status
+  - slices/status
   verbs:
   - get
   - patch
