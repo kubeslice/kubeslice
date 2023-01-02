@@ -16,4 +16,4 @@ kubeslice:
     pullPolicy: IfNotPresent
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
-    tag: 0.1.4
+    tag: 0.1.9
