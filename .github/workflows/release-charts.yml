@@ -108,7 +108,7 @@ jobs:
         if: ${{ github.event.inputs.kubeslice-controller == 'Yes' }}
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: charts/kubeslice-controller
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
