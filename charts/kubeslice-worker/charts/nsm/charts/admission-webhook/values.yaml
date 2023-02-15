@@ -3,8 +3,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-webhookImageRegistry: aveshadev/cmd-admission-webhook-k8s
-webhookImageTag: 1.6.0-RELEASE-489d2e83
+webhookImageRegistry: aveshasystems/cmd-admission-webhook-k8s
+webhookImageTag: 1.6.0
 
 nsmInjectContainerImageRegistry: aveshasystems/cmd-nsc
 nsmInjectContainerImageTag: 1.5.3
