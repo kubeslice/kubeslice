@@ -1,11 +1,8 @@
-# Kubeslice Community Kubernetes Helm Charts
+# Kubeslice Controller Helm Charts
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-KubeSlice provides network services to applications that need secure and highly available connectivity between multiple clusters. KubeSlice creates a flat overlay network to connect the clusters. The overlay network can be described as an application slice that provides a slice of connectivity between the pods of an application running in multiple clusters. It can also be described as an application-specific VPC that spans across clusters. Pods can connect to the slice overlay network and communicate with each other seamlessly across cluster boundaries.
-
-# Architecture overview
-See [Kubeslice Reference Architecture](https://docs.avesha.io/opensource/kube-slice-architecture) to get an overview of the overall architecture and core components.
+The KubeSlice Controller is installed in one of the clusters and provides a central configuration management system, for slices across multiple clusters. Please refer to the [documentation](https://docs.avesha.io/documentation/open-source/0.6.0/architecture#kubeslice-controller) for more details.
 
 # Usage
 
@@ -15,19 +12,30 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add avesha https://raw.githubusercontent.com/kubeslice/dev-charts/gh-pages/ --username <Your Username> --password <Your token>
+helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 ```
 
-You can then run `helm search repo avesha` to see the charts.
+You can then run `helm search repo kubeslice` to see the charts.
 
 
-Quick Start
----
+## Setting Up Kubeslice Controller
 
-See [Getting Started](https://docs.avesha.io/opensource/getting-started-with-kind-clusters) for instructions on setting up a local kubeslice setup using [`kind`](https://kind.sigs.k8s.io/) for non-production use.
+### Install Chart
 
-For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud](https://docs.avesha.io/opensource/getting-started-with-cloud-clusters).
+See [Kubeslice Controller Installation](https://docs.avesha.io/documentation/open-source/0.6.0/getting-started-with-kind-clusters) for instructions on installing kubeslice controller on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
+
+For setting up Kubeslice Controller on other cloud platforms, refer to the [Kubeslice Controller Installation on Cloud](https://docs.avesha.io/documentation/open-source/0.6.0/getting-started-with-cloud-clusters/).
+
+### Uninstall Chart
+
+Please refer the following Kubeslice controller [uninstallation](https://docs.avesha.io/documentation/open-source/0.6.0/getting-started-with-cloud-clusters/uninstalling-kubeslice/) steps
+
+### Upgrading Chart
+
+```console
+helm upgrade [RELEASE_NAME] kubeslice/kubeslice-controller [flags]
+```
 
 Guide
 ---
-A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/opensource/) website.
+A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/documentation/open-source/0.6.0/) website.
