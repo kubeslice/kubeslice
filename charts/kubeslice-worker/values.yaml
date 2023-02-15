@@ -1,5 +1,5 @@
 operator:
-  image: aveshasystems/worker-operator
+  image: docker.io/aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
   tag: 0.17.1
@@ -21,18 +21,18 @@ router:
   pullPolicy: IfNotPresent
 
 routerSidecar:
-  image: aveshasystems/kubeslice-router-sidecar
+  image: docker.io/aveshasystems/kubeslice-router-sidecar
   tag: 1.4.1
   pullPolicy: IfNotPresent
 
 netop:
   networkInterface: eth0
-  image: aveshasystems/netops
+  image: docker.io/aveshasystems/netops
   tag: 0.2.0
   pullPolicy: IfNotPresent
 
 gateway:
-  image: aveshasystems/gw-sidecar
+  image: docker.io/aveshasystems/gw-sidecar
   tag: 0.3.0
   pullPolicy: IfNotPresent
   logLevel: INFO
