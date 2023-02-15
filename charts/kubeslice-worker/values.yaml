@@ -1,9 +1,8 @@
 operator:
-  image: docker.io/aveshasystems/worker-operator
-  tag: 0.15.1
+  image: aveshadev/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-
+  tag: 0.17.0-RELEASE-1b906ec4
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
   namespace:
@@ -22,26 +21,26 @@ router:
   pullPolicy: IfNotPresent
 
 routerSidecar:
-  image: docker.io/aveshasystems/kubeslice-router-sidecar
-  tag: 0.3.1
+  image: aveshadev/kubeslice-router-sidecar
+  tag: 1.5.0-RELEASE-9f9ddb34
   pullPolicy: IfNotPresent
 
 netop:
   networkInterface: eth0
-  image: docker.io/aveshasystems/netops
-  tag: 0.1.1
+  image: aveshadev/netops
+  tag: 0.2.0-RELEASE-4f621b2a
   pullPolicy: IfNotPresent
 
 gateway:
-  image: docker.io/aveshasystems/gw-sidecar
-  tag: 0.1.4
+  image: docker.io/aveshadev/gw-sidecar
+  tag: 0.3.0-RELEASE-1a5b2f15
   pullPolicy: IfNotPresent
   logLevel: INFO
 
 openvpn:
   server:
     image: docker.io/aveshasystems/openvpn-server.alpine.amd64
-    tag: 1.0.0
+    tag: 1.0.1
     pullPolicy: IfNotPresent
   client:
     image: docker.io/aveshasystems/openvpn-client.alpine.amd64

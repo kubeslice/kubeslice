@@ -3,14 +3,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-webhookImageRegistry: docker.io/aveshasystems/cmd-admission-webhook-k8s
-webhookImageTag: 1.5.2
+webhookImageRegistry: aveshadev/cmd-admission-webhook-k8s
+webhookImageTag: 1.6.0-RELEASE-489d2e83
 
-nsmInjectContainerImageRegistry: docker.io/aveshasystems/cmd-nsc
-nsmInjectContainerImageTag: 1.5.2
+nsmInjectContainerImageRegistry: aveshasystems/cmd-nsc
+nsmInjectContainerImageTag: 1.5.3
 
-nsmInjectInitContainerImageRegistry: docker.io/aveshasystems/cmd-nsc-init
-nsmInjectInitContainerImageTag: 1.5.2
+nsmInjectInitContainerImageRegistry: aveshasystems/cmd-nsc-init
+nsmInjectInitContainerImageTag: 1.5.3
 
 
 
