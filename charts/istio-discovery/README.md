@@ -5,7 +5,7 @@ This chart installs an Istiod deployment.
 ## Setup Repo Info
 
 ```console
-helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 helm repo update
 ```
 
@@ -15,16 +15,16 @@ _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation
 
 Before installing, ensure CRDs are installed in the cluster (from the `istio/base` chart).
 
-To install the chart with the release name `istiod`:
+To install the chart with the release name `istio-discovery`:
 
 ```console
 kubectl create namespace istio-system
-helm install istiod istio/istiod --namespace istio-system
+helm install istiod kubeslice/istio-discovery -n istio-system
 ```
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `istiod` deployment:
+To uninstall/delete the `istio-discovery` deployment:
 
 ```console
 helm delete istiod --namespace istio-system
@@ -35,7 +35,7 @@ helm delete istiod --namespace istio-system
 To view support configuration options and documentation, run:
 
 ```console
-helm show values istio/istiod
+helm show values kubeslice/istio-discovery
 ```
 
 ### Examples
