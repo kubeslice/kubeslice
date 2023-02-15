@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubeslice-cleanup
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote}}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubeslice-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubeslice-cleanup
+subjects:
+  - kind: ServiceAccount
+    name: kubeslice-cleanup
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeslice-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - create
+      - delete
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubeslice-cleanup
+  namespace:  {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "2"
+  labels:
+    app.kubernetes.io/name: nsm
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      name: kubeslice-cleanup
+      namespace: {{ .Release.Namespace }}
+    spec:
+      serviceAccountName: kubeslice-cleanup
+      containers:
+        - name: kubectl
+          image: "alpine/k8s:1.22.9"
+          command:
+            - /bin/sh
+            - -c
+            - kubectl delete cm nsm-config --ignore-not-found -n {{ .Release.Namespace }}
+      restartPolicy: OnFailure

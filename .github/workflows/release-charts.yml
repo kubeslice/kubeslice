@@ -84,7 +84,7 @@ jobs:
         if: ${{ github.event.inputs.cert-manager == 'Yes' }}
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: charts/cert-manager
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -92,7 +92,7 @@ jobs:
         if: ${{ github.event.inputs.istio-base == 'Yes' }}
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: charts/istio-base
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -100,7 +100,7 @@ jobs:
         if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: charts/istio-discovery
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           

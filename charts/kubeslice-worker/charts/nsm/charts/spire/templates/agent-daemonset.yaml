@@ -27,7 +27,7 @@ spec:
           # from https://github.com/lqhl/wait-for-it
           image: {{ .Values.spireAgent.waitForItImageRegistry }}:{{ .Values.spireAgent.waitForItImageTag }}
           imagePullPolicy: IfNotPresent
-          args: ["-t", "30", "spire-server:8081"]
+          args: ["-t", "60", "spire-server:8081"]
         - name: init-bundle
           # Additional init container with the same wait-for-it image to
           # provide workaround for https://github.com/spiffe/spire/issues/3032

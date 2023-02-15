@@ -136,3 +136,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 6 }}
       {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubeslice.io/node-type
+                operator: In
+                values:
+                - gateway

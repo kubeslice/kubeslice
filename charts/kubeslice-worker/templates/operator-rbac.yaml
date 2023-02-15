@@ -126,8 +126,36 @@ rules:
   resources:
   - pods
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
+  - watch
+  - deletecollection
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
   - update
   - watch
 - apiGroups:

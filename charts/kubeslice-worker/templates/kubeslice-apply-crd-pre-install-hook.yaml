@@ -452,6 +452,7 @@ data:
         listKind: SliceGatewayList
         plural: slicegateways
         shortNames:
+        - gw
         - slicegw
         singular: slicegateway
       scope: Namespaced
@@ -515,21 +516,27 @@ data:
                       sliceGatewayName:
                         description: Slice Gateway Name
                         type: string
-                      sliceGatewayNodePort:
+                      sliceGatewayNodePorts:
                         description: Node port
-                        type: integer
+                        items:
+                          type: integer
+                        type: array
                       sliceGatewayRemoteClusterId:
                         description: Remote Cluster ID
                         type: string
                       sliceGatewayRemoteGatewayId:
                         description: Remote Gateway ID
                         type: string
-                      sliceGatewayRemoteNodeIp:
-                        description: Remote Node IP
-                        type: string
-                      sliceGatewayRemoteNodePort:
+                      sliceGatewayRemoteNodeIps:
+                        description: Remote Node IPs
+                        items:
+                          type: string
+                        type: array
+                      sliceGatewayRemoteNodePorts:
                         description: Remote Node Port
-                        type: integer
+                        items:
+                          type: integer
+                        type: array
                       sliceGatewayRemoteSubnet:
                         description: Remote Node Subnet
                         type: string
@@ -559,21 +566,67 @@ data:
                       in pod
                     format: int64
                     type: integer
-                  localIp:
-                    description: LocalIP is the gateway tunnel ip
-                    type: string
-                  localNsmIp:
-                    description: LocalNsmIP is the IP on the nsm interface to Slice Router
-                    type: string
+                  gatewayPodStatus:
+                    description: gatewayPodStatus is a list that consists of status of
+                      individual gatewaypods
+                    items:
+                      properties:
+                        localNsmIP:
+                          type: string
+                        peerPodName:
+                          type: string
+                        podIP:
+                          type: string
+                        podName:
+                          type: string
+                        routeRemoved:
+                          format: int32
+                          type: integer
+                        tunnelStatus:
+                          properties:
+                            IntfName:
+                              type: string
+                            Latency:
+                              format: int64
+                              type: integer
+                            LocalIP:
+                              type: string
+                            PacketLoss:
+                              format: int64
+                              type: integer
+                            RemoteIP:
+                              type: string
+                            RxRate:
+                              format: int64
+                              type: integer
+                            Status:
+                              format: int32
+                              type: integer
+                            TxRate:
+                              format: int64
+                              type: integer
+                          type: object
+                      type: object
+                    type: array
                   peerIp:
                     description: PeerIP is the gateway tunnel peer ip
                     type: string
-                  podIp:
-                    description: PodIP is the Ip of the gateway pod running in cluster
-                    type: string
+                  podIps:
+                    description: PodIPs is the list of Ip of the gateway pods running
+                      in cluster
+                    items:
+                      type: string
+                    type: array
                   podName:
-                    description: PodName is the name of the gateway pod running in cluster
+                    description: Deprecated PodName is the name of the gateway pod running
+                      in cluster
                     type: string
+                  podNames:
+                    description: PodNames is the list of names of the gateway pods running
+                      in cluster
+                    items:
+                      type: string
+                    type: array
                   podStatus:
                     description: PodStatus shows whether gateway pod is healthy
                     type: string

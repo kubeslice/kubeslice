@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote}}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:
-    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook": post-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "1"
 
@@ -18,9 +18,9 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
   annotations:
-    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook": post-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-1"
   labels:
@@ -30,19 +30,19 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
 subjects:
   - kind: ServiceAccount
-    name: kubeslice-delete-webhooks
+    name: kubeslice-postdelete-job
     namespace: {{ .Release.Namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
   annotations:
-    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook": post-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-1"
   labels:
@@ -54,6 +54,7 @@ rules:
       - ""
     resources:
       - pods
+      - namespaces
     verbs:
       - get
       - list
@@ -68,7 +69,7 @@ rules:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -76,21 +77,18 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:
-    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook": post-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "1"
 data:
-  delete-admission-webhook.sh: |-
+  kubeslice-cleanup.sh: |-
     #!/usr/bin/env bash
-    NAMESPACE={{ .Release.Namespace | quote}}
-    echo "finding and removing spiffeids in namespace $NAMESPACE ..."
-    for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $NAMESPACE -o name); do
-      echo "removing item $item"
-      kubectl patch $item -p '{"metadata":{"finalizers":null}}' --type=merge -n $NAMESPACE
-      kubectl delete $item --ignore-not-found -n $NAMESPACE
-    done
-    # TODO: once we figure out how to keep spire in release ns then we could remove this
     NAMESPACE="spire"
+    kubectl get ns $NAMESPACE -o name
+    if [[ $? -eq 1 ]]; then
+        echo "spire namespace was deleted successfully"
+        exit 0
+    fi
     echo "finding and removing spiffeids in namespace $NAMESPACE ..."
     for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $NAMESPACE -o name); do
       echo "removing item $item"
@@ -102,10 +100,10 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kubeslice-delete-webhooks
+  name: kubeslice-postdelete-job
   namespace:  {{ .Release.Namespace }}
   annotations:
-    "helm.sh/hook": pre-delete,pre-rollback
+    "helm.sh/hook": post-delete
     "helm.sh/hook-delete-policy": before-hook-creation
     "helm.sh/hook-weight": "2"
   labels:
@@ -116,21 +114,21 @@ spec:
   backoffLimit: 3
   template:
     metadata:
-      name: kubeslice-delete-webhooks
+      name: kubeslice-postdelete-job
       namespace: {{ .Release.Namespace }}
     spec:
-      serviceAccountName: kubeslice-delete-webhooks
+      serviceAccountName: kubeslice-postdelete-job
       containers:
         - name: kubectl
           image: "alpine/k8s:1.22.9"
           command:
             - /bin/bash
-            - /tmp/delete-admission-webhook.sh
+            - /tmp/kubeslice-cleanup.sh
           volumeMounts:
             - mountPath: /tmp
-              name: kubeslice-delete-webhooks
+              name: kubeslice-cleanup
       volumes:
-        - name: kubeslice-delete-webhooks
+        - name: kubeslice-cleanup
           configMap:
-            name: kubeslice-delete-webhooks
+            name: kubeslice-postdelete-job
       restartPolicy: OnFailure
