@@ -26,6 +26,20 @@ entries:
     version: v1.7.0
   istio-base:
   - apiVersion: v1
+    appVersion: 1.16.0
+    created: "2023-02-16T04:45:58.387194987Z"
+    description: Helm chart for deploying Istio cluster resources and CRDs
+    digest: 2f7a86a92cb65fa0f223dce1ddad61d27456377eca7b586eb632bfb605221de4
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    name: istio-base
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/istio-base-1.16.0/istio-base-1.16.0.tgz
+    version: 1.16.0
+  - apiVersion: v1
     appVersion: 1.13.3
     created: "2022-05-16T17:35:02.845695964Z"
     description: Helm chart for deploying Istio cluster resources and CRDs
@@ -40,6 +54,22 @@ entries:
     - https://github.com/kubeslice/kubeslice/releases/download/istio-base-1.13.3/istio-base-1.13.3.tgz
     version: 1.13.3
   istio-discovery:
+  - apiVersion: v1
+    appVersion: 1.16.0
+    created: "2023-02-16T04:45:58.470661555Z"
+    description: Helm chart for istio control plane
+    digest: bfbd4debca9d081d0a2e55a69ad9a31820ad7a16f22551852e277e4f13f39641
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istiod
+    - istio-discovery
+    name: istio-discovery
+    sources:
+    - http://github.com/istio/istio
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/istio-discovery-1.16.0/istio-discovery-1.16.0.tgz
+    version: 1.16.0
   - apiVersion: v1
     appVersion: 1.13.3
     created: "2022-05-16T17:35:03.03814311Z"
@@ -57,6 +87,16 @@ entries:
     - https://github.com/kubeslice/kubeslice/releases/download/istio-discovery-1.13.3/istio-discovery-1.13.3.tgz
     version: 1.13.3
   kubeslice-controller:
+  - apiVersion: v2
+    appVersion: 0.6.10
+    created: "2023-02-16T04:45:58.578888273Z"
+    description: A Helm chart for kubeslice-controller
+    digest: 165f5a798c9850b3a01c73a326548fdf41a09e62f809e02d4d7bef857bd75f3d
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-controller-0.6.0/kubeslice-controller-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 0.6.3
     created: "2023-01-02T11:12:38.205898195Z"
@@ -119,6 +159,16 @@ entries:
     version: 0.1.0
   kubeslice-worker:
   - apiVersion: v2
+    appVersion: 0.17.1
+    created: "2023-02-16T04:45:58.669478455Z"
+    description: A Helm chart for kubeslice-worker
+    digest: 6d9bdc94b8e9b5b33d2855804d4f0b82a0c866806ac4f6fce3fe3a57c07d813e
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.6.0/kubeslice-worker-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
     appVersion: 0.15.1
     created: "2022-12-29T15:28:26.558441223Z"
     description: A Helm Chart for kubeslice-worker
@@ -178,4 +228,4 @@ entries:
     urls:
     - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.1.0/kubeslice-worker-0.1.0.tgz
     version: 0.1.0
-generated: "2023-01-02T11:12:38.205936695Z"
+generated: "2023-02-16T04:45:58.669907756Z"
