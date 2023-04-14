@@ -59,6 +59,8 @@ on:
         options:
         - 'Yes'
         - 'No'
+        
+permissions: write-all
 
 jobs:
   release:
