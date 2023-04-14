@@ -64,8 +64,6 @@ spec:
             value: "{{ .Values.routerSidecar.image }}:{{ .Values.routerSidecar.tag }}"
           - name: AVESHA_VL3_SIDECAR_IMAGE_PULLPOLICY
             value: {{ .Values.routerSidecar.pullPolicy }}
-          - name: NODE_IP
-            value: "{{ .Values.cluster.nodeIp }}"
           - name: CLUSTER_ENDPOINT
             value: "{{ .Values.cluster.endpoint }}"
           - name: AVESHA_GW_SIDECAR_IMAGE
