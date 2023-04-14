@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+
 The Slice Operator, also known as a Kubeslice Worker is a Kubernetes Operator component that manages the life-cycle of the KubeSlice related Custom Resource Definitions (CRDs). Please refer to the [documentation](https://docs.avesha.io/documentation/open-source/0.7.0/architecture#slice-operator) for more details.
 
 # Usage
@@ -20,6 +21,7 @@ You can then run `helm search repo kubeslice` to see the charts.
 ## Setting Up Kubeslice Worker
 
 ### Install Chart
+
 
 See [Kubeslice Worker Installation](https://docs.avesha.io/documentation/open-source/0.7.0/getting-started-with-kind-clusters#registering-the-worker-clusters) for instructions on istalling worker operator on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 

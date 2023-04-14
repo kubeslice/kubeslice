@@ -166,3 +166,4 @@ metadata:
     name: event-schema
   name: kubeslice-worker-event-schema-conf
   namespace: kubeslice-system
+
