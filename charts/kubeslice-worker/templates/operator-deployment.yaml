@@ -120,6 +120,10 @@ spec:
       serviceAccountName: kubeslice-controller-manager
       terminationGracePeriodSeconds: 10
       volumes:
+        - name: kubeslice-worker-event-schema-conf
+          configMap:
+            name: kubeslice-worker-event-schema-conf
+            defaultMode: 420
         - name: webhook-certs
           secret:
             secretName: kubeslice-admission-webhook-certs
@@ -145,3 +149,20 @@ spec:
                 operator: In
                 values:
                 - gateway
+---
+apiVersion: v1
+data:
+  {{ if .Values.events.disabled }}
+  worker.yaml: |-
+    disabledEvents:
+    - LicenseSecretNotFound
+  {{ else }}
+  worker.yaml: |- 
+    disabledEvents:
+  {{ end }} 
+kind: ConfigMap
+metadata:
+  labels:
+    name: event-schema
+  name: kubeslice-worker-event-schema-conf
+  namespace: kubeslice-system

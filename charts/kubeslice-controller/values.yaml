@@ -10,10 +10,12 @@ kubeslice:
     logLevel: info
     rbacResourcePrefix: kubeslice-rbac
     projectnsPrefix: kubeslice
-    endpoint: 
-    image: aveshasystems/kubeslice-controller
-    tag: 0.6.10
+    endpoint:
+    image: aveshadev/kubeslice-controller
+    tag: 0.9.0-RELEASE-93db6efa
     pullPolicy: IfNotPresent
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
     tag: 0.1.10
+  events:
+    disabled: false

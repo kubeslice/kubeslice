@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: kubeslice-controller-manager
+  namespace: kubeslice-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: controller-manager
+    spec:
+      containers:
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=10
+        image: '{{ .Values.kubeslice.rbacproxy.image }}:{{ .Values.kubeslice.rbacproxy.tag }}'
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        - --log-level={{ required "A valid value is required!" .Values.kubeslice.controller.logLevel }}
+        - --rbac-resource-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.rbacResourcePrefix }}
+        - --project-namespace-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.projectnsPrefix }}
+        - --controller-end-point={{ required "A valid value is required!" .Values.kubeslice.controller.endpoint }}
+        - --ovpn-job-image={{ .Values.kubeslice.ovpnJob.image }}:{{ .Values.kubeslice.ovpnJob.tag }}
+        command:
+        - /manager
+        env:
+        - name: KUBESLICE_CONTROLLER_MANAGER_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: '{{ .Values.kubeslice.controller.image }}:{{ .Values.kubeslice.controller.tag }}'
+        imagePullPolicy: '{{ .Values.kubeslice.controller.pullPolicy }}'
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+        - name: kubeslice-controller-event-schema-conf
+          mountPath: /events/event-schema/
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: kubeslice-controller-controller-manager
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: kubeslice-controller-event-schema-conf
+          configMap:
+            name: kubeslice-controller-event-schema-conf
+            defaultMode: 420
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert-secret
+---
+apiVersion: v1
+data:
+  {{ if .Values.kubeslice.events.disabled}}
+  controller.yaml: |-
+    disabledEvents:
+      - ProjectDeleted
+      - ProjectDeletionFailed
+      - ClusterDeleted
+      - ClusterDeletionFailed
+      - SliceConfigDeleted
+      - SliceConfigDeletionFailed
+      - ServiceExportConfigDeleted
+      - ServiceExportConfigDeletionFailed
+      - SliceQoSConfigDeleted
+      - SliceQoSConfigDeletionFailed
+      - SecretDeleted
+      - SecretDeletionFailed
+      - NamespaceCreated
+      - NamespaceCreationFailed
+      - NamespaceDeleted
+      - NamespaceDeletionFailed
+      - WorkerClusterRoleCreated
+      - WorkerClusterRoleCreationFailed
+      - WorkerClusterRoleUpdated
+      - WorkerClusterRoleUpdateFailed
+      - ReadOnlyRoleCreated
+      - ReadOnlyRoleCreationFailed
+      - ReadOnlyRoleUpdated
+      - ReadOnlyRoleUpdateFailed
+      - ReadWriteRoleCreated
+      - ReadWriteRoleCreationFailed
+      - ReadWriteRoleUpdated
+      - ReadWriteRoleUpdateFailed
+      - ServiceAccountCreated
+      - ServiceAccountCreationFailed
+      - ServiceAccountSecretCreated
+      - ServiceAccountSecretCreationFailed
+      - DefaultRoleBindingCreated
+      - DefaultRoleBindingCreationFailed
+      - DefaultRoleBindingUpdated
+      - DefaultRoleBindingUpdateFailed
+      - DefaultRoleBindingDeleted
+      - DefaultRoleBindingDeletionFailed
+      - InactiveRoleBindingDeleted
+      - InactiveRoleBindingDeletionFailed
+      - InactiveServiceAccountDeleted
+      - InactiveServiceAccountDeletionFailed
+      - ServiceAccountDeleted
+      - ServiceAccountDeletionFailed
+      - WorkerServiceImportDeletedForcefully
+      - WorkerServiceImportRecreationFailed
+      - WorkerServiceImportRecreated
+      - WorkerServiceImportCreationFailed
+      - WorkerServiceImportCreated
+      - WorkerServiceImportUpdateFailed
+      - WorkerServiceImportUpdated
+      - WorkerServiceImportDeleted
+      - WorkerServiceImportDeletionFailed
+      - WorkerSliceConfigDeletedForcefully
+      - WorkerSliceConfigRecreationFailed
+      - WorkerSliceConfigRecreated
+      - WorkerSliceConfigCreationFailed
+      - WorkerSliceConfigCreated
+      - WorkerSliceConfigUpdateFailed
+      - WorkerSliceConfigUpdated
+      - WorkerSliceConfigDeleted
+      - WorkerSliceConfigDeletionFailed
+      - WorkerSliceGatewayDeletedForcefully
+      - WorkerSliceGatewayRecreationFailed
+      - WorkerSliceGatewayRecreated
+      - WorkerSliceGatewayDeletionFailed
+      - WorkerSliceGatewayDeleted
+      - WorkerSliceGatewayCreationFailed
+      - WorkerSliceGatewayCreated
+      - SliceGatewayJobCreationFailed
+      - SliceGatewayJobCreated
+  {{ else }}
+  controller.yaml: |-
+    disabledEvents:
+  {{ end }}
+kind: ConfigMap
+metadata:
+  labels:
+    name: event-schema
+  name: kubeslice-controller-event-schema-conf
+  namespace: kubeslice-controller

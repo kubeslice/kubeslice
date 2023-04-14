@@ -34,6 +34,9 @@ spec:
     - jsonPath: .status.exportStatus
       name: Status
       type: string
+    - jsonPath: .spec.aliases
+      name: Alias
+      type: string
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -54,6 +57,12 @@ spec:
           spec:
             description: ServiceExportSpec defines the desired state of ServiceExport
             properties:
+              aliases:
+                description: Alias names for the exported service. The service could
+                  be addressed by the alias names in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
               ingressEnabled:
                 description: IngressEnabled denotes whether the traffic should be
                   proxied through an ingress gateway
@@ -135,6 +144,12 @@ spec:
           status:
             description: ServiceExportStatus defines the observed state of ServiceExport
             properties:
+              aliases:
+                description: Alias names for the exported service. The service could
+                  be addressed by the alias names in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
               availableEndpoints:
                 description: AvailableEndpoints shows the number of available endpoints
                 type: integer
