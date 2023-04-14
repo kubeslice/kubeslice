@@ -1,8 +1,8 @@
 operator:
-  image: aveshadev/worker-operator
+  image: aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-  tag: 0.21.0-RELEASE-66f1850c
+  tag: 0.21.0
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
   namespace:
