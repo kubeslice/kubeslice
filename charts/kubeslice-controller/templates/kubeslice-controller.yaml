@@ -2,20 +2,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: kubeslice-controller/kubeslice-controller-serving-cert
     controller-gen.kubebuilder.io/version: v0.7.0
   name: clusters.controller.kubeslice.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: kubeslice-controller-webhook-service
-          namespace: kubeslice-controller
-          path: /convert
-      conversionReviewVersions:
-      - v1
   group: controller.kubeslice.io
   names:
     kind: Cluster
@@ -107,6 +96,38 @@ spec:
           status:
             description: ClusterStatus defines the observed state of Cluster
             properties:
+              clusterHealth:
+                description: ClusterHealth shows the health of the worker cluster
+                properties:
+                  clusterHealthStatus:
+                    description: ClusterHealthStatus shows the overall health status of the cluster
+                    enum:
+                    - Normal
+                    - Warning
+                    type: string
+                  componentStatuses:
+                    description: ComponentStatuses shows the health status of individual components in the cluster
+                    items:
+                      properties:
+                        component:
+                          description: Component name
+                          type: string
+                        componentHealthStatus:
+                          enum:
+                          - Normal
+                          - Warning
+                          - Error
+                          type: string
+                      required:
+                      - component
+                      - componentHealthStatus
+                      type: object
+                    type: array
+                  lastUpdated:
+                    description: LastUpdated is the timestamp when healthstatus was updated
+                    format: date-time
+                    type: string
+                type: object
               cniSubnet:
                 description: CniSubnet is the podip and service ip subnet of CNI
                 items:
@@ -121,6 +142,11 @@ spec:
                     sliceName:
                       type: string
                   type: object
+                type: array
+              nodeIPs:
+                description: NodeIPs of the gateway node of worker cluster
+                items:
+                  type: string
                 type: array
               secretName:
                 description: SecretName is the name of the secret for the worker cluster.
@@ -142,20 +168,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: kubeslice-controller/kubeslice-controller-serving-cert
     controller-gen.kubebuilder.io/version: v0.7.0
   name: projects.controller.kubeslice.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: kubeslice-controller-webhook-service
-          namespace: kubeslice-controller
-          path: /convert
-      conversionReviewVersions:
-      - v1
   group: controller.kubeslice.io
   names:
     kind: Project
@@ -240,6 +255,11 @@ spec:
           spec:
             description: ServiceExportConfigSpec defines the desired state of ServiceExportConfig
             properties:
+              aliases:
+                description: Alias names for the exported service. The service could be addressed by the alias names in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
               serviceDiscoveryEndpoints:
                 description: the service discovery endpoint array
                 items:
@@ -312,20 +332,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: kubeslice-controller/kubeslice-controller-serving-cert
     controller-gen.kubebuilder.io/version: v0.7.0
   name: sliceconfigs.controller.kubeslice.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: kubeslice-controller-webhook-service
-          namespace: kubeslice-controller
-          path: /convert
-      conversionReviewVersions:
-      - v1
   group: controller.kubeslice.io
   names:
     kind: SliceConfig
@@ -485,6 +494,42 @@ spec:
             type: object
           status:
             description: SliceConfigStatus defines the observed state of SliceConfig
+            properties:
+              kubesliceEvents:
+                items:
+                  properties:
+                    action:
+                      description: Trigger action. Examples - CLUSTER_OFFBOARDING, NAMESPCE_OFFBOARDING etc
+                      type: string
+                    components:
+                      description: list of effected components on which action failed
+                      items:
+                        type: string
+                      type: array
+                    event:
+                      description: Event name (from monitoring framework schema)
+                      type: string
+                    identifier:
+                      description: Identifier of the component for which the action was triggered
+                      type: string
+                    isEventRaised:
+                      default: false
+                      description: Flag to determine if kubernetes event is already raised
+                      type: boolean
+                    reason:
+                      description: Reason message for the event
+                      type: string
+                    timestamp:
+                      description: Timestamp of the event
+                      format: date-time
+                      type: string
+                    type:
+                      description: Type of the event. Can be one of Error, Success or InProgress
+                      type: string
+                  required:
+                  - event
+                  type: object
+                type: array
             type: object
         type: object
     served: true
@@ -616,6 +661,11 @@ spec:
           spec:
             description: WorkerServiceImportSpec defines the desired state of WorkerServiceImport
             properties:
+              aliases:
+                description: Alias names for the exported service. The service could be addressed by the alias names in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
               serviceDiscoveryEndpoints:
                 description: the service discovery endpoint array
                 items:
@@ -848,6 +898,38 @@ spec:
                       type: string
                   type: object
                 type: array
+              sliceHealth:
+                description: SliceHealth shows the health of the slice in worker cluster
+                properties:
+                  componentStatuses:
+                    description: ComponentStatuses shows the health status of individual components in the cluster
+                    items:
+                      properties:
+                        component:
+                          description: Component name
+                          type: string
+                        componentHealthStatus:
+                          enum:
+                          - Normal
+                          - Warning
+                          - Error
+                          type: string
+                      required:
+                      - component
+                      - componentHealthStatus
+                      type: object
+                    type: array
+                  lastUpdated:
+                    description: LastUpdated is the timestamp when healthstatus was updated
+                    format: date-time
+                    type: string
+                  sliceHealthStatus:
+                    description: SliceHealthStatus shows the overall health status of the slice
+                    enum:
+                    - Normal
+                    - Warning
+                    type: string
+                type: object
             type: object
         type: object
     served: true
@@ -1441,441 +1523,3 @@ spec:
     targetPort: 9443
   selector:
     control-plane: controller-manager
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: kubeslice-controller-cleanup
-  annotations:
-    # This is what defines this resource as a hook. Without this line, the
-    # job is considered part of the release.
-    "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
-spec:
-  template:
-    spec:
-      serviceAccountName: kubeslice-controller-controller-manager
-      containers:
-        - name: cleanup
-          image: '{{ .Values.kubeslice.controller.image }}:{{ .Values.kubeslice.controller.tag }}'
-          imagePullPolicy: '{{ .Values.kubeslice.controller.pullPolicy }}'
-          command:
-            - /cleanup
-          env:
-            - name: KUBESLICE_CONTROLLER_MANAGER_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-      restartPolicy: Never
-  backoffLimit: 1
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    control-plane: controller-manager
-  name: kubeslice-controller-manager
-  namespace: kubeslice-controller
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      control-plane: controller-manager
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
-        control-plane: controller-manager
-    spec:
-      containers:
-      - args:
-        - --secure-listen-address=0.0.0.0:8443
-        - --upstream=http://127.0.0.1:8080/
-        - --logtostderr=true
-        - --v=10
-        image: '{{ .Values.kubeslice.rbacproxy.image }}:{{ .Values.kubeslice.rbacproxy.tag }}'
-        name: kube-rbac-proxy
-        ports:
-        - containerPort: 8443
-          name: https
-          protocol: TCP
-      - args:
-        - --health-probe-bind-address=:8081
-        - --metrics-bind-address=127.0.0.1:8080
-        - --leader-elect
-        - --log-level={{ required "A valid value is required!" .Values.kubeslice.controller.logLevel }}
-        - --rbac-resource-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.rbacResourcePrefix }}
-        - --project-namespace-prefix={{ required "A valid value is required!" .Values.kubeslice.controller.projectnsPrefix }}
-        - --controller-end-point={{ required "A valid value is required!" .Values.kubeslice.controller.endpoint }}
-        - --ovpn-job-image={{ .Values.kubeslice.ovpnJob.image }}:{{ .Values.kubeslice.ovpnJob.tag }}
-        command:
-        - /manager
-        env:
-        - name: KUBESLICE_CONTROLLER_MANAGER_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        image: '{{ .Values.kubeslice.controller.image }}:{{ .Values.kubeslice.controller.tag }}'
-        imagePullPolicy: '{{ .Values.kubeslice.controller.pullPolicy }}'
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8081
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        ports:
-        - containerPort: 9443
-          name: webhook-server
-          protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8081
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 10m
-            memory: 64Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-        volumeMounts:
-        - mountPath: /tmp/k8s-webhook-server/serving-certs
-          name: cert
-          readOnly: true
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: kubeslice-controller-controller-manager
-      terminationGracePeriodSeconds: 10
-      volumes:
-      - name: cert
-        secret:
-          defaultMode: 420
-          secretName: webhook-server-cert
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: kubeslice-controller-serving-cert
-  namespace: kubeslice-controller
-spec:
-  dnsNames:
-  - kubeslice-controller-webhook-service.kubeslice-controller.svc
-  - kubeslice-controller-webhook-service.kubeslice-controller.svc.cluster.local
-  issuerRef:
-    kind: Issuer
-    name: kubeslice-controller-selfsigned-issuer
-  secretName: webhook-server-cert
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: kubeslice-controller-selfsigned-issuer
-  namespace: kubeslice-controller
-spec:
-  selfSigned: {}
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: MutatingWebhookConfiguration
-metadata:
-  annotations:
-    cert-manager.io/inject-ca-from: kubeslice-controller/kubeslice-controller-serving-cert
-  name: kubeslice-controller-mutating-webhook-configuration
-webhooks:
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-controller-kubeslice-io-v1alpha1-cluster
-  failurePolicy: Fail
-  name: mcluster.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - clusters
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-controller-kubeslice-io-v1alpha1-project
-  failurePolicy: Fail
-  name: mproject.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - projects
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-controller-kubeslice-io-v1alpha1-serviceexportconfig
-  failurePolicy: Fail
-  name: mserviceexportconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - serviceexportconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-controller-kubeslice-io-v1alpha1-sliceconfig
-  failurePolicy: Fail
-  name: msliceconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - sliceconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-controller-kubeslice-io-v1alpha1-sliceqosconfig
-  failurePolicy: Fail
-  name: msliceqosconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - sliceqosconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-worker-kubeslice-io-v1alpha1-workersliceconfig
-  failurePolicy: Fail
-  name: mworkersliceconfig.kb.io
-  rules:
-  - apiGroups:
-    - worker.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - workersliceconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /mutate-worker-kubeslice-io-v1alpha1-workerslicegateway
-  failurePolicy: Fail
-  name: mworkerslicegateway.kb.io
-  rules:
-  - apiGroups:
-    - worker.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - workerslicegateways
-  sideEffects: None
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  annotations:
-    cert-manager.io/inject-ca-from: kubeslice-controller/kubeslice-controller-serving-cert
-  name: kubeslice-controller-validating-webhook-configuration
-webhooks:
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-controller-kubeslice-io-v1alpha1-cluster
-  failurePolicy: Fail
-  name: vcluster.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    - DELETE
-    resources:
-    - clusters
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-controller-kubeslice-io-v1alpha1-project
-  failurePolicy: Fail
-  name: vproject.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    - DELETE
-    resources:
-    - projects
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-controller-kubeslice-io-v1alpha1-serviceexportconfig
-  failurePolicy: Fail
-  name: vserviceexportconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - serviceexportconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-controller-kubeslice-io-v1alpha1-sliceconfig
-  failurePolicy: Fail
-  name: vsliceconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    - DELETE
-    resources:
-    - sliceconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-controller-kubeslice-io-v1alpha1-sliceqosconfig
-  failurePolicy: Fail
-  name: vsliceqosconfig.kb.io
-  rules:
-  - apiGroups:
-    - controller.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    - DELETE
-    resources:
-    - sliceqosconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-worker-kubeslice-io-v1alpha1-workersliceconfig
-  failurePolicy: Fail
-  name: vworkersliceconfig.kb.io
-  rules:
-  - apiGroups:
-    - worker.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - workersliceconfigs
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: kubeslice-controller-webhook-service
-      namespace: kubeslice-controller
-      path: /validate-worker-kubeslice-io-v1alpha1-workerslicegateway
-  failurePolicy: Fail
-  name: vworkerslicegateway.kb.io
-  rules:
-  - apiGroups:
-    - worker.kubeslice.io
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - workerslicegateways
-  sideEffects: None

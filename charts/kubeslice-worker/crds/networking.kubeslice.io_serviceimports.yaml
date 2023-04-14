@@ -31,6 +31,9 @@ spec:
     - jsonPath: .status.importStatus
       name: Status
       type: string
+    - jsonPath: .spec.aliases
+      name: Alias
+      type: string
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -51,6 +54,12 @@ spec:
           spec:
             description: ServiceImportSpec defines the desired state of ServiceImport
             properties:
+              aliases:
+                description: Alias names for the exported service. The service could
+                  be addressed by the alias names in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
               dnsName:
                 description: DNSName shows the FQDN to reach the service
                 type: string

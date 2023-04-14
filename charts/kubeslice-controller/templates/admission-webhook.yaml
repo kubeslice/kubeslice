@@ -1,0 +1,328 @@
+{{- $ca := genCA "kubeslice-controller-webhook-service" 3650 -}}
+{{- $cn := printf "kubeslice-controller-webhook-service" -}}
+{{- $altName1 := printf "%s.%s.svc" $cn .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc.cluster.local" $cn .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca -}}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webhook-server-cert-secret
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  ca.crt: {{ $ca.Cert | b64enc }}
+  tls.key: {{ $cert.Key | b64enc }}
+  tls.crt: {{ $cert.Cert | b64enc }}
+
+---
+
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: kubeslice-controller-mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-controller-kubeslice-io-v1alpha1-cluster
+  failurePolicy: Fail
+  name: mcluster.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - clusters
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-controller-kubeslice-io-v1alpha1-project
+  failurePolicy: Fail
+  name: mproject.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - projects
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-controller-kubeslice-io-v1alpha1-serviceexportconfig
+  failurePolicy: Fail
+  name: mserviceexportconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - serviceexportconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-controller-kubeslice-io-v1alpha1-sliceconfig
+  failurePolicy: Fail
+  name: msliceconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sliceconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-controller-kubeslice-io-v1alpha1-sliceqosconfig
+  failurePolicy: Fail
+  name: msliceqosconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sliceqosconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-worker-kubeslice-io-v1alpha1-workersliceconfig
+  failurePolicy: Fail
+  name: mworkersliceconfig.kb.io
+  rules:
+  - apiGroups:
+    - worker.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - workersliceconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /mutate-worker-kubeslice-io-v1alpha1-workerslicegateway
+  failurePolicy: Fail
+  name: mworkerslicegateway.kb.io
+  rules:
+  - apiGroups:
+    - worker.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - workerslicegateways
+  sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: kubeslice-controller-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-cluster
+  failurePolicy: Fail
+  name: vcluster.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - clusters
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-project
+  failurePolicy: Fail
+  name: vproject.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - projects
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-serviceexportconfig
+  failurePolicy: Fail
+  name: vserviceexportconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - serviceexportconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-sliceconfig
+  failurePolicy: Fail
+  name: vsliceconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - sliceconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-sliceqosconfig
+  failurePolicy: Fail
+  name: vsliceqosconfig.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - sliceqosconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-worker-kubeslice-io-v1alpha1-workersliceconfig
+  failurePolicy: Fail
+  name: vworkersliceconfig.kb.io
+  rules:
+  - apiGroups:
+    - worker.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - workersliceconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-worker-kubeslice-io-v1alpha1-workerslicegateway
+  failurePolicy: Fail
+  name: vworkerslicegateway.kb.io
+  rules:
+  - apiGroups:
+    - worker.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - workerslicegateways
+  sideEffects: None

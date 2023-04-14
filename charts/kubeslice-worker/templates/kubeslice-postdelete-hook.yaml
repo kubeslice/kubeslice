@@ -83,17 +83,20 @@ metadata:
 data:
   kubeslice-cleanup.sh: |-
     #!/usr/bin/env bash
-    NAMESPACE="spire"
-    kubectl get ns $NAMESPACE -o name
-    if [[ $? -eq 1 ]]; then
-        echo "spire namespace was deleted successfully"
-        exit 0
-    fi
-    echo "finding and removing spiffeids in namespace $NAMESPACE ..."
-    for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $NAMESPACE -o name); do
-      echo "removing item $item"
-      kubectl patch $item -p '{"metadata":{"finalizers":null}}' --type=merge -n $NAMESPACE
-      kubectl delete $item --ignore-not-found -n $NAMESPACE
+    NAMESPACES=(spire kubeslice-system)
+    for ns in ${NAMESPACES[@]}
+    do
+      kubectl get ns $ns -o name  
+      if [[ $? -eq 1 ]]; then
+          echo "$ns namespace was deleted successfully"
+          continue
+      fi
+      echo "finding and removing spiffeids in namespace $ns ..."
+      for item in $(kubectl get spiffeid.spiffeid.spiffe.io -n $ns -o name); do
+        echo "removing item $item"
+        kubectl patch $item -p '{"metadata":{"finalizers":null}}' --type=merge -n $ns
+        kubectl delete $item --ignore-not-found -n $ns
+      done
     done
 
 ---
