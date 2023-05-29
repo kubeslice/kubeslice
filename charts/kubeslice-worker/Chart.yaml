@@ -1,6 +1,32 @@
 apiVersion: v2
-appVersion: 0.24.2-RELEASE-40b331dd
 description: A Helm chart for kubeslice-worker
 name: kubeslice-worker
 type: application
+maintainers:
+  - name: Avesha
+    email: support@avesha.io
+keywords:
+- multicloud
+- multi cloud
+- multitenant
+- multitenancy
+- multi tenant
+- multi tenancy
+- federated mesh
+- federated clusters
+- federated k8s
+- federated kubernetes
+- cluster sprawl
+- sprawl
+- namespace sprawl
+- network policy
+- overlay network
+- mesh network
+- security
+- networking
+- infrastructure
+- application
+kubeVersion: '>= 1.19.0-0'
+home: https://avesha.io/products/product-slice
 version: 1.0.0
+appVersion: 0.24.2-RELEASE-40b331dd
