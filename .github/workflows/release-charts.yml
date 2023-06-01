@@ -59,6 +59,28 @@ on:
         options:
         - 'Yes'
         - 'No'
+      botkube:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'kubeslice-worker'
+        description: 'Release botkube Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
+      prometheus:
+        type: choice
+        # Friendly description to be shown in the UI instead of 'kubeslice-worker'
+        description: 'Release prometheus Helm Chart'
+        # Default value if no value is explicitly provided
+        default: 'No'
+        # Input has to be provided for the workflow to run
+        required: true
+        options:
+        - 'Yes'
+        - 'No'
         
 permissions: write-all
 
@@ -116,6 +138,22 @@ jobs:
           
       - name: Run kubeslice-worker chart-releaser
         if: ${{ github.event.inputs.kubeslice-worker == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run prometheus chart-releaser
+        if: ${{ github.event.inputs.prometheus == 'Yes' }}
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          charts_dir: charts/
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+          
+      - name: Run botkube chart-releaser
+        if: ${{ github.event.inputs.botkube == 'Yes' }}
         uses: helm/chart-releaser-action@v1.4.1
         with:
           charts_dir: charts/
