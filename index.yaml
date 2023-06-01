@@ -1,5 +1,34 @@
 apiVersion: v1
 entries:
+  botkube:
+  - apiVersion: v1
+    appVersion: v1.0.0
+    created: "2023-06-01T02:37:12.33410476Z"
+    description: Controller for the Kubeslice Botkube Slack app which helps you monitor
+      your Kubernetes cluster, debug deployments and run specific checks on kubeslice
+      resources as well as kuberenetes resources in the cluster.
+    digest: 3f0e2afe8a259abe7e82c67aee2dbcdde15ce70f025deb0e35f091c48eba7dc0
+    home: https://avesha.io
+    icon: https://user-images.githubusercontent.com/99885802/169118120-1636d01b-b9d9-474c-9d08-ff54c8be0d2a.png
+    keywords:
+    - botkube
+    - avesha
+    - kubernetes
+    - kubernetes-monitoring
+    - kubernetes-controller
+    - kubernetes-bot
+    - chatops
+    - bot
+    - botops
+    maintainers:
+    - email: support@avesha.io
+      name: Avesha
+    name: botkube
+    sources:
+    - https://avesha.io
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/botkube-v1.0.0/botkube-v1.0.0.tgz
+    version: v1.0.0
   cert-manager:
   - annotations:
       artifacthub.io/prerelease: "false"
@@ -88,6 +117,43 @@ entries:
     version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-06-01T02:37:12.434709982Z"
+    description: A Helm chart for kubeslice-controller
+    digest: 936bac8f22625cb63ceb9b979bfaf4e42e8b0c9f7ff36c8fad479f1aaf655776
+    home: https://avesha.io/products/product-slice
+    icon: https://avatars.githubusercontent.com/u/99859346?s=200&v=4
+    keywords:
+    - multicloud
+    - multi cloud
+    - multitenant
+    - multitenancy
+    - multi tenant
+    - multi tenancy
+    - federated mesh
+    - federated clusters
+    - federated k8s
+    - federated kubernetes
+    - cluster sprawl
+    - sprawl
+    - namespace sprawl
+    - network policy
+    - overlay network
+    - mesh network
+    - security
+    - networking
+    - infrastructure
+    - application
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: support@avesha.io
+      name: Avesha
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-controller-1.0.0/kubeslice-controller-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     appVersion: 0.7.0
     created: "2023-04-14T18:39:32.591509476Z"
     description: A Helm chart for kubeslice-controller
@@ -169,6 +235,42 @@ entries:
     version: 0.1.0
   kubeslice-worker:
   - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-06-01T02:37:12.539920024Z"
+    description: A Helm chart for kubeslice-worker
+    digest: ed083f0e31ffe07922058e523620ce0f10c616cc5619f2d08b3bbfe0f3486655
+    home: https://avesha.io/products/product-slice
+    keywords:
+    - multicloud
+    - multi cloud
+    - multitenant
+    - multitenancy
+    - multi tenant
+    - multi tenancy
+    - federated mesh
+    - federated clusters
+    - federated k8s
+    - federated kubernetes
+    - cluster sprawl
+    - sprawl
+    - namespace sprawl
+    - network policy
+    - overlay network
+    - mesh network
+    - security
+    - networking
+    - infrastructure
+    - application
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: support@avesha.io
+      name: Avesha
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-1.0.0/kubeslice-worker-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     appVersion: 0.21.0
     created: "2023-04-14T18:39:32.715618644Z"
     description: A Helm chart for kubeslice-worker
@@ -248,4 +350,51 @@ entries:
     urls:
     - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-0.1.0/kubeslice-worker-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-14T18:39:32.715709144Z"
+  prometheus:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus/prometheus
+    apiVersion: v2
+    appVersion: v2.41.0
+    created: "2023-06-01T02:37:12.661078833Z"
+    dependencies:
+    - condition: alertmanager.enabled
+      name: alertmanager
+      repository: ""
+      version: 0.24.1
+    - condition: kube-state-metrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.24.*
+    - condition: prometheus-node-exporter.enabled
+      name: prometheus-node-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.8.*
+    - condition: prometheus-pushgateway.enabled
+      name: prometheus-pushgateway
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 2.0.*
+    description: Prometheus is a monitoring system and time series database.
+    digest: b307a8e5030ea625f781840cf1ce4635ac83aea76e55d751d1d3b6c473a50283
+    home: https://prometheus.io/
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - monitoring
+    - prometheus
+    kubeVersion: '>=1.16.0-0'
+    name: prometheus
+    sources:
+    - https://github.com/prometheus/alertmanager
+    - https://github.com/prometheus/prometheus
+    - https://github.com/prometheus/pushgateway
+    - https://github.com/prometheus/node_exporter
+    - https://github.com/kubernetes/kube-state-metrics
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/prometheus-19.3.0/prometheus-19.3.0.tgz
+    version: 19.3.0
+generated: "2023-06-01T02:37:12.661137533Z"
