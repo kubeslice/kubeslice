@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "botkube.fullname" . }}-global-config
+  labels:
+    app.kubernetes.io/name: {{ include "botkube.name" . }}
+    helm.sh/chart: {{ include "botkube.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    botkube.io/config-watch: "true"
+data:
+  global_config.yaml: |
+    executors:
+      {{- .Values.executors | toYaml | nindent 6 }}
+
+    aliases:
+      {{- .Values.aliases | toYaml | nindent 6 }}
+
+    actions:
+      {{- .Values.actions | toYaml | nindent 6 }}
+
+    settings:
+      {{- .Values.settings | toYaml | nindent 6 }}
+
+    sources:
+      {{- .Values.sources | toYaml | nindent 6 }}
+
+    configWatcher:
+      {{- .Values.configWatcher | toYaml | nindent 6 }}
+
+    plugins:
+      {{- .Values.plugins | toYaml | nindent 6 }}
+
+    analytics:
+      disable: {{ .Values.analytics.disable }}
+
+

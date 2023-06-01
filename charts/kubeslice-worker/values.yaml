@@ -1,8 +1,8 @@
 operator:
-  image: aveshasystems/worker-operator
+  image: docker.io/aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-  tag: 0.21.0
+  tag: 1.0.0
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
   namespace:
@@ -22,7 +22,7 @@ router:
 
 routerSidecar:
   image: docker.io/aveshasystems/kubeslice-router-sidecar
-  tag: 1.4.1
+  tag: 1.4.2
   pullPolicy: IfNotPresent
 
 netop:
