@@ -16,10 +16,8 @@ keywords:
 - bot
 - botops
 maintainers:
-- email: nishant.singh@aveshasystems.com
-  name: Nishant Singh
-- email: richie@aveshasystems.com
-  name: Richie Sebestian
+- name: Avesha
+  email: support@avesha.io
 name: botkube
 sources:
 - https://avesha.io
