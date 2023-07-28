@@ -1,0 +1,221 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "botkube.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "botkube.name" . }}
+    helm.sh/chart: {{ include "botkube.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    component: controller
+    app: botkube
+  annotations:
+    {{- if .Values.deployment.annotations }}
+{{ toYaml .Values.deployment.annotations | indent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate # RollingUpdate doesn't work with SocketSlack integration as it requires a single connection to Slack API.
+  selector:
+    matchLabels:
+      component: controller
+      app: botkube
+  template:
+    metadata:
+      labels:
+        component: controller
+        app: botkube
+      {{- if .Values.extraLabels }}
+{{ toYaml .Values.extraLabels | indent 8 }}
+      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/global-config.yaml") . | sha256sum }}
+      {{- if .Values.extraAnnotations }}
+{{ toYaml .Values.extraAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
+      serviceAccountName: {{ include "botkube.serviceAccountName" . }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+          {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{ end }}
+          readinessProbe:
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 5
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /healthz
+              port: {{ .Values.settings.healthPort }}
+          livenessProbe:
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 10
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /healthz
+              port: {{ .Values.settings.healthPort }}
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /tmp
+          {{- if not (include "botkube.remoteConfigEnabled" $) }}
+            - name: config-volume
+              mountPath: "/config"
+            - name: startup-config
+              mountPath: "/startup-config"
+            - name: cfg-watcher-tmp
+              mountPath: {{ .Values.configWatcher.tmpDir }}
+          {{- end }}
+          {{- with .Values.extraVolumeMounts }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ssl.enabled }}
+            - name: certs
+              mountPath: "/etc/ssl/certs"
+          {{ end }}
+          {{- if .Values.kubeconfig.enabled }}
+            - name: kubeconfig
+              mountPath: "/.kube/config"
+              subPath: config
+          {{ end }}
+            - name: cache
+              mountPath: "/.kube/cache"
+          env:
+            - name: BOTKUBE_CONFIG_PATHS
+              value: "/config/global_config.yaml,/config/comm_config.yaml,/config/{{ .Values.settings.persistentConfig.runtime.fileName}},/startup-config/{{ .Values.settings.persistentConfig.startup.fileName}}"
+            - name: BOTKUBE_SETTINGS_METRICS__PORT
+              value: {{ .Values.service.targetPort | quote }}
+            {{- if .Values.kubeconfig.enabled }}
+            - name: BOTKUBE_SETTINGS_KUBECONFIG
+              value: "/.kube/config"
+            {{- end }}
+            - name: BOTKUBE_SETTINGS_SYSTEM__CONFIG__MAP_NAMESPACE
+              value: "{{.Release.Namespace}}"
+            - name: BOTKUBE_SETTINGS_PERSISTENT__CONFIG_RUNTIME_CONFIG__MAP_NAMESPACE
+              value: "{{.Release.Namespace}}"
+            - name: BOTKUBE_SETTINGS_PERSISTENT__CONFIG_STARTUP_CONFIG__MAP_NAMESPACE
+              value: "{{.Release.Namespace}}"
+            - name: BOTKUBE_CONFIG__WATCHER_DEPLOYMENT_NAMESPACE
+              value: "{{.Release.Namespace}}"
+            - name: BOTKUBE_CONFIG__WATCHER_DEPLOYMENT_NAME
+              value: "{{ include "botkube.fullname" . }}"
+            - name: CONFIG_PROVIDER_ENDPOINT
+              value: {{ .Values.config.provider.endpoint }}
+            {{- if .Values.config.provider.identifier }}
+            - name: CONFIG_PROVIDER_IDENTIFIER
+              value: "{{ .Values.config.provider.identifier }}"
+            {{- end }}
+            {{- if .Values.config.provider.apiKey }}
+            - name: CONFIG_PROVIDER_API_KEY
+              value: "{{ .Values.config.provider.apiKey }}"
+            {{- end }}
+          {{- with .Values.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          {{- end }}
+        {{- if and (.Values.configWatcher.enabled) (not (include "botkube.remoteConfigEnabled" $))}}
+        - name: cfg-watcher
+          image: "{{ .Values.configWatcher.image.registry }}/{{ .Values.configWatcher.image.repository }}:{{ .Values.configWatcher.image.tag }}"
+          imagePullPolicy: "{{ .Values.configWatcher.image.pullPolicy }}"
+          env:
+            - name: FOLDER
+              value: {{ .Values.configWatcher.tmpDir }}
+            - name: RESOURCE
+              value: "both"
+            - name: LOG_LEVEL
+              value: "DEBUG"
+            - name: NAMESPACE
+              value: "{{.Release.Namespace}}"
+            - name: LABEL
+              value: "botkube.io/config-watch"
+            - name: LABEL_VALUE
+              value: "true"
+            - name: REQ_URL
+              value: "http://{{ include "botkube.fullname" . }}:{{.Values.settings.lifecycleServer.port}}/reload"
+            - name: REQ_IGNORE_INITIAL_EVENT
+              value: "true"
+            - name: REQ_METHOD
+              value: "POST"
+            - name: IGNORE_ALREADY_PROCESSED
+              value: "true"
+          volumeMounts:
+            - name: cfg-watcher-tmp
+              mountPath: {{ .Values.configWatcher.tmpDir }}
+        {{- end }}
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
+        {{- if not (include "botkube.remoteConfigEnabled" $) }}
+        - name: cfg-watcher-tmp
+          emptyDir: {}
+        - name: config-volume
+          projected:
+            sources:
+            - configMap:
+                name: {{ include "botkube.fullname" . }}-global-config
+            - secret:
+                name: {{ include "botkube.CommunicationsSecretName" . }}
+            - configMap:
+                name: {{ .Values.settings.persistentConfig.runtime.configMap.name }}
+        # Startup ConfigMap need to be mounted separately to avoid triggering Config Watcher.
+        # When using `projected.sources`, each file is removed and added when any ConfigMap/Secret changes.
+        - name: startup-config
+          configMap:
+            name: {{ .Values.settings.persistentConfig.startup.configMap.name }}
+        {{ end}}
+      {{- with .Values.extraVolumes }}
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ssl.enabled }}
+        - name: certs
+          secret:
+            secretName: {{ include "botkube.SSLCertSecretName" . }}
+      {{ end }}
+      {{- if .Values.kubeconfig.enabled }}
+        - name: kubeconfig
+          secret:
+            {{- if .Values.kubeconfig.base64Config }}
+            secretName: {{ include "botkube.fullname" . }}-kubeconfig
+            {{- else }}
+            secretName: {{ .Values.kubeconfig.existingSecret }}
+            {{- end }}
+      {{ end }}
+        - name: cache
+          emptyDir: {}
+      {{- if .Values.securityContext }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+      {{ end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
+

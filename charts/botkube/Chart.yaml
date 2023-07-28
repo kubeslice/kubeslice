@@ -1,0 +1,24 @@
+apiVersion: v1
+appVersion: v1.0.0
+description: Controller for the Kubeslice Botkube Slack app which helps you monitor
+  your Kubernetes cluster, debug deployments and run specific checks on kubeslice
+  resources as well as kuberenetes resources in the cluster.
+home: https://avesha.io
+icon: https://user-images.githubusercontent.com/99885802/169118120-1636d01b-b9d9-474c-9d08-ff54c8be0d2a.png
+keywords:
+- botkube
+- avesha
+- kubernetes
+- kubernetes-monitoring
+- kubernetes-controller
+- kubernetes-bot
+- chatops
+- bot
+- botops
+maintainers:
+- name: Avesha
+  email: support@avesha.io
+name: botkube
+sources:
+- https://avesha.io
+version: v1.0.0

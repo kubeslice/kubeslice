@@ -1,8 +1,11 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+
+    controller-gen.kubebuilder.io/version: v0.11.1
+  creationTimestamp: null
   name: clusters.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -19,10 +22,14 @@ spec:
         description: Cluster is the Schema for the clusters API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -33,7 +40,8 @@ spec:
                 description: put in an object
                 properties:
                   geoLocation:
-                    description: GeoLocation contains information regarding Geographical Location of the Cluster
+                    description: GeoLocation contains information regarding Geographical
+                      Location of the Cluster
                     properties:
                       cloudProvider:
                         description: CloudProvider is the cloud service provider
@@ -52,19 +60,23 @@ spec:
                     description: Monitoring contains the Kubernetes Monitoring Dashboard
                     properties:
                       kubernetesDashboard:
-                        description: KubernetesDashboard contains the information regarding Kubernetes Monitoring Dashboard
+                        description: KubernetesDashboard contains the information
+                          regarding Kubernetes Monitoring Dashboard
                         properties:
                           accessToken:
-                            description: AccessToken is the Access Token to access the KubernetesDashboard
+                            description: AccessToken is the Access Token to access
+                              the KubernetesDashboard
                             type: string
                           enabled:
                             description: Enabled is the enable status of the KubernetesDashboard
                             type: boolean
                           endpoint:
-                            description: Endpoint is the base endpoint to access the kubernetes dashboard
+                            description: Endpoint is the base endpoint to access the
+                              kubernetes dashboard
                             type: string
                           ingressPrefix:
-                            description: IngressPrefix is the prefix of ingress gateway for KubernetesDashboard
+                            description: IngressPrefix is the prefix of ingress gateway
+                              for KubernetesDashboard
                             type: string
                         type: object
                     type: object
@@ -83,10 +95,12 @@ spec:
                     type: object
                 type: object
               networkInterface:
-                description: NetworkInterface is the network interface attached with the cluster.
+                description: NetworkInterface is the network interface attached with
+                  the cluster.
                 type: string
               nodeIP:
-                description: NodeIP is the IP address of the Node - deprecated field use Plural NodeIPs
+                description: NodeIP is the IP address of the Node - deprecated field
+                  use Plural NodeIPs
                 type: string
               nodeIPs:
                 items:
@@ -100,13 +114,16 @@ spec:
                 description: ClusterHealth shows the health of the worker cluster
                 properties:
                   clusterHealthStatus:
-                    description: ClusterHealthStatus shows the overall health status of the cluster
+                    description: ClusterHealthStatus shows the overall health status
+                      of the cluster
                     enum:
                     - Normal
                     - Warning
                     type: string
                   componentStatuses:
-                    description: ComponentStatuses shows the health status of individual components in the cluster
+
+                    description: ComponentStatuses shows the health status of individual
+                      components in the cluster
                     items:
                       properties:
                         component:
@@ -124,7 +141,9 @@ spec:
                       type: object
                     type: array
                   lastUpdated:
-                    description: LastUpdated is the timestamp when healthstatus was updated
+
+                    description: LastUpdated is the timestamp when healthstatus was
+                      updated
                     format: date-time
                     type: string
                 type: object
@@ -133,6 +152,10 @@ spec:
                 items:
                   type: string
                 type: array
+              isDeregisterInProgress:
+                description: IsDeregisterInProgress is the flag to check if the cluster
+                  deregister is InProgress
+                type: boolean
               namespaces:
                 description: Namespaces present in cluster
                 items:
@@ -148,6 +171,17 @@ spec:
                 items:
                   type: string
                 type: array
+              registrationStatus:
+                description: RegistrationStatus shows the status of cluster registration
+                enum:
+                - Pending
+                - InProgress
+                - Failed
+                - Registered
+                - DeregisterInProgress
+                - DeregisterFailed
+                - Deregistered
+                type: string
               secretName:
                 description: SecretName is the name of the secret for the worker cluster.
                 type: string
@@ -157,12 +191,6 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
