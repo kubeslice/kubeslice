@@ -8,15 +8,9 @@ metadata:
 rules:
 - apiGroups: ["authentication.k8s.io"]
   resources: ["tokenreviews"]
-  verbs: ["create"]
-- apiGroups: ["admissionregistration.k8s.io"]
-  resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
-  verbs: ["get", "list", "patch", "watch"]
+  verbs: ["get", "create"]
 - apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["patch", "get", "list"]
-- apiGroups: [""]
-  resources: ["pods", "nodes"]
+  resources: ["nodes"]
   verbs: ["get"]
 
 ---

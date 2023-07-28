@@ -1,6 +1,6 @@
 apiVersion: v2
 name: kubeslice-controller
-description: A Helm chart for kubeslice-controller
+description: Kubernetes multi-cluster/cloud fleet management controller using Kubeslice
 icon: https://avatars.githubusercontent.com/u/99859346?s=200&v=4
 type: application
 maintainers:
@@ -29,5 +29,5 @@ keywords:
 - application
 kubeVersion: '>= 1.19.0-0'
 home: https://avesha.io/products/product-slice
-version: 1.0.0
-appVersion: 1.0.0
+version: 1.1.0
+appVersion: 1.1.0

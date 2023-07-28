@@ -1,0 +1,70 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spire-server
+  namespace: spire
+data:
+    server.conf: |
+      server {
+          bind_address = "0.0.0.0"
+          bind_port = "8081"
+          trust_domain = "k8s.nsm"
+          data_dir = "/run/spire/data"
+          log_level = "DEBUG"
+          #AWS requires the use of RSA.  EC cryptography is not supported
+          ca_key_type = "rsa-2048"
+          default_x509_svid_ttl = "1h"
+          default_jwt_svid_ttl = "1h"
+          ca_subject = {
+              country = ["US"],
+              organization = ["SPIFFE"],
+              common_name = "",
+          }
+          # Federation config was added here for unification of Spire setups
+          # This config will do nothing until Spiffe Federation bundles are configured manually
+          federation {
+              bundle_endpoint {
+                  address = "0.0.0.0"
+                  port = 8443
+              }
+              federates_with "docker.nsm" {
+                  bundle_endpoint_url = "https://spire-server.spire.docker.nsm:8443"
+                  bundle_endpoint_profile "https_spiffe" {
+                      endpoint_spiffe_id = "spiffe://docker.nsm/spire/server"
+                  }
+              }
+          }
+      }
+
+      plugins {
+          DataStore "sql" {
+              plugin_data {
+                  database_type = "sqlite3"
+                  connection_string = "/run/spire/data/datastore.sqlite3"
+              }
+          }
+
+          NodeAttestor "k8s_psat" {
+              plugin_data {
+                  clusters = {
+                  # NOTE: Change this to your cluster name
+                      "k8s-nsm-cluster" = {
+                          use_token_review_api_validation = true
+                          service_account_allow_list = ["spire:spire-agent"]
+                      }
+                  }
+              }
+          }
+
+          KeyManager "disk" {
+              plugin_data {
+                  keys_path = "/run/spire/data/keys.json"
+              }
+          }
+          Notifier "k8sbundle" {
+              plugin_data {
+                  webhook_label = "spiffe.io/webhook"
+              }
+          }
+      }

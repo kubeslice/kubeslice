@@ -1,0 +1,96 @@
+# -- Set the csi driver name deployed to Kubernetes.
+pluginName: csi.spiffe.io
+
+image:
+  # -- The OCI registry to pull the image from
+  registry: ghcr.io
+  # -- The repository within the registry
+  repository: spiffe/spiffe-csi-driver
+  # -- The image pull policy
+  pullPolicy: IfNotPresent
+  # -- This value is deprecated in favor of tag. (Will be removed in a future release)
+  version: ""
+  # -- Overrides the image tag whose default is the chart appVersion
+  tag: 0.2.3
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # requests:
+  #   cpu: 50m
+  #   memory: 32Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 64Mi
+
+healthChecks:
+  port: 9809
+
+livenessProbe:
+  # -- Initial delay seconds for livenessProbe
+  initialDelaySeconds: 5
+  # -- Timeout value in seconds for livenessProbe
+  timeoutSeconds: 5
+
+imagePullSecrets: []
+nameOverride: ""
+namespaceOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  readOnlyRootFilesystem: true
+  privileged: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+nodeSelector: {}
+
+nodeDriverRegistrar:
+  image:
+    # -- The OCI registry to pull the image from
+    registry: registry.k8s.io
+    # -- The repository within the registry
+    repository: sig-storage/csi-node-driver-registrar
+    # -- The image pull policy
+    pullPolicy: IfNotPresent
+    # -- This value is deprecated in favor of tag. (Will be removed in a future release)
+    version: ""
+    # -- Overrides the image tag
+    tag: v2.8.0
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # requests:
+    #   cpu: 50m
+    #   memory: 32Mi
+    # limits:
+    #   cpu: 100m
+    #   memory: 64Mi
+
+# -- The unix socket path to the spire-agent
+agentSocketPath: /run/spire/sockets/agent.sock
+
+kubeletPath: /var/lib/kubelet
+
+# -- Priority class assigned to daemonset pods
+priorityClassName: ""

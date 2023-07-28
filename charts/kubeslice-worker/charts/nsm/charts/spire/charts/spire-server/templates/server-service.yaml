@@ -11,9 +11,18 @@ spec:
       port: 8081
       targetPort: 8081
       protocol: TCP
-    - name: spire-federation
-      port: 8443
-      targetPort: 8443
+  selector:
+    app: spire-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spire-controller-manager-webhook-service
+  namespace: spire
+spec:
+  ports:
+    - port: 443
       protocol: TCP
+      targetPort: 9443
   selector:
     app: spire-server

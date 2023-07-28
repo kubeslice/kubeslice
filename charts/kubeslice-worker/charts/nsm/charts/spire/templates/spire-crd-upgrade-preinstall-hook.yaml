@@ -1,0 +1,432 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spire-install-crds
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote}}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: spire-install-crds
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: spire-install-crds
+subjects:
+  - kind: ServiceAccount
+    name: spire-install-crds
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: spire-install-crds
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+  labels:
+    app.kubernetes.io/name: kubeslice
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - "apiextensions.k8s.io"
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - create
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spire-crd-install
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"
+data:
+  crds.yaml: |
+    ---
+    apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    metadata:
+      annotations:
+        controller-gen.kubebuilder.io/version: v0.11.1
+      creationTimestamp: null
+      name: clusterspiffeids.spire.spiffe.io
+    spec:
+      group: spire.spiffe.io
+      names:
+        kind: ClusterSPIFFEID
+        listKind: ClusterSPIFFEIDList
+        plural: clusterspiffeids
+        singular: clusterspiffeid
+      scope: Cluster
+      versions:
+      - name: v1alpha1
+        schema:
+          openAPIV3Schema:
+            description: ClusterSPIFFEID is the Schema for the clusterspiffeids API
+            properties:
+              apiVersion:
+                description: 'APIVersion defines the versioned schema of this representation
+                  of an object. Servers should convert recognized schemas to the latest
+                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+                type: string
+              kind:
+                description: 'Kind is a string value representing the REST resource this
+                  object represents. Servers may infer this from the endpoint the client
+                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                type: string
+              metadata:
+                type: object
+              spec:
+                description: ClusterSPIFFEIDSpec defines the desired state of ClusterSPIFFEID
+                properties:
+                  admin:
+                    description: Admin indicates whether or not the SVID can be used to
+                      access the SPIRE administrative APIs. Extra care should be taken
+                      to only apply this SPIFFE ID to admin workloads.
+                    type: boolean
+                  dnsNameTemplates:
+                    description: DNSNameTemplate represents templates for extra DNS names
+                      that are applicable to SVIDs minted for this ClusterSPIFFEID. The
+                      node and pod spec are made available to the template under .NodeSpec,
+                      .PodSpec respectively.
+                    items:
+                      type: string
+                    type: array
+                  downstream:
+                    description: Downstream indicates that the entry describes a downstream
+                      SPIRE server.
+                    type: boolean
+                  federatesWith:
+                    description: FederatesWith is a list of trust domain names that workloads
+                      that obtain this SPIFFE ID will federate with.
+                    items:
+                      type: string
+                    type: array
+                  namespaceSelector:
+                    description: NamespaceSelector selects the namespaces that are targeted
+                      by this CRD.
+                    properties:
+                      matchExpressions:
+                        description: matchExpressions is a list of label selector requirements.
+                          The requirements are ANDed.
+                        items:
+                          description: A label selector requirement is a selector that
+                            contains values, a key, and an operator that relates the key
+                            and values.
+                          properties:
+                            key:
+                              description: key is the label key that the selector applies
+                                to.
+                              type: string
+                            operator:
+                              description: operator represents a key's relationship to
+                                a set of values. Valid operators are In, NotIn, Exists
+                                and DoesNotExist.
+                              type: string
+                            values:
+                              description: values is an array of string values. If the
+                                operator is In or NotIn, the values array must be non-empty.
+                                If the operator is Exists or DoesNotExist, the values
+                                array must be empty. This array is replaced during a strategic
+                                merge patch.
+                              items:
+                                type: string
+                              type: array
+                          required:
+                          - key
+                          - operator
+                          type: object
+                        type: array
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: matchLabels is a map of {key,value} pairs. A single
+                          {key,value} in the matchLabels map is equivalent to an element
+                          of matchExpressions, whose key field is "key", the operator
+                          is "In", and the values array contains only "value". The requirements
+                          are ANDed.
+                        type: object
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  podSelector:
+                    description: PodSelector selects the pods that are targeted by this
+                      CRD.
+                    properties:
+                      matchExpressions:
+                        description: matchExpressions is a list of label selector requirements.
+                          The requirements are ANDed.
+                        items:
+                          description: A label selector requirement is a selector that
+                            contains values, a key, and an operator that relates the key
+                            and values.
+                          properties:
+                            key:
+                              description: key is the label key that the selector applies
+                                to.
+                              type: string
+                            operator:
+                              description: operator represents a key's relationship to
+                                a set of values. Valid operators are In, NotIn, Exists
+                                and DoesNotExist.
+                              type: string
+                            values:
+                              description: values is an array of string values. If the
+                                operator is In or NotIn, the values array must be non-empty.
+                                If the operator is Exists or DoesNotExist, the values
+                                array must be empty. This array is replaced during a strategic
+                                merge patch.
+                              items:
+                                type: string
+                              type: array
+                          required:
+                          - key
+                          - operator
+                          type: object
+                        type: array
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: matchLabels is a map of {key,value} pairs. A single
+                          {key,value} in the matchLabels map is equivalent to an element
+                          of matchExpressions, whose key field is "key", the operator
+                          is "In", and the values array contains only "value". The requirements
+                          are ANDed.
+                        type: object
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  spiffeIDTemplate:
+                    description: SPIFFEID is the SPIFFE ID template. The node and pod
+                      spec are made available to the template under .NodeSpec, .PodSpec
+                      respectively.
+                    type: string
+                  ttl:
+                    description: TTL indicates an upper-bound time-to-live for SVIDs minted
+                      for this ClusterSPIFFEID. If unset, a default will be chosen.
+                    type: string
+                  workloadSelectorTemplates:
+                    description: WorkloadSelectorTemplates are templates to produce arbitrary
+                      workload selectors that apply to a given workload before it will
+                      receive this SPIFFE ID. The rendered value is interpreted by SPIRE
+                      and are of the form type:value, where the value may, and often does,
+                      contain semicolons, .e.g., k8s:container-image:docker/hello-world
+                      The node and pod spec are made available to the template under .NodeSpec,
+                      .PodSpec respectively.
+                    items:
+                      type: string
+                    type: array
+                required:
+                - spiffeIDTemplate
+                type: object
+              status:
+                description: ClusterSPIFFEIDStatus defines the observed state of ClusterSPIFFEID
+                properties:
+                  stats:
+                    description: Stats produced by the last entry reconciliation run
+                    properties:
+                      entriesMasked:
+                        description: How many entries were masked by entries for other
+                          ClusterSPIFFEIDs. This happens when one or more ClusterSPIFFEIDs
+                          produce an entry for the same pod with the same set of workload
+                          selectors.
+                        type: integer
+                      entriesToSet:
+                        description: How many entries are to be set for this ClusterSPIFFEID.
+                          In nominal conditions, this should reflect the number of pods
+                          selected, but not always if there were problems encountered
+                          rendering an entry for the pod (RenderFailures) or entries are
+                          masked (EntriesMasked).
+                        type: integer
+                      entryFailures:
+                        description: How many entries were unable to be set due to failures
+                          to create or update the entries via the SPIRE Server API.
+                        type: integer
+                      namespacesIgnored:
+                        description: How many (selected) namespaces were ignored (based
+                          on configuration).
+                        type: integer
+                      namespacesSelected:
+                        description: How many namespaces were selected.
+                        type: integer
+                      podEntryRenderFailures:
+                        description: How many failures were encountered rendering an entry
+                          selected pods. This could be due to either a bad template in
+                          the ClusterSPIFFEID or Pod metadata that when applied to the
+                          template did not produce valid entry values.
+                        type: integer
+                      podsSelected:
+                        description: How many pods were selected out of the namespaces.
+                        type: integer
+                    type: object
+                type: object
+            type: object
+        served: true
+        storage: true
+        subresources:
+          status: {}
+
+    ---
+    apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    metadata:
+      annotations:
+        controller-gen.kubebuilder.io/version: v0.11.1
+      creationTimestamp: null
+      name: clusterfederatedtrustdomains.spire.spiffe.io
+    spec:
+      group: spire.spiffe.io
+      names:
+        kind: ClusterFederatedTrustDomain
+        listKind: ClusterFederatedTrustDomainList
+        plural: clusterfederatedtrustdomains
+        singular: clusterfederatedtrustdomain
+      scope: Cluster
+      versions:
+      - additionalPrinterColumns:
+        - jsonPath: .spec.trustDomain
+          name: Trust Domain
+          type: string
+        - jsonPath: .spec.bundleEndpointURL
+          name: Endpoint URL
+          type: string
+        name: v1alpha1
+        schema:
+          openAPIV3Schema:
+            description: ClusterFederatedTrustDomain is the Schema for the clusterfederatedtrustdomains
+              API
+            properties:
+              apiVersion:
+                description: 'APIVersion defines the versioned schema of this representation
+                  of an object. Servers should convert recognized schemas to the latest
+                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+                type: string
+              kind:
+                description: 'Kind is a string value representing the REST resource this
+                  object represents. Servers may infer this from the endpoint the client
+                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                type: string
+              metadata:
+                type: object
+              spec:
+                description: ClusterFederatedTrustDomainSpec defines the desired state
+                  of ClusterFederatedTrustDomain
+                properties:
+                  bundleEndpointProfile:
+                    description: BundleEndpointProfile is the profile for the bundle endpoint.
+                    properties:
+                      endpointSPIFFEID:
+                        description: EndpointSPIFFEID is the SPIFFE ID of the bundle endpoint.
+                          It is required for the "https_spiffe" profile.
+                        type: string
+                      type:
+                        description: Type is the type of the bundle endpoint profile.
+                        enum:
+                        - https_spiffe
+                        - https_web
+                        type: string
+                    required:
+                    - type
+                    type: object
+                  bundleEndpointURL:
+                    description: BundleEndpointURL is the URL of the bundle endpoint.
+                      It must be an HTTPS URL and cannot contain userinfo (i.e. username/password).
+                    type: string
+                  trustDomain:
+                    description: TrustDomain is the name of the trust domain to federate
+                      with (e.g. example.org)
+                    pattern: '[a-z0-9._-]{1,255}'
+                    type: string
+                  trustDomainBundle:
+                    description: TrustDomainBundle is the contents of the bundle for the
+                      referenced trust domain. This field is optional when the resource
+                      is created.
+                    type: string
+                required:
+                - bundleEndpointProfile
+                - bundleEndpointURL
+                - trustDomain
+                type: object
+              status:
+                description: ClusterFederatedTrustDomainStatus defines the observed state
+                  of ClusterFederatedTrustDomain
+                type: object
+            type: object
+        served: true
+        storage: true
+        subresources:
+          status: {}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spire-install-crds
+  namespace:  {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "2"
+  labels:
+    app.kubernetes.io/name: spire 
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      name: spire-install-crds
+      namespace: {{ .Release.Namespace }}
+    spec:
+      serviceAccountName: spire-install-crds
+      containers:
+        - name: kubectl
+          image: "alpine/k8s:1.22.9"
+          command:
+            - /bin/sh
+            - -c
+            - kubectl apply -f /tmp/crds.yaml
+          volumeMounts:
+            - mountPath: /tmp
+              name: crds
+      volumes:
+        - name: crds
+          configMap:
+            name: spire-crd-install
+            items:
+            - key: "crds.yaml"
+              path: "crds.yaml"
+      restartPolicy: OnFailure

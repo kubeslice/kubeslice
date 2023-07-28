@@ -7,15 +7,15 @@ kubeslice:
     image: gcr.io/kubebuilder/kube-rbac-proxy
     tag: v0.8.0
   controller:
-    logLevel: info
+    logLevel: debug
     rbacResourcePrefix: kubeslice-rbac
     projectnsPrefix: kubeslice
     endpoint:
     image: aveshasystems/kubeslice-controller
-    tag: 1.0.0
-    pullPolicy: IfNotPresent
+    tag: 1.1.0
+    pullPolicy: Always
   ovpnJob:
     image: aveshasystems/gateway-certs-generator
-    tag: 0.1.10
+    tag: 0.2.0
   events:
     disabled: false

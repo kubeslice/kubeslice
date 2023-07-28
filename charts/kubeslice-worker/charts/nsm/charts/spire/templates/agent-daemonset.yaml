@@ -25,19 +25,22 @@ spec:
           # This is a small image with wait-for-it, choose whatever image
           # you prefer that waits for a service to be up. This image is built
           # from https://github.com/lqhl/wait-for-it
-          image: {{ .Values.spireAgent.waitForItImageRegistry }}:{{ .Values.spireAgent.waitForItImageTag }}
+          image: gcr.io/spiffe-io/wait-for-it
           imagePullPolicy: IfNotPresent
-          args: ["-t", "60", "spire-server:8081"]
+          args: ["-t", "30", "spire-server:8081"]
         - name: init-bundle
           # Additional init container with the same wait-for-it image to
           # provide workaround for https://github.com/spiffe/spire/issues/3032
           # It checks if the bundle is in place and ready to be parsed or not.
-          image: {{ .Values.spireAgent.waitForItImageRegistry }}:{{ .Values.spireAgent.waitForItImageTag }}
+          image: gcr.io/spiffe-io/wait-for-it
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 5 ]; do t=`expr $t + 1`; sleep 1; done"]
+          command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 60 ]; do t=`expr $t + 1`; sleep 1; done"]
+          volumeMounts:
+            - name: spire-bundle
+              mountPath: /run/spire/bundle
       containers:
         - name: spire-agent
-          image: {{ .Values.spireAgent.imageRegistry }}:{{ .Values.spireAgent.imageTag }}
+          image: ghcr.io/spiffe/spire-agent:1.6.1
           args: ["-config", "/run/spire/config/agent.conf"]
           volumeMounts:
             - name: spire-config

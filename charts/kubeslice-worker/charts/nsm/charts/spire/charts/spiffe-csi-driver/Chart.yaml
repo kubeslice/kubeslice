@@ -1,0 +1,6 @@
+apiVersion: v2
+name: spiffe-csi-driver
+description: A Helm chart to install the SPIFFE CSI driver.
+type: application
+version: 0.1.0
+appVersion: "0.2.3"
