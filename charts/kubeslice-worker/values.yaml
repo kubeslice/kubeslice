@@ -2,7 +2,7 @@ operator:
   image: docker.io/aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-  tag: 1.0.0
+  tag: 1.1.0
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
   namespace:
@@ -17,7 +17,7 @@ cluster:
 
 router:
   image: docker.io/aveshasystems/cmd-nse-vl3
-  tag: 1.0.2
+  tag: 1.0.3
   pullPolicy: IfNotPresent                                                                                     
 
 routerSidecar:

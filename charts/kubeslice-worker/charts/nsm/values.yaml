@@ -10,11 +10,11 @@ global:
 
 forwardingPlane:
   kernelImageRegistry: docker.io/aveshasystems/cmd-forwarder-kernel
-  kernelImageTag: 1.0.1
+  kernelImageTag: 1.0.3
 
 nsmgr:
   imageRegistry: docker.io/aveshasystems/cmd-nsmgr
-  imageTag: 1.5.2
+  imageTag: 1.5.3
   waitForItImageRegistry: docker.io/aveshasystems/wait-for-it
   waitForItImageTag: 1.0.0
   excludePrefixesImageRegistry: docker.io/aveshasystems/cmd-exclude-prefixes-k8s

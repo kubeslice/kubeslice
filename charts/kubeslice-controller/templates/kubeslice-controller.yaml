@@ -357,7 +357,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.11.1
   name: sliceconfigs.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -374,10 +374,14 @@ spec:
         description: SliceConfig is the Schema for the sliceconfig API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -390,7 +394,8 @@ spec:
                 type: array
               externalGatewayConfig:
                 items:
-                  description: ExternalGatewayConfig is the configuration for external gateways like 'istio', etc/
+                  description: ExternalGatewayConfig is the configuration for external
+                    gateways like 'istio', etc/
                   properties:
                     clusters:
                       items:
@@ -491,8 +496,18 @@ spec:
                 - queueType
                 - tcType
                 type: object
+              renewBefore:
+                description: RenewBefore is used for renew now!
+                format: date-time
+                type: string
+              rotationInterval:
+                default: 30
+                maximum: 90
+                minimum: 30
+                type: integer
               sliceGatewayProvider:
-                description: WorkerSliceGatewayProvider defines the configuration for slicegateway
+                description: WorkerSliceGatewayProvider defines the configuration
+                  for slicegateway
                 properties:
                   sliceCaType:
                     default: Local
@@ -514,6 +529,19 @@ spec:
                 type: string
               standardQosProfileName:
                 type: string
+              vpnConfig:
+                description: VPNConfiguration defines the additional (optional) VPN
+                  Configuration to customise
+                properties:
+                  cipher:
+                    default: AES-256-CBC
+                    enum:
+                    - AES-256-CBC
+                    - AES-128-CBC
+                    type: string
+                required:
+                - cipher
+                type: object
             required:
             - sliceGatewayProvider
             type: object
@@ -524,7 +552,8 @@ spec:
                 items:
                   properties:
                     action:
-                      description: Trigger action. Examples - CLUSTER_OFFBOARDING, NAMESPCE_OFFBOARDING etc
+                      description: Trigger action. Examples - CLUSTER_OFFBOARDING,
+                        NAMESPCE_OFFBOARDING etc
                       type: string
                     components:
                       description: list of effected components on which action failed
@@ -535,11 +564,13 @@ spec:
                       description: Event name (from monitoring framework schema)
                       type: string
                     identifier:
-                      description: Identifier of the component for which the action was triggered
+                      description: Identifier of the component for which the action
+                        was triggered
                       type: string
                     isEventRaised:
                       default: false
-                      description: Flag to determine if kubernetes event is already raised
+                      description: Flag to determine if kubernetes event is already
+                        raised
                       type: boolean
                     reason:
                       description: Reason message for the event
@@ -549,7 +580,8 @@ spec:
                       format: date-time
                       type: string
                     type:
-                      description: Type of the event. Can be one of Error, Success or InProgress
+                      description: Type of the event. Can be one of Error, Success
+                        or InProgress
                       type: string
                   required:
                   - event
@@ -561,12 +593,112 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.1
+  creationTimestamp: null
+  name: vpnkeyrotations.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: VpnKeyRotation
+    listKind: VpnKeyRotationList
+    plural: vpnkeyrotations
+    singular: vpnkeyrotation
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: VpnKeyRotation is the Schema for the vpnkeyrotations API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VpnKeyRotationSpec defines the desired state of VpnKeyRotation
+            properties:
+              certificateCreationTime:
+                description: CertificateCreationTime is a time when certificate for
+                  all the gateway pairs is created/updated
+                format: date-time
+                type: string
+              certificateExpiryTime:
+                description: CertificateExpiryTime is a time when certificate for
+                  all the gateway pairs will expire
+                format: date-time
+                type: string
+              clusterGatewayMapping:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                description: ClusterGatewayMapping represents a map where key is cluster
+                  name and value is array of gateways present on that cluster. This
+                  is used to avoid unnecessary reconciliation in worker-operator.
+                type: object
+              clusters:
+                description: clusters contains the list of clusters attached to this
+                  slice
+                items:
+                  type: string
+                type: array
+              rotationCount:
+                description: RotationCount represent the number of times rotation
+                  has been already performed.
+                type: integer
+              rotationInterval:
+                type: integer
+              sliceName:
+                type: string
+            type: object
+          status:
+            description: VpnKeyRotationStatus defines the observed state of VpnKeyRotation
+            properties:
+              currentRotationState:
+                additionalProperties:
+                  description: StatusOfKeyRotation represent per gateway status
+                  properties:
+                    lastUpdatedTimestamp:
+                      format: date-time
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                description: This is map of gateway name to the current rotation state
+                type: object
+              statusHistory:
+                additionalProperties:
+                  items:
+                    description: StatusOfKeyRotation represent per gateway status
+                    properties:
+                      lastUpdatedTimestamp:
+                        format: date-time
+                        type: string
+                      status:
+                        type: string
+                    type: object
+                  type: array
+                description: This is circular array of last n number of rotation status.
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1088,7 +1220,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
   name: workerslicegwrecyclers.worker.kubeslice.io
 spec:
@@ -1103,19 +1235,26 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: WorkerSliceGwRecycler is the Schema for the workerslicegwrecyclers API
+        description: WorkerSliceGwRecycler is the Schema for the workerslicegwrecyclers
+          API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
           spec:
             description: WorkerSliceGwRecyclerSpec defines the desired state of WorkerSliceGwRecycler
             properties:
+              clientRedundancyNumber:
+                type: integer
               gwPair:
                 properties:
                   clientId:
@@ -1125,6 +1264,8 @@ spec:
                 type: object
               request:
                 type: string
+              serverRedundancyNumber:
+                type: integer
               sliceGwClient:
                 type: string
               sliceGwServer:
@@ -1135,7 +1276,8 @@ spec:
                 type: string
             type: object
           status:
-            description: WorkerSliceGwRecyclerStatus defines the observed state of WorkerSliceGwRecycler
+            description: WorkerSliceGwRecyclerStatus defines the observed state of
+              WorkerSliceGwRecycler
             properties:
               client:
                 properties:
@@ -1158,12 +1300,6 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1291,6 +1427,7 @@ rules:
   - serviceexportconfigs
   - sliceconfigs
   - sliceqosconfigs
+  - vpnkeyrotations
   verbs:
   - create
   - delete
@@ -1307,6 +1444,7 @@ rules:
   - serviceexportconfigs/finalizers
   - sliceconfigs/finalizers
   - sliceqosconfigs/finalizers
+  - vpnkeyrotations/finalizers
   verbs:
   - update
 - apiGroups:
@@ -1317,6 +1455,7 @@ rules:
   - serviceexportconfigs/status
   - sliceconfigs/status
   - sliceqosconfigs/status
+  - vpnkeyrotations/status
   verbs:
   - get
   - patch
@@ -1421,6 +1560,7 @@ rules:
   - update
   - patch
   - create
+  - delete
 - apiGroups:
   - worker.kubeslice.io
   resources:

@@ -326,3 +326,25 @@ webhooks:
     resources:
     - workerslicegateways
   sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $ca.Cert | b64enc }}
+    service:
+      name: kubeslice-controller-webhook-service
+      namespace: kubeslice-controller
+      path: /validate-controller-kubeslice-io-v1alpha1-vpnkeyrotation
+  failurePolicy: Fail
+  name: vvpnkeyrotation.kb.io
+  rules:
+  - apiGroups:
+    - controller.kubeslice.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - vpnkeyrotations
+  sideEffects: None

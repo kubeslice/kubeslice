@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spire-controller-manager-config
+  namespace: spire
+data:
+   spire-controller-manager-config.yaml: |
+     apiVersion: spire.spiffe.io/v1alpha1
+     kind: ControllerManagerConfig
+     metrics:
+     bindAddress: 127.0.0.1:8082
+     healthProbe:
+       bindAddress: 127.0.0.1:8083
+     leaderElection:
+       leaderElect: true
+       resourceName: 98c9c988.spiffe.io
+       resourceNamespace: spire
+     clusterName: k8s-nsm-cluster
+     trustDomain: k8s.nsm
+     spireServerSocketPath: /run/spire/sockets/api.sock
+     ignoreNamespaces:
+       - kube-system
+       - kube-public
+       - spire
+       - local-path-storage

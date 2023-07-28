@@ -4,10 +4,8 @@
 
 # Variables added
 spireServer:
-  imageRegistry: gcr.io/spiffe-io/spire-server
-  imageTag: 1.5.1
-  k8sWorkloadRegistrarImageRegistry: gcr.io/spiffe-io/k8s-workload-registrar
-  k8sWorkloadRegistrarImageTag: 1.5.1
+  imageRegistry: ghcr.io/spiffe/spire-server
+  imageTag: 1.6.1
 
 # TODO: check and remove unneeded values
 

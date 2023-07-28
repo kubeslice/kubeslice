@@ -1,4 +1,41 @@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nsmgr-cm
+  namespace: kubeslice-system
+data:
+  create-nsmgr-svc.sh: |-
+    #!/usr/bin/env bash
+    #
+    # Service name should be an RFC-1035 label name.
+    # Get the md5 hash of the node name to use as the name of the
+    # nsmgr service.
+    SVC_NAME="nsm-$(echo $MY_NODE_NAME | md5sum | awk '{print $1}')"
+    kubectl get svc $SVC_NAME -n kubeslice-system
+    if [[ $? -eq 1 ]]; then
+        echo "Creating service $SVC_NAME"
+        kubectl create service clusterip $SVC_NAME --tcp=5001:5001 --save-config=true -n kubeslice-system
+        if [[ $? -eq 1 ]]; then
+            echo "Failed to create service"
+            exit 1
+        fi
+    fi
+
+    kubectl label po $MY_POD_NAME nsmgr-svc=$SVC_NAME --overwrite -n kubeslice-system
+    if [[ $? -eq 1 ]]; then
+        echo "Failed to label the pod"
+        exit 1
+    fi
+
+    SELECTOR="nsmgr-svc=$SVC_NAME"
+    kubectl get service $SVC_NAME -oyaml -n kubeslice-system | kubectl set selector --local=false -f - "$SELECTOR" -oyaml -n kubeslice-system
+    if [[ $? -eq 1 ]]; then
+        echo "Failed to set selector on the service"
+        exit 1
+    fi
+
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -27,6 +64,24 @@ spec:
           args: [ "-t", "120", "spire-server.spire:8081" ]
           #command: ['sh', '-c', 'sleep 120']
           #command: ['sh', '-c', "t=0; until [ -f /run/spire/sockets/agent.sock 2>&1 ] || [ $t -eq 5 ]; do t=`expr $t + 1`; sleep 15; done;"]
+        - env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          image: "alpine/k8s:1.22.9"
+          imagePullPolicy: IfNotPresent
+          name: nsmgr-init-svc-creator
+          command:
+            - /bin/bash
+            - /tmp/create-nsmgr-svc.sh
+          volumeMounts:
+          - mountPath: /tmp/
+            name: nsm-svc-config-volume
       containers:
         - image: {{ .Values.nsmgr.imageRegistry }}:{{ .Values.nsmgr.imageTag }}
           imagePullPolicy: IfNotPresent
@@ -137,10 +192,12 @@ spec:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
         - name: nsm-config-volume
-{{/*          emptyDir:*/}}
-{{/*            {}*/}}
           configMap:
             name: nsm-config
+        - configMap:
+            defaultMode: 420
+            name: nsmgr-cm
+          name: nsm-svc-config-volume
       tolerations:
         - key: "kubeslice.io/node-type"
           operator: "Equal"
