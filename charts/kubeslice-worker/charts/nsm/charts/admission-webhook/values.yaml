@@ -11,3 +11,4 @@ nsmInjectContainerImageTag: 1.5.6
 
 nsmInjectInitContainerImageRegistry: docker.io/aveshasystems/cmd-nsc-init
 nsmInjectInitContainerImageTag: 1.5.5
+
