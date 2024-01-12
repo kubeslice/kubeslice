@@ -162,6 +162,12 @@ spec:
                   sliceDisplayName:
                     description: display name of the slice.
                     type: string
+                  sliceGatewayProtocol:
+                    description: 'SliceGateway Protocol Type: UDP or TCP'
+                    type: string
+                  sliceGatewayServiceType:
+                    description: SliceGateway Service Type
+                    type: string
                   sliceId:
                     description: UUID of the slice.
                     type: string

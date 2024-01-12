@@ -528,12 +528,20 @@ data:
                   config:
                     description: SliceGatewayConfig defines the config received from backend
                     properties:
+                      sliceGatewayConnectivityType:
+                        description: SliceGateway Connectivity Type
+                        type: string
                       sliceGatewayHostType:
                         description: 'Host Type : server or client'
                         type: string
                       sliceGatewayId:
                         description: UUID of the slice gateway.
                         type: string
+                      sliceGatewayIntermediateDeployments:
+                        description: Intermediate Slice Gw Deployments
+                        items:
+                          type: string
+                        type: array
                       sliceGatewayLocalVpnIp:
                         description: Local VPN IP
                         type: string
@@ -545,6 +553,9 @@ data:
                         items:
                           type: integer
                         type: array
+                      sliceGatewayProtocol:
+                        description: 'SliceGateway Protocol Type: UDP or TCP'
+                        type: string
                       sliceGatewayRemoteClusterId:
                         description: Remote Cluster ID
                         type: string
@@ -567,6 +578,11 @@ data:
                       sliceGatewayRemoteVpnIp:
                         description: Remote VPN IP
                         type: string
+                      sliceGatewayServerLBIps:
+                        description: Slice gateway server LB IPs
+                        items:
+                          type: string
+                        type: array
                       sliceGatewayStatus:
                         description: SliceGateway status
                         type: string
@@ -597,7 +613,16 @@ data:
                       properties:
                         localNsmIP:
                           type: string
+                        originalPodCreationTS:
+                          description: originalPodCreationTS indicates how old the gw
+                            pod is even if is restarted
+                          format: date-time
+                          type: string
                         peerPodName:
+                          type: string
+                        podCreationTS:
+                          description: podCreationTS indicates the creation TS of a pod
+                          format: date-time
                           type: string
                         podIP:
                           type: string
@@ -666,6 +691,8 @@ data:
         plural: ""
       conditions: []
       storedVersions: []
+
+
   networking.kubeslice.io_slices.yaml: |2-
 
     ---
@@ -830,6 +857,12 @@ data:
                         type: object
                       sliceDisplayName:
                         description: display name of the slice.
+                        type: string
+                      sliceGatewayProtocol:
+                        description: 'SliceGateway Protocol Type: UDP or TCP'
+                        type: string
+                      sliceGatewayServiceType:
+                        description: SliceGateway Service Type
                         type: string
                       sliceId:
                         description: UUID of the slice.

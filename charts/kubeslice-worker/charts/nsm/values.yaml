@@ -10,7 +10,7 @@ global:
 
 forwardingPlane:
   kernelImageRegistry: docker.io/aveshasystems/cmd-forwarder-kernel
-  kernelImageTag: 1.0.3
+  kernelImageTag: 1.0.6
 
 nsmgr:
   imageRegistry: docker.io/aveshasystems/cmd-nsmgr
