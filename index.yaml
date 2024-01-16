@@ -117,6 +117,44 @@ entries:
     version: 1.13.3
   kubeslice-controller:
   - apiVersion: v2
+    appVersion: 1.2.0
+    created: "2024-01-16T12:05:26.023215692Z"
+    description: Kubernetes multi-cluster/cloud fleet management controller using
+      Kubeslice
+    digest: 675fa4a86f921cd55de17b869973814f2b4c9ffc6d6ed587a9c64f20d4c74c4b
+    home: https://avesha.io/products/product-slice
+    icon: https://avatars.githubusercontent.com/u/99859346?s=200&v=4
+    keywords:
+    - multicloud
+    - multi cloud
+    - multitenant
+    - multitenancy
+    - multi tenant
+    - multi tenancy
+    - federated mesh
+    - federated clusters
+    - federated k8s
+    - federated kubernetes
+    - cluster sprawl
+    - sprawl
+    - namespace sprawl
+    - network policy
+    - overlay network
+    - mesh network
+    - security
+    - networking
+    - infrastructure
+    - application
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: support@avesha.io
+      name: Avesha
+    name: kubeslice-controller
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-controller-1.2.0/kubeslice-controller-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
     appVersion: 1.1.0
     created: "2023-07-28T07:14:03.486538914Z"
     description: Kubernetes multi-cluster/cloud fleet management controller using
@@ -272,6 +310,43 @@ entries:
     - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-controller-0.1.0/kubeslice-controller-0.1.0.tgz
     version: 0.1.0
   kubeslice-worker:
+  - apiVersion: v2
+    appVersion: 1.2.0
+    created: "2024-01-16T12:05:26.235531792Z"
+    description: Kubeslice operator - A Helm chart for managing life-cycle management
+      of Kubeslice
+    digest: 98df9be372bd51db5dca868d931e18d41292cc7212b03ff4992524b30b5833c7
+    home: https://avesha.io/products/product-slice
+    keywords:
+    - multicloud
+    - multi cloud
+    - multitenant
+    - multitenancy
+    - multi tenant
+    - multi tenancy
+    - federated mesh
+    - federated clusters
+    - federated k8s
+    - federated kubernetes
+    - cluster sprawl
+    - sprawl
+    - namespace sprawl
+    - network policy
+    - overlay network
+    - mesh network
+    - security
+    - networking
+    - infrastructure
+    - application
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - email: support@avesha.io
+      name: Avesha
+    name: kubeslice-worker
+    type: application
+    urls:
+    - https://github.com/kubeslice/kubeslice/releases/download/kubeslice-worker-1.2.0/kubeslice-worker-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: 1.1.0
     created: "2023-07-28T07:14:03.649864179Z"
@@ -472,4 +547,4 @@ entries:
     urls:
     - https://github.com/kubeslice/kubeslice/releases/download/prometheus-19.3.0/prometheus-19.3.0.tgz
     version: 19.3.0
-generated: "2023-07-28T07:14:03.650175593Z"
+generated: "2024-01-16T12:05:26.235645195Z"
