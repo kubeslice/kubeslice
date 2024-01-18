@@ -41,4 +41,4 @@ helm upgrade [RELEASE_NAME] kubeslice/kubeslice-controller [flags]
 Guide
 ---
 
-A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/documentation/open-source/1.1.0/) website.
+A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/documentation/open-source/1.2.0/) website.

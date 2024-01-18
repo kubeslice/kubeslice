@@ -8,6 +8,7 @@ kubeslice:
     tag: v0.8.0
   controller:
     logLevel: debug
+    logLevel: debug
     rbacResourcePrefix: kubeslice-rbac
     projectnsPrefix: kubeslice
     endpoint:

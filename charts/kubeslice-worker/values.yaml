@@ -1,5 +1,5 @@
 operator:
-  image: docker.io/aveshasystems/worker-operator
+  image: aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
   tag: 1.2.0
@@ -13,10 +13,13 @@ controllerSecret:
 cluster:
   name:
   nodeIp: # This field is deprecated. You can set nodeIPs through cluster spec.
+  nodeIp: # This field is deprecated. You can set nodeIPs through cluster spec.
   endpoint:
 
 router:
   image: docker.io/aveshasystems/cmd-nse-vl3
+  tag: 1.0.3
+  pullPolicy: IfNotPresent                                                                                     
   tag: 1.0.3
   pullPolicy: IfNotPresent                                                                                     
 
@@ -54,10 +57,14 @@ openvpn:
 dns:
   image: docker.io/aveshasystems/dns
   tag: 0.1.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
 
 jaeger:
   enabled: false
+
+events:
+  disabled: true
 
 events:
   disabled: true
