@@ -78,12 +78,12 @@ spec:
             value: '{{ .Values.openvpn.client.image }}:{{ .Values.openvpn.client.tag }}'
           - name: AVESHA_OPENVPN_CLIENT_PULLPOLICY
             value: '{{ .Values.openvpn.client.pullPolicy }}'
+          - name: AVESHA_SLICE_GW_EDGE_IMAGE
+            value: "{{ .Values.gatewayEdge.image }}:{{ .Values.gatewayEdge.tag }}"
 
           {{- if .Values.imagePullSecrets }}
-          {{- with (first .Values.imagePullSecrets) }}
           - name: IMAGE_PULL_SECRET_NAME
-            value: {{ .name }}
-          {{- end }}
+            value: ""
           {{- end }}
           
         livenessProbe:

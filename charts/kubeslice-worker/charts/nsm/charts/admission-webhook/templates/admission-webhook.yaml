@@ -1,3 +1,17 @@
+{{- $ca := genCA "admission-controller-ca" 3650 -}}
+{{- $cn := printf "admission-webhook-svc"  -}}
+{{- $altName1 := printf "%s.%s.svc" $cn .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc.cluster.local" $cn .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nsm-admission-webhook-certs
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  tls.key: {{ $cert.Key | b64enc }}
+  tls.crt: {{ $cert.Cert | b64enc }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -16,6 +30,7 @@ spec:
         app: admission-webhook-k8s
     spec:
       serviceAccountName: admission-webhook-sa
+      priorityClassName: nsm-webhook-high-priority
       containers:
         - name: admission-webhook-k8s
           image: {{ .Values.webhookImageRegistry }}:{{ .Values.webhookImageTag }}
@@ -48,3 +63,67 @@ spec:
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
               value: NSM_CONNECT_TO=tcp://nsmgr.kubeslice-system.svc.cluster.local:5001,NSM_LOG_LEVEL=TRACE,NSM_LIVENESSCHECKENABLED=false
+            - name: NSM_REGISTER_WEBHOOK_CLIENT
+              value: "false"
+            - name: NSM_CA_BUNDLE
+              value: "{{ $ca.Cert | b64enc }}"
+            - name: NSM_CERT_FILE_PATH
+              value: /etc/webhook/certs/tls.crt
+            - name: NSM_KEY_FILE_PATH
+              value: /etc/webhook/certs/tls.key
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: nsm-admission-webhook-certs
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: nsm-mutating-webhook-configuration
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: nsm-admission-webhook
+webhooks:
+  - name: webhook.networkservicemesh.io
+    sideEffects: None
+    admissionReviewVersions: 
+    - "v1"
+    failurePolicy: Fail
+    matchPolicy: Equivalent
+    clientConfig:
+      service:
+        name: admission-webhook-svc
+        namespace: {{ .Release.Namespace }}
+        path: "/mutate"
+      caBundle: {{ $ca.Cert | b64enc }}
+    rules:
+      - apiGroups:
+        - ""
+        - apps
+        apiVersions:
+        - v1
+        operations: 
+        - CREATE
+        - UPDATE
+        resources:
+        - pods
+        - deployments
+        - statefulsets
+        - daemonsets
+        - replicasets
+    namespaceSelector:
+      matchExpressions:
+      - key: kubeslice.io/inject
+        operator: In
+        values:
+        - "true"
+      - key: kubernetes.io/metadata.name
+        operator: NotIn
+        values:
+        - kube-system
+        - spire
+        - kubeslice-controller

@@ -4,11 +4,10 @@
 # Declare variables to be passed into your templates.
 
 webhookImageRegistry: docker.io/aveshasystems/cmd-admission-webhook-k8s
-webhookImageTag: 1.6.3
+webhookImageTag: 1.7.0
 
 nsmInjectContainerImageRegistry: docker.io/aveshasystems/cmd-nsc
-nsmInjectContainerImageTag: 1.5.6
+nsmInjectContainerImageTag: 1.5.7
 
 nsmInjectInitContainerImageRegistry: docker.io/aveshasystems/cmd-nsc-init
 nsmInjectInitContainerImageTag: 1.5.5
-
