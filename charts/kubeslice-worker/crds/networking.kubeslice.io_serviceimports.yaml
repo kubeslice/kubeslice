@@ -80,6 +80,21 @@ spec:
                       description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
                         to "TCP".
                       type: string
+                    servicePort:
+                      description: Port number of the exported service
+                      format: int32
+                      type: integer
+                    serviceProtocol:
+                      default: HTTP
+                      description: The protocol being used by the exported service
+                        (for multinet slice)
+                      enum:
+                      - HTTP
+                      - HTTPS
+                      maxLength: 255
+                      minLength: 1
+                      pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
+                      type: string
                   required:
                   - containerPort
                   type: object
