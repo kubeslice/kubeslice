@@ -1,6 +1,5 @@
 apiVersion: v2
 description: Kubeslice operator - A Helm chart for managing life-cycle management of Kubeslice
-description: Kubeslice operator - A Helm chart for managing life-cycle management of Kubeslice
 name: kubeslice-worker
 type: application
 maintainers:
@@ -29,6 +28,5 @@ keywords:
 - application
 kubeVersion: '>= 1.19.0-0'
 home: https://avesha.io/products/product-slice
-version: 1.2.0
-appVersion: 1.2.0
-
+version: 1.2.1
+appVersion: 1.2.1

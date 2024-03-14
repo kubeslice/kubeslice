@@ -108,6 +108,9 @@ data:
         - jsonPath: .spec.ingressEnabled
           name: Ingress
           type: boolean
+        - jsonPath: .status.servicePorts
+          name: ServicePort(s)
+          type: string
         - jsonPath: .status.exposedPorts
           name: Port(s)
           type: string
@@ -142,7 +145,7 @@ data:
                 properties:
                   aliases:
                     description: Alias names for the exported service. The service could
-                       be addressed by the alias names in addition to the slice.local name.
+                      be addressed by the alias names in addition to the slice.local name.
                     items:
                       type: string
                     type: array
@@ -166,6 +169,21 @@ data:
                           default: TCP
                           description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
                             to "TCP".
+                          type: string
+                        servicePort:
+                          description: Port number of the exported service
+                          format: int32
+                          type: integer
+                        serviceProtocol:
+                          default: HTTP
+                          description: The protocol being used by the exported service
+                            (for multinet slice)
+                          enum:
+                          - HTTP
+                          - HTTPS
+                          maxLength: 255
+                          minLength: 1
+                          pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
                           type: string
                       required:
                       - containerPort
@@ -290,6 +308,10 @@ data:
                       - podIp
                       type: object
                     type: array
+                  servicePorts:
+                    description: ServicePorts shows a one line representation of service
+                      ports and protocols
+                    type: string
                 type: object
             type: object
         served: true
@@ -302,6 +324,7 @@ data:
         plural: ""
       conditions: []
       storedVersions: []
+      
   networking.kubeslice.io_serviceimports.yaml: |2
 
     ---
@@ -385,6 +408,21 @@ data:
                           description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
                             to "TCP".
                           type: string
+                        servicePort:
+                          description: Port number of the exported service
+                          format: int32
+                          type: integer
+                        serviceProtocol:
+                          default: HTTP
+                          description: The protocol being used by the exported service
+                            (for multinet slice)
+                          enum:
+                          - HTTP
+                          - HTTPS
+                          maxLength: 255
+                          minLength: 1
+                          pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
+                          type: string
                       required:
                       - containerPort
                       type: object
@@ -459,6 +497,7 @@ data:
         plural: ""
       conditions: []
       storedVersions: []
+      
   networking.kubeslice.io_slicegateways.yaml: |2
 
     ---
@@ -879,6 +918,10 @@ data:
                         required:
                         - sliceIpamType
                         type: object
+                      sliceOverlayNetworkDeploymentMode:
+                        description: 'Slice overlay network deployment mode: single-network
+                          or multi-network'
+                        type: string
                       sliceSubnet:
                         description: IP subnet range of the slice.
                         type: string

@@ -447,6 +447,14 @@ rules:
   - update
   - watch
 - apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - create
+  - delete
+  - list
+- apiGroups:
   - ""
   - extensions
   - apps
