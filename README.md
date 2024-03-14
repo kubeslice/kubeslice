@@ -25,10 +25,10 @@ Note : Please refer to the following link for details on generating [your github
 Quick Start
 ---
 
-See [Sandbox](https://kubeslice.io/documentation/open-source/1.2.0/playground/sandbox) for instructions on setting up a local kubeslice setup using [`kind`](https://kind.sigs.k8s.io/) for non-production use.
+Use our [Sandbox environment](https://kubeslice.io/documentation/open-source/1.2.0/playground/sandbox) to get a hands-on experience of KubeSlice on  [`kind`](https://kind.sigs.k8s.io/) clusters.
 
-For setting up Kubeslice on other cloud platforms, refer to the [Cloud Clusters Demo](https://kubeslice.io/documentation/open-source/1.2.0/tutorials/kubeslice-cli-tutorials/kubeslice-cli-demo-on-cloud-clusters).
+For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud clusters](https://kubeslice.io/documentation/open-source/1.2.0/tutorials/kubeslice-cli-tutorials/kubeslice-cli-demo-on-cloud-clusters).
 
 Guide
 ---
-A full and comprehensive documentation is available on our opensource [documentation](https://docs.avesha.io/opensource/) website.
+A full and comprehensive documentation is available on our opensource [documentation](https://kubeslice.io/documentation/open-source/1.2.0/) website.
