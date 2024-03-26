@@ -5,7 +5,7 @@ operator:
   tag: 1.2.1
 
 ## Base64 encoded secret values from controller cluster
-controllerSecret:
+controllerSecret
   namespace:
   endpoint:
   ca.crt:
