@@ -26,9 +26,9 @@ Note : Please refer to the following link for details on generating [your github
 Quick Start
 ---
 
-Use our [Sandbox environment](https://kubeslice.io/documentation/open-source/1.2.0/) to get a hands-on experience of KubeSlice on  [`kind`](https://kind.sigs.k8s.io/) clusters.
+Use our [Sandbox environment](https://kubeslice.io/documentation/open-source/1.2.0/playground/sandbox) to get a hands-on experience of KubeSlice on  [`kind`](https://kind.sigs.k8s.io/) clusters.
 
-For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud clusters](https://kubeslice.io/documentation/open-source/1.2.0/cloud-cluster-quick-start).
+For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud clusters](https://kubeslice.io/documentation/open-source/1.2.0/tutorials/kubeslice-cli-tutorials/kubeslice-cli-demo-on-cloud-clusters).
 
 Guide
 ---
