@@ -1,4 +1,4 @@
-# Kubeslice Development Kubernetes Helm Charts
+# Kubeslice Community Kubernetes Helm Charts
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -16,10 +16,10 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add avesha https://raw.githubusercontent.com/kubeslice/dev-charts/gh-pages/ --username <Your Username> --password <Your Github personal access token>
+helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 ```
 
-You can then run `helm search repo avesha` to see the charts.
+You can then run `helm search repo kubeslice` to see the charts.
 
 Note : Please refer to the following link for details on generating [your github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) 
 
