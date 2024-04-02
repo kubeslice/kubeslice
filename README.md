@@ -18,7 +18,7 @@ Once Helm is set up properly, add the repo as follows:
 helm repo add kubeslice https://kubeslice.github.io/kubeslice/
 ```
 
-You can then run `helm search repo avesha` to see the charts.
+You can then run `helm search repo kubeslice` to see the charts.
 
 Note : Please refer to the following link for details on generating [your github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) 
 
