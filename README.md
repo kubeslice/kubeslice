@@ -4,9 +4,9 @@
 
 KubeSlice provides network services to applications that need secure and highly available connectivity between multiple clusters. KubeSlice creates a flat overlay network to connect the clusters. The overlay network can be described as an application slice that provides a slice of connectivity between the pods of an application running in multiple clusters. It can also be described as an application-specific VPC that spans across clusters. Pods can connect to the slice overlay network and communicate with each other seamlessly across cluster boundaries.
 
-
 # Architecture Overview
-See [Kubeslice Reference Architecture](https://kubeslice.io/documentation/open-source/1.2.0/overview/architecture) to get an overview of the overall architecture and core components.
+See [Kubeslice Reference Architecture](https://kubeslice.io/documentation/open-source/1.3.0/overview/architecture) to get an overview of the overall architecture and core components.
+
 
 # Usage
 
@@ -26,10 +26,10 @@ Note : Please refer to the following link for details on generating [your github
 Quick Start
 ---
 
-Use our [Sandbox environment](https://kubeslice.io/documentation/open-source/1.2.0/playground/sandbox) to get a hands-on experience of KubeSlice on  [`kind`](https://kind.sigs.k8s.io/) clusters.
+See [Sandbox](https://kubeslice.io/documentation/open-source/1.3.0/playground/sandbox) for instructions on setting up a local kubeslice setup using [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
-For setting up Kubeslice on other cloud platforms, refer to the [getting started with cloud clusters](https://kubeslice.io/documentation/open-source/1.2.0/tutorials/kubeslice-cli-tutorials/kubeslice-cli-demo-on-cloud-clusters).
+For setting up Kubeslice on other cloud platforms, refer to the [Cloud Clusters Demo](https://kubeslice.io/documentation/open-source/1.3.0/tutorials/kubeslice-cli-tutorials/kubeslice-cli-demo-on-cloud-clusters).
 
 Guide
 ---
-A full and comprehensive documentation is available on our opensource [documentation](https://kubeslice.io/documentation/open-source/1.2.0/) website.
+A full and comprehensive documentation is available on our opensource [documentation](https://kubeslice.io/documentation/open-source/) website.

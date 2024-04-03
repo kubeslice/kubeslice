@@ -163,6 +163,11 @@ spec:
                       type: string
                   type: object
                 type: array
+              networkPresent:
+                default: false
+                description: NetworkPresent denotes if the networking components (NSM,
+                  Spire) are installed on a cluster
+                type: boolean
               nodeIPs:
                 description: NodeIPs of the gateway node of worker cluster
                 items:
@@ -470,6 +475,7 @@ spec:
                 enum:
                 - single-network
                 - multi-network
+                - no-network
                 type: string
               qosProfileDetails:
                 description: The custom QOS Profile Details
@@ -581,7 +587,7 @@ spec:
                 - cipher
                 type: object
             required:
-            - sliceGatewayProvider
+            - maxClusters
             type: object
           status:
             description: SliceConfigStatus defines the observed state of SliceConfig
@@ -1021,6 +1027,7 @@ spec:
                 enum:
                 - single-network
                 - multi-network
+                - no-network
                 type: string
               qosProfileDetails:
                 description: QOSProfile is the QOS Profile configuration from backend
@@ -1087,8 +1094,6 @@ spec:
               sliceType:
                 default: Application
                 type: string
-            required:
-            - octet
             type: object
           status:
             description: WorkerSliceConfigStatus defines the observed state of Slice

@@ -183,8 +183,12 @@ spec:
                     - sliceIpamType
                     type: object
                   sliceOverlayNetworkDeploymentMode:
-                    description: 'Slice overlay network deployment mode: single-network
-                      or multi-network'
+                    description: 'Slice overlay network deployment mode: single-network,
+                      multi-network or no-network'
+                    enum:
+                    - single-network
+                    - multi-network
+                    - no-network
                     type: string
                   sliceSubnet:
                     description: IP subnet range of the slice.
@@ -193,11 +197,8 @@ spec:
                     description: Type of the slice.
                     type: string
                 required:
-                - qosProfileDetails
                 - sliceDisplayName
                 - sliceId
-                - sliceIpam
-                - sliceSubnet
                 - sliceType
                 type: object
             type: object
