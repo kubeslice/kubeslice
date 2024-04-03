@@ -7,6 +7,7 @@ KubeSlice provides network services to applications that need secure and highly 
 # Architecture Overview
 See [Kubeslice Reference Architecture](https://kubeslice.io/documentation/open-source/1.3.0/overview/architecture) to get an overview of the overall architecture and core components.
 
+
 # Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.
