@@ -1,5 +1,7 @@
 
-# Contributor Covenant Code of Conduct
+<h1>KubeSlice Community Code Of Conduct v1.0</h1>
+
+## Contributor Code of Conduct
 
 ## Our Pledge
 
@@ -39,12 +41,12 @@ Examples of unacceptable behavior include:
 
 ## Enforcement Responsibilities
 
-Community leaders are responsible for clarifying and enforcing our standards of
+Project maintainers are responsible for clarifying and enforcing our standards of
 acceptable behavior and will take appropriate and fair corrective action in
 response to any behavior that they deem inappropriate, threatening, offensive,
 or harmful.
 
-Community leaders have the right and responsibility to remove, edit, or reject
+Project maintainers have the right and responsibility to remove, edit, or reject
 comments, commits, code, wiki edits, issues, and other contributions that are
 not aligned to this Code of Conduct, and will communicate reasons for moderation
 decisions when appropriate.
@@ -60,8 +62,8 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-[Authors](https://github.com/kubeslice/kubeslice/blob/master/AUTHORS).
+reported to the project maintainers responsible for enforcement at
+[MAINTAINERS](https://github.com/kubeslice/kubeslice/blob/master/MAINTAINERS.md).
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
@@ -69,7 +71,7 @@ reporter of any incident.
 
 ## Enforcement Guidelines
 
-Community leaders will follow these Community Impact Guidelines in determining
+Project maintainers will follow these Community Impact Guidelines in determining
 the consequences for any action they deem in violation of this Code of Conduct:
 
 ### 1. Correction
@@ -115,13 +117,6 @@ community.
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
+This Code of Conduct is adapted from the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md) and the [Contributor Covenant][homepage],
 version 2.1, available at
 [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
-
-For answers to common questions about this code of conduct, see the FAQ at
-[https://www.contributor-covenant.org/faq][FAQ]. Translations are available at
-
-[homepage]: https://www.contributor-covenant.org
-[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
-[FAQ]: https://www.contributor-covenant.org/faq
