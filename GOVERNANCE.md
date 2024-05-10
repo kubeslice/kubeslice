@@ -2,7 +2,8 @@
 
 [Instructions](https://contribute.cncf.io/maintainers/github/templates/required/governance-maintainer/)
 
-The KubeSlice project is dedicated to the creation and management of groups of related pods and services that communicate seamlessly across one or more clusters located in one or more clouds, edges, or data centers.  
+The KubeSlice project is dedicated to the creation and management of groups of related pods and services that communicate seamlessly across one or more clusters located in one or more clouds, edges, or data centers.
+
 This governance explains how the project is run.
 
 - [Values](#values)
@@ -96,8 +97,7 @@ and can be rapidly returned to Maintainer status if their availability changes.
 ## Meetings
 
 Time zones permitting, Maintainers are expected to participate in the public
-developer meeting, which occurs
-[TODO: Details of regular developer or maintainer meeting here].  
+developer meeting, details of which are linked at: [KubeSlice Project](https://github.com/kubeslice#woman_technologist-this-sounds-awesome-and-i-want-to-help).  
 
 Maintainers will also have closed meetings in order to discuss security reports
 or Code of Conduct violations.  Such meetings should be scheduled by any
@@ -118,7 +118,7 @@ for that purpose.
 
 [Code of Conduct](./code-of-conduct.md)
 violations by community members will be discussed and resolved
-on the [private Maintainer mailing list](kubeslice-maint@googlegroups.com).  If a Maintainer is directly involved
+on the [private Maintainer mailing list](https://groups.google.com/g/kubeslice-maint).  If a Maintainer is directly involved
 in the report, the Maintainers will instead designate two Maintainers to work
 with the CNCF Code of Conduct Committee in resolving it.
 
@@ -139,7 +139,7 @@ While most business in KubeSlice is conducted by "[lazy consensus](https://commu
 periodically the Maintainers may need to vote on specific actions or changes.
 A vote can be taken on [the developer mailing list](kubeslice-dev@googlegroups.com) or
 [the private Maintainer mailing list](kubeslice-maint@googlegroups.com) for security or conduct matters.  
-Votes may also be taken at [the developer meeting](TODO).  Any Maintainer may
+Votes may also be taken at [the developer meeting](https://github.com/kubeslice#woman_technologist-this-sounds-awesome-and-i-want-to-help).  Any Maintainer may
 demand a vote be taken.
 
 Most votes require a simple majority of all Maintainers to succeed, except where
