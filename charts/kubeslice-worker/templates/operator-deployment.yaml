@@ -80,6 +80,8 @@ spec:
             value: '{{ .Values.openvpn.client.pullPolicy }}'
           - name: AVESHA_SLICE_GW_EDGE_IMAGE
             value: "{{ .Values.gatewayEdge.image }}:{{ .Values.gatewayEdge.tag }}"
+          - name: WORKER_INSTALLER_IMAGE
+            value: "{{ .Values.workerInstaller.image }}:{{ .Values.workerInstaller.tag }}"
 
           {{- if .Values.imagePullSecrets }}
           - name: IMAGE_PULL_SECRET_NAME
