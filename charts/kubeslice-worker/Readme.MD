@@ -26,9 +26,11 @@ You can then run `helm search repo kubeslice` to see the charts.
 See [Kubeslice Worker Installation](https://kubeslice.io/documentation/open-source/1.3.0/playground/sandbox) for instructions on istalling worker operator on [`kind`](https://kind.sigs.k8s.io/) for non-production use.
 
 For setting up Worker Operator on other cloud platforms, refer to the [Kubeslice Worker Installation on Cloud](https://kubeslice.io/documentation/open-source/1.3.0/install-kubeslice/yaml/yaml-register-worker-clusters).
+For setting up Worker Operator on other cloud platforms, refer to the [Kubeslice Worker Installation on Cloud](https://kubeslice.io/documentation/open-source/1.3.0/install-kubeslice/yaml/yaml-register-worker-clusters).
 
 ### Uninstall Chart
 
+Please refer the following Kubeslice Worker [uninstallation](https://kubeslice.io/documentation/open-source/1.3.0/uninstall-kubeslice/) steps.
 Please refer the following Kubeslice Worker [uninstallation](https://kubeslice.io/documentation/open-source/1.3.0/uninstall-kubeslice/) steps.
 
 ### Upgrading Chart
