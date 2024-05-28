@@ -2,7 +2,7 @@ operator:
   image: docker.io/aveshasystems/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-  tag: 1.3.0
+  tag: 1.3.1
 
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
@@ -56,6 +56,10 @@ dns:
   image: docker.io/aveshasystems/dns
   tag: 0.1.0
   pullPolicy: IfNotPresent
+
+workerInstaller:
+  image: docker.io/aveshasystems/worker-installer
+  tag: 1.2.0
 
 jaeger:
   enabled: false
