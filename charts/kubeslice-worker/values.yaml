@@ -19,7 +19,7 @@ cluster:
 router:
   image: docker.io/aveshasystems/cmd-nse-vl3
   tag: 1.0.3
-  pullPolicy: IfNotPresent                                                                                     
+  pullPolicy: IfNotPresent
 
 routerSidecar:
   image: docker.io/aveshasystems/kubeslice-router-sidecar
