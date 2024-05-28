@@ -1,0 +1,33 @@
+# Names should be added to this file as
+#	Name or Organization <email address>
+# The email address is not required for organizations.
+
+# You can update this list using the following command:
+#
+#   $ (head -n10 AUTHORS && git shortlog -se | sed -E 's/^\s+[0-9]+\t//') | tee AUTHORS
+
+# Please keep the list sorted.
+Avesha Bot <avesha-bot@aveshasystems.com>
+Avesha Bot <avesha-bot@aveshasystems.com>
+Bharath Horatti <bharath@aveshasystems.com>
+Eric Peterson <eric@avesha.io>
+Jayadeep KM <6793260+kmjayadeep@users.noreply.github.com>
+Jayadeep KM <kmjayadeep@gmail.com>
+KRANTHI0918 <kranthi@aveshasystems.com>
+Kranthi Kumar <104369326+KRANTHI0918@users.noreply.github.com>
+Md Imran <imranaec@outlook.com>
+Rahul <rahul.sawra@aveshasystems.com>
+Richie Sebastian <104349170+richiesebastian@users.noreply.github.com>
+Ubuntu <kranthi@aveshasystems.com>
+Vivek Bangare <99859815+vivek-avesha@users.noreply.github.com>
+YachikaRalhan <yachika@infracloud.io>
+bharath-avesha <99859949+bharath-avesha@users.noreply.github.com>
+gourishkb <104021126+gourishkb@users.noreply.github.com>
+kranthi <kranthi@aveshasystems.com>
+rahulsawra98 <104886535+rahulsawra98@users.noreply.github.com>
+richiesebastian <104349170+richiesebastian@users.noreply.github.com>
+richiesebastian <richie@aveshasystems.com>
+srinivas-avesha <99861290+srinivas-avesha@users.noreply.github.com>
+uma-kt <105046156+uma-kt@users.noreply.github.com>
+veenamj-avesha <104770800+veenamj-avesha@users.noreply.github.com>
+vivek-avesha <vivekbangare@aveshasystems.com>
