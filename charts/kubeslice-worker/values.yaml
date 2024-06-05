@@ -21,7 +21,7 @@ controllerSecret:
 
 cluster:
   name:
-  nodeIp: # This field is deprecated. You can set nodeIPs through cluster spec.
+    nodeIp:       # This field is deprecated. You can set nodeIPs through cluster spec.
   endpoint:
 
 router:
