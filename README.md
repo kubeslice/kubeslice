@@ -9,7 +9,7 @@ See [Kubeslice Reference Architecture](https://kubeslice.io/documentation/open-s
 
 # Usage
 
-[Helm](https://helm.sh) must be installed to use the charts. For more information, see [documentation](https://helm.sh/docs/) to get started.
+[Helm](https://helm.sh) must be installed to use charts. For more information, see [documentation](https://helm.sh/docs/) to get started.
 
 
 Once Helm is set up properly, add the repo as follows:
