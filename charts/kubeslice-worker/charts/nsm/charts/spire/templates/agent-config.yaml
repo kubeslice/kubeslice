@@ -34,10 +34,12 @@ data:
                 # Minikube does not have a cert in the cluster CA bundle that
                 # can authenticate the kubelet cert, so skip validation.
                 skip_kubelet_verification = true
+                max_poll_attempts = 100
+                poll_retry_interval = "2000ms"
+                disable_container_selectors = true
             }
          }
          WorkloadAttestor "unix" {
              plugin_data {}
         }
       }
-

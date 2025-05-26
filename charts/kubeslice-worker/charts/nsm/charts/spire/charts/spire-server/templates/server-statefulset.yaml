@@ -20,9 +20,12 @@ spec:
     spec:
       serviceAccountName: spire-server
       shareProcessNamespace: true
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       containers:
         - name: spire-server
-          image: {{ .Values.spireServer.imageRegistry }}:{{ .Values.spireServer.imageTag }}
+          image: '{{ .Values.global.imageRegistry }}/{{ .Values.spireServer.imageRegistry }}:{{ .Values.spireServer.imageTag }}'
           args:
             - -config
             - /run/spire/config/server.conf
@@ -32,8 +35,15 @@ spec:
             - name: spire-config
               mountPath: /run/spire/config
               readOnly: true
+            - mountPath: /etc/spire/certs
+              name: spire-ca-certs
+            - mountPath: /run/spire/data
+              name: spire-store
             - name: spire-server-socket
               mountPath: /tmp/spire-server/private
+          resources:
+            requests:
+              cpu: 30m
           livenessProbe:
             exec:
               command:
@@ -47,7 +57,7 @@ spec:
             exec:
               command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
         - name: spire-controller-manager
-          image: ghcr.io/spiffe/spire-controller-manager:0.2.2
+          image: '{{ .Values.global.imageRegistry }}/spiffe-spire-controller-manager:0.2.3'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9443
@@ -66,6 +76,14 @@ spec:
             name: spire-server
         - name: spire-server-socket
           emptyDir: {}
+        - hostPath:
+            path: /run/spire/data
+            type: DirectoryOrCreate
+          name: spire-store
+        - name: spire-ca-certs
+          secret:
+            defaultMode: 420
+            secretName: spire-ca-certs
         - name: spire-controller-manager-config
           configMap:
             name: spire-controller-manager-config

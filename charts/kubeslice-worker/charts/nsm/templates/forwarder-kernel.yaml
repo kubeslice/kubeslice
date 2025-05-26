@@ -19,8 +19,10 @@ spec:
       hostPID: true
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: {{ .Values.forwardingPlane.kernelImageRegistry }}:{{ .Values.forwardingPlane.kernelImageTag }}
+        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.forwardingPlane.kernelImageRegistry }}:{{ .Values.forwardingPlane.kernelImageTag }}'
           imagePullPolicy: IfNotPresent
           name: forwarder-kernel
           securityContext:
@@ -38,6 +40,8 @@ spec:
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_LISTEN_ON
               value: unix:///listen.on.sock
+            - name: NSM_DIAL_TIMEOUT
+              value: "5000ms"
             - name: NSM_NAME
               valueFrom:
                 fieldRef:
@@ -75,3 +79,5 @@ spec:
           hostPath:
             path: /sys/fs/cgroup
             type: Directory
+      tolerations:
+        - operator: "Exists"

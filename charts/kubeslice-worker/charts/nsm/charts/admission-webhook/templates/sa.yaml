@@ -3,4 +3,4 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: admission-webhook-sa
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.nsmNs }}

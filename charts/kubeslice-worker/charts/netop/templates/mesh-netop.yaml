@@ -33,7 +33,7 @@ spec:
           value: NETOP_POD
         - name: NETWORK_INTERFACE
           value: {{ .Values.netop.networkInterface }}
-        image: {{ .Values.netop.image }}:{{ .Values.netop.tag }}
+        image: '{{ .Values.global.imageRegistry }}/{{ .Values.netop.image }}:{{ .Values.netop.tag }}'
         imagePullPolicy: {{ .Values.netop.pullPolicy }}
         name: avesha-sidecar
         securityContext:
@@ -42,10 +42,8 @@ spec:
             add:
             - NET_ADMIN
           privileged: true
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 6 }}
-      {{- end }}
+      - name: {{ template "imagePullSecrets.secretName" . }}
       tolerations:
         - key: "kubeslice.io/node-type"
           operator: "Equal"
@@ -55,3 +53,4 @@ spec:
           operator: "Equal"
           value: "gateway"
           effect: "NoExecute"
+        - operator: "Exists"

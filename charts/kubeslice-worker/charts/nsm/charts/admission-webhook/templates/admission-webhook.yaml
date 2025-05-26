@@ -1,13 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.nsmNs }}
+---
 {{- $ca := genCA "admission-controller-ca" 3650 -}}
 {{- $cn := printf "admission-webhook-svc"  -}}
-{{- $altName1 := printf "%s.%s.svc" $cn .Release.Namespace }}
-{{- $altName2 := printf "%s.%s.svc.cluster.local" $cn .Release.Namespace }}
+{{- $altName1 := printf "%s.%s.svc" $cn .Values.nsmNs }}
+{{- $altName2 := printf "%s.%s.svc.cluster.local" $cn .Values.nsmNs }}
 {{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca -}}
 apiVersion: v1
 kind: Secret
 metadata:
   name: nsm-admission-webhook-certs
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.nsmNs }}
 type: Opaque
 data:
   tls.key: {{ $cert.Key | b64enc }}
@@ -17,23 +22,38 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nsm-admission-webhook-k8s
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.nsmNs }}
   labels:
-    app: admission-webhook-k8s
+    app: kubeslice-nsm-webhook
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: admission-webhook-k8s
+      app: kubeslice-nsm-webhook
   template:
     metadata:
       labels:
-        app: admission-webhook-k8s
+        app: kubeslice-nsm-webhook
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - kubeslice-nsm-webhook
+              topologyKey: kubernetes.io/hostname
       serviceAccountName: admission-webhook-sa
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       priorityClassName: nsm-webhook-high-priority
       containers:
         - name: admission-webhook-k8s
-          image: {{ .Values.webhookImageRegistry }}:{{ .Values.webhookImageTag }}
+          image: '{{ .Values.global.imageRegistry }}/{{ .Values.webhookImageRegistry }}:{{ .Values.webhookImageTag }}'
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
@@ -56,13 +76,15 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: "{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
+              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: "{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
+              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
-              value: NSM_CONNECT_TO=tcp://nsmgr.kubeslice-system.svc.cluster.local:5001,NSM_LOG_LEVEL=TRACE,NSM_LIVENESSCHECKENABLED=false
+              value: NSM_CONNECT_TO=tcp://nsmgr.kubeslice-system.svc.cluster.local:5001,NSM_LOG_LEVEL=TRACE,NSM_LIVENESSCHECKENABLED=false,NSM_REQUEST_TIMEOUT=60s,NSM_INITLOCALDNSCONFIG={{ .Values.nsmInitContainerUpdateDNSConfig }}
+            - name: PROFILE_OPENSHIFT
+              value: "{{ .Values.global.profile.openshift | default false }}"
             - name: NSM_REGISTER_WEBHOOK_CLIENT
               value: "false"
             - name: NSM_CA_BUNDLE
@@ -79,14 +101,26 @@ spec:
         - name: webhook-certs
           secret:
             secretName: nsm-admission-webhook-certs
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nsm-webhook-pdb
+  namespace: {{ .Values.nsmNs }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: kubeslice-nsm-webhook
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: nsm-mutating-webhook-configuration
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.nsmNs }}
   labels:
-    app: nsm-admission-webhook
+    app: kubeslice-nsm-webhook
 webhooks:
   - name: webhook.networkservicemesh.io
     sideEffects: None
@@ -97,7 +131,7 @@ webhooks:
     clientConfig:
       service:
         name: admission-webhook-svc
-        namespace: {{ .Release.Namespace }}
+        namespace: {{ .Values.nsmNs }}
         path: "/mutate"
       caBundle: {{ $ca.Cert | b64enc }}
     rules:
@@ -127,3 +161,4 @@ webhooks:
         - kube-system
         - spire
         - kubeslice-controller
+        - {{ .Values.nsmNs }}

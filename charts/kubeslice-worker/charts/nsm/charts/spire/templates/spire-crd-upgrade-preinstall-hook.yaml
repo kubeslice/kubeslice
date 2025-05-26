@@ -414,7 +414,7 @@ spec:
       serviceAccountName: spire-install-crds
       containers:
         - name: kubectl
-          image: "alpine/k8s:1.22.9"
+          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
           command:
             - /bin/sh
             - -c

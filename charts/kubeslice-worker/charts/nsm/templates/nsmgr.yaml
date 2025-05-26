@@ -54,12 +54,14 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       serviceAccountName: nsmgr-acc
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       initContainers:
         - name: init
           # This is a small image with wait-for-it, choose whatever image
           # you prefer that waits for a service to be up. This image is built
           # from https://github.com/lqhl/wait-for-it
-          image: {{ .Values.nsmgr.waitForItImageRegistry }}:{{ .Values.nsmgr.waitForItImageTag }}
+          image: '{{ .Values.global.imageRegistry }}/{{ .Values.nsmgr.waitForItImageRegistry }}:{{ .Values.nsmgr.waitForItImageTag }}'
           imagePullPolicy: IfNotPresent
           args: [ "-t", "120", "spire-server.spire:8081" ]
           #command: ['sh', '-c', 'sleep 120']
@@ -73,22 +75,27 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          image: "alpine/k8s:1.22.9"
+          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
           imagePullPolicy: IfNotPresent
           name: nsmgr-init-svc-creator
           command:
-            - /bin/bash
+            - /bin/sh
             - /tmp/create-nsmgr-svc.sh
           volumeMounts:
           - mountPath: /tmp/
             name: nsm-svc-config-volume
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: {{ .Values.nsmgr.imageRegistry }}:{{ .Values.nsmgr.imageTag }}
+        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.nsmgr.imageRegistry }}:{{ .Values.nsmgr.imageTag }}'
           imagePullPolicy: IfNotPresent
+          {{- if .Values.global.profile.openshift }}
+          securityContext:
+            privileged: true
+          {{- end }}
           name: nsmgr
           ports:
             - containerPort: 5001
-              hostPort: 5001
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
@@ -96,8 +103,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSM_LOG_LEVEL
-              value: TRACE
             - name: NSM_REGISTRY_URL
               value: "registry:5002"
             #            - name: DLV_LISTEN_NSMGR
@@ -124,6 +129,10 @@ spec:
               value: "6831"
             - name: FORWARDER_NAME
               value: "kernel"
+            - name: NSM_DIAL_TIMEOUT
+              value: "5000ms"
+            - name: NSM_LOG_LEVEL
+              value: TRACE
           volumeMounts:
             - name: kubelet-socket
               mountPath: /var/lib/kubelet/device-plugins
@@ -140,7 +149,7 @@ spec:
               memory: 100Mi
             limits:
               memory: 200Mi
-              cpu: 400m
+              cpu: 500m
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
@@ -161,8 +170,12 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
             failureThreshold: 25
             periodSeconds: 5
-        - image: {{ .Values.nsmgr.excludePrefixesImageRegistry }}:{{ .Values.nsmgr.excludePrefixesImageTag }}
+        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.nsmgr.excludePrefixesImageRegistry }}:{{ .Values.nsmgr.excludePrefixesImageTag }}'
           imagePullPolicy: IfNotPresent
+          {{- if .Values.global.profile.openshift }}
+          securityContext:
+            privileged: true
+          {{- end }}
           name: exclude-prefixes
           env:
             - name: NSM_LOG_LEVEL
@@ -207,3 +220,4 @@ spec:
           operator: "Equal"
           value: "gateway"
           effect: "NoExecute"
+        - operator: "Exists"

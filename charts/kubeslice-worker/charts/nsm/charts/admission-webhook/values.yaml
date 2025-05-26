@@ -3,11 +3,26 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-webhookImageRegistry: docker.io/aveshasystems/cmd-admission-webhook-k8s
-webhookImageTag: 1.7.0
+global:
+  nsmw_docker_existingImagePullSecret: "kubeslice-image-pull-secret"
+  # IF You dont have existing secret then pass all below values it will create new secret "avesha-docker-ips"
+  ## MANDOTORY FIELDS IF EXISTING SECRET NOT PRESENT ##
+  nsmw_docker_imagePullSecrets:
+    repository: 
+    username: ''
+    password: ''
+    email: ''
+  imageRegistry: docker.io/aveshasystems
 
-nsmInjectContainerImageRegistry: docker.io/aveshasystems/cmd-nsc
-nsmInjectContainerImageTag: 1.5.7
+webhookImageRegistry: cmd-admission-webhook-k8s
+webhookImageTag: 1.7.3
 
-nsmInjectInitContainerImageRegistry: docker.io/aveshasystems/cmd-nsc-init
-nsmInjectInitContainerImageTag: 1.5.5
+nsmInjectContainerImageRegistry: cmd-nsc
+nsmInjectContainerImageTag: 1.5.13
+
+nsmInjectInitContainerImageRegistry: cmd-nsc-init
+nsmInjectInitContainerImageTag: 1.5.9
+nsmInitContainerUpdateDNSConfig: true
+
+# nsm admission webhook ns
+nsmNs: kubeslice-nsm-webhook-system

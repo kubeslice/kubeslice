@@ -55,6 +55,12 @@ spec:
             - mountPath: {{ .Values.kubeletPath }}/pods
               mountPropagation: Bidirectional
               name: mountpoint-dir
+              {{- if .Values.global.profile.openshift }}
+            # The volume containing mount points for containers in openshift clusters
+            - name: openshift-mountpoint-dir
+              mountPath: /var/data/kubelet/pods
+              mountPropagation: Bidirectional
+              {{- end }}
           securityContext:
             readOnlyRootFilesystem: true
             capabilities:
@@ -93,6 +99,13 @@ spec:
           resources:
             {{- toYaml .Values.nodeDriverRegistrar.resources | nindent 12 }}
       volumes:
+          {{- if .Values.global.profile.openshift }}
+        # where SPIFFE CSI driver mounts volume in openshift clusters 
+        - name: openshift-mountpoint-dir
+          hostPath:
+            path: /var/data/kubelet/pods
+            type: DirectoryOrCreate
+          {{- end }}
         - name: spire-agent-socket-dir
           hostPath:
             path: {{ include "spiffe-csi-driver.agent-socket-path" . | dir }}
@@ -113,3 +126,5 @@ spec:
           hostPath:
             path: {{ .Values.kubeletPath }}/plugins_registry
             type: Directory
+      tolerations:
+      - operator: "Exists"

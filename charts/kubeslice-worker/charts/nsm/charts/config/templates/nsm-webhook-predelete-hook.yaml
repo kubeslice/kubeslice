@@ -83,10 +83,10 @@ metadata:
     "helm.sh/hook-weight": "1"
 data:
   delete-admission-webhook.sh: |-
-    #!/usr/bin/env bash
+    #!/usr/bin/env sh
 
     echo "finding out the admission webhook "
-    WH=$(kubectl get pods -l app=admission-webhook-k8s -n {{ .Release.Namespace }} --template {{`'{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'`}})
+    WH=nsm-mutating-webhook-configuration # MutatingWebhookConfiguration name, ref: admission-webhook.yaml
     echo "deleting mutatingwebhookconfiguration ${WH}"
     kubectl delete mutatingwebhookconfiguration --ignore-not-found ${WH}
 
@@ -112,11 +112,13 @@ spec:
       namespace: {{ .Release.Namespace }}
     spec:
       serviceAccountName: nsm-delete-webhooks
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
         - name: kubectl
-          image: "alpine/k8s:1.22.9"
+          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
           command:
-            - /bin/bash
+            - /bin/sh
             - /tmp/delete-admission-webhook.sh
           volumeMounts:
             - mountPath: /tmp

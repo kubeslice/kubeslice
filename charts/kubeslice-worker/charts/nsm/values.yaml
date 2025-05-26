@@ -2,23 +2,32 @@
 # Default values for nsm.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
+  
 insecure: true
 global:
+  nsm_docker_existingImagePullSecret: "kubeslice-image-pull-secret"
+  # IF You dont have existing secret then pass all below values it will create new secret "avesha-docker-ips"
+  ## MANDOTORY FIELDS IF EXISTING SECRET NOT PRESENT ##
+  nsm_docker_imagePullSecrets:
+    repository: 
+    username: ''
+    password: ''
+    email: ''
+  imageRegistry: docker.io/aveshasystems
   # set to true to enable Jaeger tracing for NSM components
   JaegerTracing: true
 
 forwardingPlane:
-  kernelImageRegistry: docker.io/aveshasystems/cmd-forwarder-kernel
-  kernelImageTag: 1.0.6
+  kernelImageRegistry: cmd-forwarder-kernel
+  kernelImageTag: 1.0.9 
 
 nsmgr:
-  imageRegistry: docker.io/aveshasystems/cmd-nsmgr
-  imageTag: 1.5.3
-  waitForItImageRegistry: docker.io/aveshasystems/wait-for-it
-  waitForItImageTag: 1.0.0
-  excludePrefixesImageRegistry: docker.io/aveshasystems/cmd-exclude-prefixes-k8s
-  excludePrefixesImageTag: 1.5.2
+  imageRegistry: cmd-nsmgr
+  imageTag: 1.5.7
+  waitForItImageRegistry: wait-for-it
+  waitForItImageTag: 1.0.2
+  excludePrefixesImageRegistry: cmd-exclude-prefixes-k8s
+  excludePrefixesImageTag: 1.5.4
 
-registryK8sImageRegistry: docker.io/aveshasystems/cmd-registry-k8s
-registryK8sImageTag: 1.5.4
+registryK8sImageRegistry: cmd-registry-k8s
+registryK8sImageTag: 1.5.6

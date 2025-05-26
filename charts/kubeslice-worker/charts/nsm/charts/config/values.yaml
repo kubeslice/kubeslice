@@ -1,3 +1,14 @@
 # Default values for config.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+global:
+  imageRegistry: docker.io/aveshasystems
+  nsmcfg_docker_existingImagePullSecret: "kubeslice-image-pull-secret"
+  # IF You dont have existing secret then pass all below values it will create new secret "avesha-docker-ips"
+  ## MANDOTORY FIELDS IF EXISTING SECRET NOT PRESENT ##
+  nsmcfg_docker_imagePullSecrets:
+    repository: 
+    username: ''
+    password: ''
+    email: ''

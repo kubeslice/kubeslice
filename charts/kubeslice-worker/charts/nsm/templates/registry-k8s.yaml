@@ -17,8 +17,10 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       serviceAccountName: nsmgr-acc
+      imagePullSecrets:
+      - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: {{ .Values.registryK8sImageRegistry }}:{{ .Values.registryK8sImageTag }}
+        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.registryK8sImageRegistry }}:{{ .Values.registryK8sImageTag }}'
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
@@ -26,26 +28,29 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: REGISTRY_K8S_LOG_LEVEL
-              value: TRACE
             - name: REGISTRY_K8S_LISTEN_ON
               value: tcp://:5002
             - name: REGISTRY_K8S_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
+            - name: REGISTRY_K8S_KUBELET_QPS
+              value: "500"
           imagePullPolicy: IfNotPresent
+          {{- if .Values.global.profile.openshift }}
+          securityContext:
+            privileged: true
+          {{- end }}
           name: registry
           ports:
             - containerPort: 5002
-              hostPort: 5002
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
           resources:
             requests:
-              cpu: 100m
-            limits:
-              memory: 40Mi
               cpu: 200m
+            limits:
+              memory: 100Mi
+              cpu: 600m
       volumes:
         - name: spire-agent-socket
           hostPath:

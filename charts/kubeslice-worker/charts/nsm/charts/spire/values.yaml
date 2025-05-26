@@ -2,12 +2,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  imageRegistry: docker.io/aveshasystems
+
 # Variables added
 spireAgent:
-  imageRegistry: gcr.io/spiffe-io/spire-agent
-  imageTag: 1.5.1
-  waitForItImageRegistry: docker.io/aveshasystems/wait-for-it
-  waitForItImageTag: 1.0.0
+  imageRegistry: spire-agent
+  imageTag: 1.9.2
+  waitForItImageRegistry: wait-for-it
+  waitForItImageTag: 1.0.2
 
 # TODO: use these values/remove them
 # TODO: figure how how to make this work outside of spire NS
@@ -17,7 +20,7 @@ spireAgent:
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: docker.io/aveshasystems/nginx
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

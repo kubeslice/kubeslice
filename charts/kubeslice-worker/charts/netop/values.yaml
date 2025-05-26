@@ -1,0 +1,15 @@
+global:
+  netop_docker_existingImagePullSecret: "kubeslice-image-pull-secret"
+  # IF You dont have existing secret then pass all below values it will create new secret "avesha-docker-ips"
+  ## MANDOTORY FIELDS IF EXISTING SECRET NOT PRESENT ##
+  netop_docker_imagePullSecrets:
+    repository: 
+    username: ''
+    password: ''
+    email: ''
+  imageRegistry: docker.io/aveshasystems
+netop:
+  networkInterface: eth0
+  image: netops
+  tag: 0.2.2 
+  pullPolicy: IfNotPresent
