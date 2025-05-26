@@ -37,5 +37,5 @@ dependencies:
     repository: file://./charts/netop
     version: 0.2.0
     condition: kubesliceNetworking.enabled
-version: 1.4.0
+version: 1.4.1
 appVersion: 1.4.0
