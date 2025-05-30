@@ -116,7 +116,7 @@ spec:
       - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
         - name: kubectl
-          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
+          image: "alpine/k8s:1.32.2"
           command:
             - /bin/sh
             - /tmp/delete-admission-webhook.sh

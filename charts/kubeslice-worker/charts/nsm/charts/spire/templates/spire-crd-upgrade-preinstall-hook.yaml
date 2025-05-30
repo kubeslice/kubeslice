@@ -401,7 +401,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
     "helm.sh/hook-weight": "2"
   labels:
-    app.kubernetes.io/name: spire 
+    app.kubernetes.io/name: spire
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
@@ -414,7 +414,7 @@ spec:
       serviceAccountName: spire-install-crds
       containers:
         - name: kubectl
-          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
+          image: "alpine/k8s:1.32.2"
           command:
             - /bin/sh
             - -c

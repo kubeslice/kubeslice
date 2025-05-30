@@ -75,7 +75,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
+          image: "alpine/k8s:1.32.2"
           imagePullPolicy: IfNotPresent
           name: nsmgr-init-svc-creator
           command:
