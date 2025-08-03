@@ -59,11 +59,11 @@ spec:
         imagePullPolicy: {{ .Values.dns.pullPolicy }}
         resources:
           requests:
-            cpu: 10m
-            memory: 64Mi
+            cpu: {{ .Values.dns.resources.requests.cpu }}
+            memory: {{ .Values.dns.resources.requests.memory }}
           limits:
-            cpu: 50m
-            memory: 128Mi
+            cpu: {{ .Values.dns.resources.limits.cpu }}
+            memory: {{ .Values.dns.resources.limits.memory }}
         ports:
         - containerPort: 1053
           protocol: UDP

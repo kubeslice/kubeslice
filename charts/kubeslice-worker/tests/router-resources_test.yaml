@@ -1,0 +1,65 @@
+suite: vl3-slice-router resource requests bug test
+templates:
+  - templates/operator-deployment.yaml
+tests:
+  - it: should fix missing resource requests bug - verify environment variables exist
+    documentation: |
+      Bug: Update charts/vl3-slice-router (nse) pod container specs with resources requests
+      This test ensures the operator deployment includes all required router resource env vars
+    set:
+      cluster.name: "test-cluster"
+      controllerSecret.namespace: "dGVzdA=="
+      controllerSecret.endpoint: "aHR0cHM6Ly90ZXN0"
+      controllerSecret.ca.crt: "Y2E="
+      controllerSecret.token: "dG9rZW4="
+    asserts:
+      - isKind:
+          of: Deployment
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_CPU_REQUESTS
+            value: "100m"
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_MEMORY_REQUESTS
+            value: "128Mi"
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_CPU_LIMITS
+            value: "200m"
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_MEMORY_LIMITS
+            value: "256Mi"
+        documentIndex: 0
+
+  - it: should allow custom resource values override
+    set:
+      cluster.name: "test-cluster"
+      router.resources.requests.cpu: "250m"
+      router.resources.requests.memory: "512Mi"
+      controllerSecret.namespace: "dGVzdA=="
+      controllerSecret.endpoint: "aHR0cHM6Ly90ZXN0"
+      controllerSecret.ca.crt: "Y2E="
+      controllerSecret.token: "dG9rZW4="
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_CPU_REQUESTS
+            value: "250m"
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: AVESHA_VL3_ROUTER_MEMORY_REQUESTS
+            value: "512Mi"
+        documentIndex: 0

@@ -19,12 +19,26 @@ cluster:
 router:
   image: docker.io/aveshasystems/cmd-nse-vl3
   tag: 1.0.6
-  pullPolicy: IfNotPresent                                                                                     
+  pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 routerSidecar:
   image: docker.io/aveshasystems/kubeslice-router-sidecar
   tag: 1.4.6
   pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 
 gateway:
@@ -32,6 +46,13 @@ gateway:
   tag: 1.0.3
   pullPolicy: IfNotPresent
   logLevel: INFO
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 gatewayEdge:
   image: aveshasystems/slicegw-edge
@@ -42,15 +63,36 @@ openvpn:
     image: docker.io/aveshasystems/openvpn-server.alpine
     tag: 1.0.4
     pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
   client:
     image: docker.io/aveshasystems/openvpn-client.alpine
     tag: 1.0.4
     pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
 
 dns:
   image: docker.io/aveshasystems/dns
   tag: 0.1.4
   pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
 
 workerInstaller:
   image: docker.io/aveshasystems/worker-installer
