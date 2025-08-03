@@ -60,10 +60,18 @@ spec:
             value: "{{ .Values.router.image }}:{{ .Values.router.tag }}"
           - name: AVESHA_VL3_ROUTER_PULLPOLICY
             value: {{ .Values.router.pullPolicy }}
+          - name: AVESHA_VL3_ROUTER_SECURITY_CONTEXT
+            value: {{ .Values.router.securityContext | toJson | quote }}
+          - name: AVESHA_VL3_ROUTER_POD_SECURITY_CONTEXT
+            value: {{ .Values.router.podSecurityContext | toJson | quote }}
           - name: AVESHA_VL3_SIDECAR_IMAGE
             value: "{{ .Values.routerSidecar.image }}:{{ .Values.routerSidecar.tag }}"
           - name: AVESHA_VL3_SIDECAR_IMAGE_PULLPOLICY
             value: {{ .Values.routerSidecar.pullPolicy }}
+          - name: AVESHA_VL3_SIDECAR_SECURITY_CONTEXT
+            value: {{ .Values.routerSidecar.securityContext | toJson | quote }}
+          - name: AVESHA_VL3_SIDECAR_POD_SECURITY_CONTEXT
+            value: {{ .Values.routerSidecar.podSecurityContext | toJson | quote }}
           - name: CLUSTER_ENDPOINT
             value: "{{ .Values.cluster.endpoint }}"
           - name: AVESHA_GW_SIDECAR_IMAGE

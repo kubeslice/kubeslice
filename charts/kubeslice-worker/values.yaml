@@ -19,12 +19,47 @@ cluster:
 router:
   image: docker.io/aveshasystems/cmd-nse-vl3
   tag: 1.0.6
-  pullPolicy: IfNotPresent                                                                                     
+  pullPolicy: IfNotPresent
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - NET_ADMIN
+        - NET_RAW
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    seccompProfile:
+      type: RuntimeDefault
 
 routerSidecar:
   image: docker.io/aveshasystems/kubeslice-router-sidecar
   tag: 1.4.6
   pullPolicy: IfNotPresent
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    capabilities:
+      drop:
+        - ALL
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    seccompProfile:
+      type: RuntimeDefault
 
 
 gateway:
