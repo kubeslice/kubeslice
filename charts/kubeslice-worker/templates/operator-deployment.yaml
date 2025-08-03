@@ -60,24 +60,64 @@ spec:
             value: "{{ .Values.router.image }}:{{ .Values.router.tag }}"
           - name: AVESHA_VL3_ROUTER_PULLPOLICY
             value: {{ .Values.router.pullPolicy }}
+          - name: AVESHA_VL3_ROUTER_CPU_REQUESTS
+            value: "{{ .Values.router.resources.requests.cpu }}"
+          - name: AVESHA_VL3_ROUTER_MEMORY_REQUESTS
+            value: "{{ .Values.router.resources.requests.memory }}"
+          - name: AVESHA_VL3_ROUTER_CPU_LIMITS
+            value: "{{ .Values.router.resources.limits.cpu }}"
+          - name: AVESHA_VL3_ROUTER_MEMORY_LIMITS
+            value: "{{ .Values.router.resources.limits.memory }}"
           - name: AVESHA_VL3_SIDECAR_IMAGE
             value: "{{ .Values.routerSidecar.image }}:{{ .Values.routerSidecar.tag }}"
           - name: AVESHA_VL3_SIDECAR_IMAGE_PULLPOLICY
             value: {{ .Values.routerSidecar.pullPolicy }}
+          - name: AVESHA_VL3_SIDECAR_CPU_REQUESTS
+            value: "{{ .Values.routerSidecar.resources.requests.cpu }}"
+          - name: AVESHA_VL3_SIDECAR_MEMORY_REQUESTS
+            value: "{{ .Values.routerSidecar.resources.requests.memory }}"
+          - name: AVESHA_VL3_SIDECAR_CPU_LIMITS
+            value: "{{ .Values.routerSidecar.resources.limits.cpu }}"
+          - name: AVESHA_VL3_SIDECAR_MEMORY_LIMITS
+            value: "{{ .Values.routerSidecar.resources.limits.memory }}"
           - name: CLUSTER_ENDPOINT
             value: "{{ .Values.cluster.endpoint }}"
           - name: AVESHA_GW_SIDECAR_IMAGE
             value: '{{ .Values.gateway.image }}:{{ .Values.gateway.tag }}'
           - name: AVESHA_GW_SIDECAR_IMAGE_PULLPOLICY
             value: '{{ .Values.gateway.pullPolicy }}'
+          - name: AVESHA_GW_SIDECAR_CPU_REQUESTS
+            value: "{{ .Values.gateway.resources.requests.cpu }}"
+          - name: AVESHA_GW_SIDECAR_MEMORY_REQUESTS
+            value: "{{ .Values.gateway.resources.requests.memory }}"
+          - name: AVESHA_GW_SIDECAR_CPU_LIMITS
+            value: "{{ .Values.gateway.resources.limits.cpu }}"
+          - name: AVESHA_GW_SIDECAR_MEMORY_LIMITS
+            value: "{{ .Values.gateway.resources.limits.memory }}"
           - name: AVESHA_OPENVPN_SERVER_IMAGE
             value: '{{ .Values.openvpn.server.image }}:{{ .Values.openvpn.server.tag }}'
           - name: AVESHA_OPENVPN_SERVER_PULLPOLICY
             value: '{{ .Values.openvpn.server.pullPolicy }}'
+          - name: AVESHA_OPENVPN_SERVER_CPU_REQUESTS
+            value: "{{ .Values.openvpn.server.resources.requests.cpu }}"
+          - name: AVESHA_OPENVPN_SERVER_MEMORY_REQUESTS
+            value: "{{ .Values.openvpn.server.resources.requests.memory }}"
+          - name: AVESHA_OPENVPN_SERVER_CPU_LIMITS
+            value: "{{ .Values.openvpn.server.resources.limits.cpu }}"
+          - name: AVESHA_OPENVPN_SERVER_MEMORY_LIMITS
+            value: "{{ .Values.openvpn.server.resources.limits.memory }}"
           - name: AVESHA_OPENVPN_CLIENT_IMAGE
             value: '{{ .Values.openvpn.client.image }}:{{ .Values.openvpn.client.tag }}'
           - name: AVESHA_OPENVPN_CLIENT_PULLPOLICY
             value: '{{ .Values.openvpn.client.pullPolicy }}'
+          - name: AVESHA_OPENVPN_CLIENT_CPU_REQUESTS
+            value: "{{ .Values.openvpn.client.resources.requests.cpu }}"
+          - name: AVESHA_OPENVPN_CLIENT_MEMORY_REQUESTS
+            value: "{{ .Values.openvpn.client.resources.requests.memory }}"
+          - name: AVESHA_OPENVPN_CLIENT_CPU_LIMITS
+            value: "{{ .Values.openvpn.client.resources.limits.cpu }}"
+          - name: AVESHA_OPENVPN_CLIENT_MEMORY_LIMITS
+            value: "{{ .Values.openvpn.client.resources.limits.memory }}"
           - name: AVESHA_SLICE_GW_EDGE_IMAGE
             value: "{{ .Values.gatewayEdge.image }}:{{ .Values.gatewayEdge.tag }}"
           - name: WORKER_INSTALLER_IMAGE
