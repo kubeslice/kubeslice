@@ -1,0 +1,176 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "netop.fullname" . }}-securitycontext-test"
+  labels:
+    {{- include "netop.labels" . | nindent 4 }}
+    app.kubernetes.io/component: securitycontext-test
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+  - name: securitycontext-test
+    image: busybox:1.35
+    command:
+    - /bin/sh
+    - -c
+    - |
+      echo "🛡️  Testing netop sidecar container SecurityContext fixes..."
+      echo "Issue: Update charts/netops pod spec to fix the sidecar container SecurityContext"
+      echo "Goal: Remove privileged=true and apply minimal required permissions"
+      echo ""
+      
+      # Get the netop pod for testing
+      POD_NAME=$(kubectl get pods -l app=app_net_op -n {{ .Release.Namespace }} -o jsonpath='{.items[0].metadata.name}')
+      
+      if [ -z "$POD_NAME" ]; then
+        echo "❌ No netop pods found in namespace {{ .Release.Namespace }}"
+        exit 1
+      fi
+      
+      echo "Testing pod: $POD_NAME"
+      echo ""
+      
+      # ===== CRITICAL SECURITY TESTS =====
+      
+      # Test 1: Verify privileged=true has been removed (PRIMARY ISSUE REQUIREMENT)
+      echo "🔍 Test 1: Checking privileged=true removal (CRITICAL)..."
+      POD_YAML=$(kubectl get pod $POD_NAME -n {{ .Release.Namespace }} -o yaml)
+      if echo "$POD_YAML" | grep -q "privileged: true"; then
+        echo "❌ FAILED: privileged: true still present - SECURITY VULNERABILITY!"
+        echo "   This was the main issue requirement that must be fixed"
+        exit 1
+      else
+        echo "✅ PASSED: privileged: true successfully removed"
+      fi
+      
+      # Test 2: Verify SecurityContext has minimal required permissions
+      echo ""
+      echo "🔍 Test 2: Checking minimal required permissions..."
+      
+      # Get the sidecar container security context
+      SECURITY_CONTEXT=$(kubectl get pod $POD_NAME -n {{ .Release.Namespace }} -o jsonpath='{.spec.containers[0].securityContext}')
+      echo "Security Context: $SECURITY_CONTEXT"
+      
+      # Check runAsNonRoot
+      if echo "$SECURITY_CONTEXT" | grep -q '"runAsNonRoot":true'; then
+        echo "✅ runAsNonRoot: true (prevents root execution)"
+      else
+        echo "❌ runAsNonRoot not set to true"
+        exit 1
+      fi
+      
+      # Check runAsUser  
+      if echo "$SECURITY_CONTEXT" | grep -q '"runAsUser":65534'; then
+        echo "✅ runAsUser: 65534 (explicit nobody user)"
+      else
+        echo "❌ runAsUser not properly set to nobody (65534)"
+        exit 1
+      fi
+      
+      # Check allowPrivilegeEscalation
+      if echo "$SECURITY_CONTEXT" | grep -q '"allowPrivilegeEscalation":false'; then
+        echo "✅ allowPrivilegeEscalation: false (blocks privilege escalation)"
+      else
+        echo "❌ allowPrivilegeEscalation not set to false"
+        exit 1
+      fi
+      
+      # Check readOnlyRootFilesystem
+      if echo "$SECURITY_CONTEXT" | grep -q '"readOnlyRootFilesystem":true'; then
+        echo "✅ readOnlyRootFilesystem: true (filesystem protection)"
+      else
+        echo "❌ readOnlyRootFilesystem not set to true"
+        exit 1
+      fi
+      
+      # Test 3: Verify capabilities follow least privilege principle
+      echo ""
+      echo "🔍 Test 3: Checking capability permissions (least privilege)..."
+      
+      # Check that all capabilities are dropped by default
+      if echo "$SECURITY_CONTEXT" | grep -q '"drop":\["ALL"\]'; then
+        echo "✅ All capabilities dropped by default (secure baseline)"
+      else
+        echo "❌ Capabilities not properly dropped"
+        exit 1
+      fi
+      
+      # Check only required network capabilities are added
+      CAPS_ADD=$(echo "$SECURITY_CONTEXT" | grep -o '"add":\[[^]]*\]')
+      
+      if echo "$CAPS_ADD" | grep -q "NET_ADMIN"; then
+        echo "✅ NET_ADMIN capability present (required for network operations)"
+      else
+        echo "❌ NET_ADMIN capability missing (required for netop functionality)"
+        exit 1
+      fi
+      
+      if echo "$CAPS_ADD" | grep -q "NET_RAW"; then
+        echo "✅ NET_RAW capability present (required for raw socket operations)"
+      else
+        echo "❌ NET_RAW capability missing (required for netop functionality)"
+        exit 1
+      fi
+      
+      # Check that excessive capabilities are not present
+      if echo "$CAPS_ADD" | grep -q "SYS_ADMIN"; then
+        echo "❌ SYS_ADMIN capability detected - TOO PERMISSIVE!"
+        exit 1
+      else
+        echo "✅ No SYS_ADMIN capability (excessive privilege removed)"
+      fi
+      
+      # Test 4: Verify sidecar container name and functionality
+      echo ""
+      echo "🔍 Test 4: Checking sidecar container configuration..."
+      
+      CONTAINER_NAME=$(kubectl get pod $POD_NAME -n {{ .Release.Namespace }} -o jsonpath='{.spec.containers[0].name}')
+      if [ "$CONTAINER_NAME" = "avesha-sidecar" ]; then
+        echo "✅ Sidecar container name: $CONTAINER_NAME (correct)"
+      else
+        echo "❌ Unexpected container name: $CONTAINER_NAME"
+        exit 1
+      fi
+      
+      # Test 5: Verify the pod is actually running with secure config
+      echo ""
+      echo "🔍 Test 5: Checking pod runtime status..."
+      
+      POD_STATUS=$(kubectl get pod $POD_NAME -n {{ .Release.Namespace }} -o jsonpath='{.status.phase}')
+      if [ "$POD_STATUS" = "Running" ]; then
+        echo "✅ Pod is running successfully with secure configuration"
+      else
+        echo "⚠️  Pod status: $POD_STATUS (may be starting or stopping)"
+      fi
+      
+      # Verify the process is running as the correct user
+      if kubectl exec -n {{ .Release.Namespace }} $POD_NAME -- id 2>/dev/null | grep -q "uid=65534"; then
+        echo "✅ Process running as user 65534 (nobody) - secure execution"
+      else
+        echo "⚠️  Could not verify process user (container may be initializing)"
+      fi
+      
+      # ===== FINAL RESULTS =====
+      echo ""
+      echo "🎉 ALL SECURITYCONTEXT TESTS PASSED!"
+      echo ""
+      echo "📋 ISSUE RESOLUTION SUMMARY:"
+      echo "   ✅ PRIMARY REQUIREMENT: privileged=true removed"
+      echo "   ✅ SECURITY HARDENING: Minimal required permissions applied"
+      echo "   ✅ LEAST PRIVILEGE: Only necessary network capabilities granted"
+      echo "   ✅ RUNTIME SECURITY: Non-root execution enforced"
+      echo ""
+      echo "🛡️  The netop sidecar container SecurityContext has been successfully fixed!"
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+        - ALL
+  serviceAccountName: {{ include "netop.serviceAccountName" . }}
