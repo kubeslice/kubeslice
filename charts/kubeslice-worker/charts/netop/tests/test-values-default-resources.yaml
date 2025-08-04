@@ -1,0 +1,14 @@
+# Test values file for netop chart - Default Resources Test
+# Purpose: Test that default resource values are applied when resources section is not specified
+# Usage: helm template test . -f tests/test-values-default-resources.yaml
+# Expected: Should render with default resource values from main values.yaml (CPU: 100m/200m, Memory: 128Mi/256Mi)
+
+global:
+  netop_docker_existingImagePullSecret: "kubeslice-image-pull-secret"
+  imageRegistry: docker.io/aveshasystems
+netop:
+  networkInterface: eth0
+  image: netops
+  tag: 0.2.2 
+  pullPolicy: IfNotPresent
+  # Note: resources section is omitted to test that default values are applied
