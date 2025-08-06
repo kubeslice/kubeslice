@@ -1,6 +1,6 @@
 # Test values file for netop chart - Default Resources Test
 # Purpose: Test that default resource values are applied when resources section is not specified
-# Usage: helm template test . -f tests/test-values-default-resources.yaml
+# Usage: helm template test . -f ci/test-values-default-resources.yaml
 # Expected: Should render with default resource values from main values.yaml (CPU: 100m/200m, Memory: 128Mi/256Mi)
 
 global:
