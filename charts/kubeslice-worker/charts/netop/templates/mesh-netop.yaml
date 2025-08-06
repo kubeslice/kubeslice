@@ -37,11 +37,16 @@ spec:
         imagePullPolicy: {{ .Values.netop.pullPolicy }}
         name: avesha-sidecar
         securityContext:
-          allowPrivilegeEscalation: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
           capabilities:
             add:
             - NET_ADMIN
-          privileged: true
+            - NET_RAW
+            drop:
+            - ALL
       imagePullSecrets:
       - name: {{ template "imagePullSecrets.secretName" . }}
       tolerations:
