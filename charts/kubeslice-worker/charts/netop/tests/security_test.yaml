@@ -1,0 +1,66 @@
+suite: netop security context comprehensive tests
+templates:
+  - mesh-netop.yaml
+tests:
+  # CRITICAL SECURITY TESTS
+  - it: should remove privileged=true (MAIN REQUIREMENT)
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].securityContext.privileged
+
+  # MINIMAL PERMISSIONS TESTS
+  - it: should enforce non-root execution
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 65534
+
+  - it: should block privilege escalation
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+
+  - it: should enforce read-only root filesystem
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem
+          value: true
+
+  # CAPABILITIES TESTS (LEAST PRIVILEGE)
+  - it: should drop all capabilities by default
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop[0]
+          value: "ALL"
+
+  - it: should only add required network capabilities
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.add
+          content: "NET_ADMIN"
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.add
+          content: "NET_RAW"
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.capabilities.add
+          value: ["NET_ADMIN", "NET_RAW"]
+
+  # INTEGRATION TESTS
+  - it: should have correct sidecar container name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: "avesha-sidecar"
+
+  - it: should target gateway nodes only
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key
+          value: "kubeslice.io/node-type"
+      - equal:
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]
+          value: "gateway"
