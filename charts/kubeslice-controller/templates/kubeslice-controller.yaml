@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: clusters.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -15,190 +14,229 @@ spec:
     singular: cluster
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: Cluster is the Schema for the clusters API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: ClusterSpec defines the desired state of Cluster
-            properties:
-              clusterProperty:
-                description: put in an object
-                properties:
-                  geoLocation:
-                    description: GeoLocation contains information regarding Geographical
-                      Location of the Cluster
-                    properties:
-                      cloudProvider:
-                        description: CloudProvider is the cloud service provider
-                        type: string
-                      cloudRegion:
-                        description: CloudRegion is the region of the cloud
-                        type: string
-                      latitude:
-                        description: Latitude is the latitude of the cluster
-                        type: string
-                      longitude:
-                        description: Longitude is the longitude of the cluster
-                        type: string
-                    type: object
-                  monitoring:
-                    description: Monitoring contains the Kubernetes Monitoring Dashboard
-                    properties:
-                      kubernetesDashboard:
-                        description: KubernetesDashboard contains the information
-                          regarding Kubernetes Monitoring Dashboard
-                        properties:
-                          accessToken:
-                            description: AccessToken is the Access Token to access
-                              the KubernetesDashboard
-                            type: string
-                          enabled:
-                            description: Enabled is the enable status of the KubernetesDashboard
-                            type: boolean
-                          endpoint:
-                            description: Endpoint is the base endpoint to access the
-                              kubernetes dashboard
-                            type: string
-                          ingressPrefix:
-                            description: IngressPrefix is the prefix of ingress gateway
-                              for KubernetesDashboard
-                            type: string
-                        type: object
-                    type: object
-                  telemetry:
-                    description: Telemetry contains Telemetry information
-                    properties:
-                      enabled:
-                        description: Enabled is the enable status of the Telemetry
-                        type: boolean
-                      endpoint:
-                        description: Endpoint is the Telemetry Endpoint
-                        type: string
-                      telemetryProvider:
-                        description: TelemetryProvider is the Telemetry Provider information
-                        type: string
-                    type: object
-                type: object
-              networkInterface:
-                description: NetworkInterface is the network interface attached with
-                  the cluster.
-                type: string
-              nodeIP:
-                description: NodeIP is the IP address of the Node - deprecated field
-                  use Plural NodeIPs
-                type: string
-              nodeIPs:
-                items:
-                  type: string
-                type: array
-            type: object
-          status:
-            description: ClusterStatus defines the observed state of Cluster
-            properties:
-              clusterHealth:
-                description: ClusterHealth shows the health of the worker cluster
-                properties:
-                  clusterHealthStatus:
-                    description: ClusterHealthStatus shows the overall health status
-                      of the cluster
-                    enum:
-                    - Normal
-                    - Warning
-                    type: string
-                  componentStatuses:
-                    description: ComponentStatuses shows the health status of individual
-                      components in the cluster
-                    items:
-                      properties:
-                        component:
-                          description: Component name
-                          type: string
-                        componentHealthStatus:
-                          enum:
-                          - Normal
-                          - Warning
-                          - Error
-                          type: string
-                      required:
-                      - component
-                      - componentHealthStatus
-                      type: object
-                    type: array
-                  lastUpdated:
-                    description: LastUpdated is the timestamp when healthstatus was
-                      updated
-                    format: date-time
-                    type: string
-                type: object
-              cniSubnet:
-                description: CniSubnet is the podip and service ip subnet of CNI
-                items:
-                  type: string
-                type: array
-              isDeregisterInProgress:
-                description: IsDeregisterInProgress is the flag to check if the cluster
-                  deregister is InProgress
-                type: boolean
-              namespaces:
-                description: Namespaces present in cluster
-                items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: Cluster is the Schema for the clusters API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ClusterSpec defines the desired state of Cluster
+              properties:
+                clusterProperty:
+                  description: put in an object
                   properties:
-                    name:
-                      type: string
-                    sliceName:
+                    geoLocation:
+                      description: GeoLocation contains information regarding Geographical
+                        Location of the Cluster
+                      properties:
+                        cloudProvider:
+                          description: CloudProvider is the cloud service provider
+                          type: string
+                        cloudRegion:
+                          description: CloudRegion is the region of the cloud
+                          type: string
+                        latitude:
+                          description: Latitude is the latitude of the cluster
+                          type: string
+                        longitude:
+                          description: Longitude is the longitude of the cluster
+                          type: string
+                      type: object
+                    monitoring:
+                      description: Monitoring contains the Kubernetes Monitoring Dashboard
+                      properties:
+                        grafanaDashboardBaseURL:
+                          description: GrafanaDashboardBaseURL is the base URL for the
+                            grafana dashboard
+                          type: string
+                        kubernetesDashboard:
+                          description: KubernetesDashboard contains the information
+                            regarding Kubernetes Monitoring Dashboard
+                          properties:
+                            accessToken:
+                              description: AccessToken is the Access Token to access
+                                the KubernetesDashboard
+                              type: string
+                            enabled:
+                              description: Enabled is the enable status of the KubernetesDashboard
+                              type: boolean
+                            endpoint:
+                              description: Endpoint is the base endpoint to access the
+                                kubernetes dashboard
+                              type: string
+                            ingressPrefix:
+                              description: IngressPrefix is the prefix of ingress gateway
+                                for KubernetesDashboard
+                              type: string
+                          type: object
+                      type: object
+                    telemetry:
+                      description: Telemetry contains Telemetry information
+                      properties:
+                        enabled:
+                          description: Enabled is the enable status of the Telemetry
+                          type: boolean
+                        endpoint:
+                          description: Endpoint is the Telemetry Endpoint
+                          type: string
+                        telemetryProvider:
+                          description: TelemetryProvider is the Telemetry Provider information
+                          type: string
+                      type: object
+                  type: object
+                enableAutoEviction:
+                  type: boolean
+                networkInterface:
+                  description: NetworkInterface is the network interface attached with
+                    the cluster.
+                  type: string
+                nodeIP:
+                  description: NodeIP is the IP address of the Node - deprecated field
+                    use Plural NodeIPs
+                  type: string
+                nodeIPs:
+                  items:
+                    type: string
+                  type: array
+                requeueOnFailure:
+                  type: boolean
+              type: object
+            status:
+              description: ClusterStatus defines the observed state of Cluster
+              properties:
+                GPURestriction:
+                  properties:
+                    enforceRestrictions:
+                      description: EnforceRestrictions is the flag to check if the cluster
+                        is restricted
+                      type: boolean
+                    lastUpdatedTimestamp:
+                      description: LastUpdatedTimestamp is the timestamp when the enforcement
+                        was updated
+                      format: date-time
                       type: string
                   type: object
-                type: array
-              networkPresent:
-                default: false
-                description: NetworkPresent denotes if the networking components (NSM,
-                  Spire) are installed on a cluster
-                type: boolean
-              nodeIPs:
-                description: NodeIPs of the gateway node of worker cluster
-                items:
+                clusterHealth:
+                  description: ClusterHealth shows the health of the worker cluster
+                  properties:
+                    clusterHealthStatus:
+                      description: ClusterHealthStatus shows the overall health status
+                        of the cluster
+                      enum:
+                        - Normal
+                        - Warning
+                      type: string
+                    componentStatuses:
+                      description: ComponentStatuses shows the health status of individual
+                        components in the cluster
+                      items:
+                        properties:
+                          component:
+                            description: Component name
+                            type: string
+                          componentHealthStatus:
+                            enum:
+                              - Normal
+                              - Warning
+                              - Error
+                            type: string
+                        required:
+                          - component
+                          - componentHealthStatus
+                        type: object
+                      type: array
+                    lastUpdated:
+                      description: LastUpdated is the timestamp when healthstatus was
+                        updated
+                      format: date-time
+                      type: string
+                  type: object
+                cniSubnet:
+                  description: CniSubnet is the podip and service ip subnet of CNI
+                  items:
+                    type: string
+                  type: array
+                isDeregisterInProgress:
+                  description: IsDeregisterInProgress is the flag to check if the cluster
+                    deregister is InProgress
+                  type: boolean
+                namespaces:
+                  description: Namespaces present in cluster
+                  items:
+                    properties:
+                      name:
+                        type: string
+                      sliceName:
+                        type: string
+                    type: object
+                  type: array
+                networkPresent:
+                  default: false
+                  description: NetworkPresent denotes if the networking components (NSM,
+                    Spire) are installed on a cluster
+                  type: boolean
+                nodeIPs:
+                  description: NodeIPs of the gateway node of worker cluster
+                  items:
+                    type: string
+                  type: array
+                registrationStatus:
+                  description: RegistrationStatus shows the status of cluster registration
+                  enum:
+                    - Pending
+                    - InProgress
+                    - Failed
+                    - Registered
+                    - DeregisterInProgress
+                    - DeregisterFailed
+                    - Deregistered
                   type: string
-                type: array
-              registrationStatus:
-                description: RegistrationStatus shows the status of cluster registration
-                enum:
-                - Pending
-                - InProgress
-                - Failed
-                - Registered
-                - DeregisterInProgress
-                - DeregisterFailed
-                - Deregistered
-                type: string
-              secretName:
-                description: SecretName is the name of the secret for the worker cluster.
-                type: string
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                secretName:
+                  description: SecretName is the name of the secret for the worker cluster.
+                  type: string
+                vCPURestriction:
+                  description: VCPURestriction is the restriction on the cluster disabling
+                    the creation of new pods
+                  properties:
+                    enforceRestrictions:
+                      description: EnforceRestrictions is the flag to check if the cluster
+                        is restricted
+                      type: boolean
+                    lastUpdatedTimestamp:
+                      description: LastUpdatedTimestamp is the timestamp when the enforcement
+                        was updated
+                      format: date-time
+                      type: string
+                  type: object
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: projects.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -209,56 +247,63 @@ spec:
     singular: project
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: Project is the Schema for the projects API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: ProjectSpec defines the desired state of Project
-            properties:
-              serviceAccount:
-                description: ServiceAccount is a field of Project. Edit project_types.go to remove/update
-                properties:
-                  readOnly:
-                    items:
-                      type: string
-                    type: array
-                  readWrite:
-                    items:
-                      type: string
-                    type: array
-                type: object
-            type: object
-          status:
-            description: ProjectStatus defines the observed state of Project
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: Project is the Schema for the projects API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ProjectSpec defines the desired state of Project
+              properties:
+                defaultSliceCreation:
+                  description: If defaultSliceCreation is true, then the default slice
+                    will be created
+                  type: boolean
+                serviceAccount:
+                  description: ServiceAccount is a field of Project. Edit project_types.go
+                    to remove/update
+                  properties:
+                    readOnly:
+                      items:
+                        type: string
+                      type: array
+                    readWrite:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+              type: object
+            status:
+              description: ProjectStatus defines the observed state of Project
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: serviceexportconfigs.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -269,109 +314,114 @@ spec:
     singular: serviceexportconfig
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: ServiceExportConfig is the Schema for the serviceexportconfigs
-          API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: ServiceExportConfigSpec defines the desired state of ServiceExportConfig
-            properties:
-              aliases:
-                description: Alias names for the exported service. The service could
-                  be addressed by the alias names in addition to the slice.local name.
-                items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: ServiceExportConfig is the Schema for the serviceexportconfigs
+            API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ServiceExportConfigSpec defines the desired state of ServiceExportConfig
+              properties:
+                aliases:
+                  description: |-
+                    Alias names for the exported service. The service could be addressed by the alias names
+                    in addition to the slice.local name.
+                  items:
+                    type: string
+                  type: array
+                serviceDiscoveryEndpoints:
+                  description: the service discovery endpoint array
+                  items:
+                    properties:
+                      cluster:
+                        description: The ID of the cluster.
+                        type: string
+                      dnsName:
+                        description: the dns_name of the service
+                        type: string
+                      nsmIp:
+                        description: The NSM IP address.
+                        type: string
+                      podName:
+                        description: The name of the pod.
+                        type: string
+                      port:
+                        description: port of the service
+                        format: int32
+                        type: integer
+                    type: object
+                  type: array
+                serviceDiscoveryPorts:
+                  description: The ports for the given service.
+                  items:
+                    properties:
+                      name:
+                        description: The name of the port.
+                        type: string
+                      port:
+                        description: The target port number.
+                        format: int32
+                        type: integer
+                      protocol:
+                        description: The protocol.
+                        type: string
+                      servicePort:
+                        description: The port exposed by service
+                        format: int32
+                        type: integer
+                      serviceProtocol:
+                        description: The service protocol
+                        type: string
+                    type: object
+                  type: array
+                serviceName:
+                  description: ServiceName is the name of the service
                   type: string
-                type: array
-              serviceDiscoveryEndpoints:
-                description: the service discovery endpoint array
-                items:
-                  properties:
-                    cluster:
-                      description: The ID of the cluster.
-                      type: string
-                    dnsName:
-                      description: the dns_name of the service
-                      type: string
-                    nsmIp:
-                      description: The NSM IP address.
-                      type: string
-                    podName:
-                      description: The name of the pod.
-                      type: string
-                    port:
-                      description: port of the service
-                      format: int32
-                      type: integer
-                  type: object
-                type: array
-              serviceDiscoveryPorts:
-                description: The ports for the given service.
-                items:
-                  properties:
-                    name:
-                      description: The name of the port.
-                      type: string
-                    port:
-                      description: The target port number.
-                      format: int32
-                      type: integer
-                    protocol:
-                      description: The protocol.
-                      type: string
-                    servicePort:
-                      description: The port exposed by service
-                      format: int32
-                      type: integer
-                    serviceProtocol:
-                      description: The service protocol
-                      type: string
-                  type: object
-                type: array
-              serviceName:
-                description: ServiceName is the name of the service
-                type: string
-              serviceNamespace:
-                type: string
-              sliceName:
-                description: The name of the slice.
-                type: string
-              sourceCluster:
-                description: clusterId is the id of the cluster where the service
-                  is available.
-                type: string
-            required:
-            - serviceName
-            - sliceName
-            - sourceCluster
-            type: object
-          status:
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                serviceNamespace:
+                  type: string
+                sliceName:
+                  description: The name of the slice.
+                  type: string
+                sourceCluster:
+                  description: clusterId is the id of the cluster where the service
+                    is available.
+                  type: string
+              required:
+                - serviceName
+                - sliceName
+                - sourceCluster
+              type: object
+            status:
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: sliceconfigs.controller.kubeslice.io
 spec:
   group: controller.kubeslice.io
@@ -382,39 +432,644 @@ spec:
     singular: sliceconfig
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: SliceConfig is the Schema for the sliceconfig API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: SliceConfigSpec defines the desired state of SliceConfig
-            properties:
-              clusters:
-                items:
-                  type: string
-                type: array
-              externalGatewayConfig:
-                items:
-                  description: ExternalGatewayConfig is the configuration for external
-                    gateways like 'istio', etc/
-                  properties:
-                    clusters:
-                      items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: SliceConfig is the Schema for the sliceconfig API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: SliceConfigSpec defines the desired state of SliceConfig
+              properties:
+                clusters:
+                  items:
+                    type: string
+                  type: array
+                externalGatewayConfig:
+                  items:
+                    description: ExternalGatewayConfig is the configuration for external
+                      gateways like 'istio', etc/
+                    properties:
+                      clusters:
+                        items:
+                          type: string
+                        type: array
+                      egress:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                      gatewayType:
+                        enum:
+                          - none
+                          - istio
+                          - envoy
                         type: string
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                      nsIngress:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                      vpcServiceAccess:
+                        properties:
+                          egress:
+                            properties:
+                              enabled:
+                                type: boolean
+                            type: object
+                          ingress:
+                            properties:
+                              enabled:
+                                type: boolean
+                            type: object
+                        type: object
+                    type: object
+                  type: array
+                maxClusters:
+                  default: 16
+                  maximum: 32
+                  minimum: 2
+                  type: integer
+                namespaceIsolationProfile:
+                  properties:
+                    allowedNamespaces:
+                      items:
+                        properties:
+                          clusters:
+                            items:
+                              type: string
+                            type: array
+                          namespace:
+                            type: string
+                        type: object
                       type: array
+                    applicationNamespaces:
+                      items:
+                        properties:
+                          clusters:
+                            items:
+                              type: string
+                            type: array
+                          namespace:
+                            type: string
+                        type: object
+                      type: array
+                    isolationEnabled:
+                      default: false
+                      type: boolean
+                  type: object
+                overlayNetworkDeploymentMode:
+                  default: single-network
+                  enum:
+                    - single-network
+                    - multi-network
+                    - no-network
+                  type: string
+                qosProfileDetails:
+                  description: The custom QOS Profile Details
+                  properties:
+                    bandwidthCeilingKbps:
+                      type: integer
+                    bandwidthGuaranteedKbps:
+                      type: integer
+                    dscpClass:
+                      enum:
+                        - Default
+                        - AF11
+                        - AF12
+                        - AF13
+                        - AF21
+                        - AF22
+                        - AF23
+                        - AF31
+                        - AF32
+                        - AF33
+                        - AF41
+                        - AF42
+                        - AF43
+                        - EF
+                      type: string
+                    priority:
+                      type: integer
+                    queueType:
+                      default: HTB
+                      type: string
+                    tcType:
+                      default: BANDWIDTH_CONTROL
+                      type: string
+                  required:
+                    - bandwidthCeilingKbps
+                    - bandwidthGuaranteedKbps
+                    - dscpClass
+                    - priority
+                    - queueType
+                    - tcType
+                  type: object
+                renewBefore:
+                  description: RenewBefore is used for renew now!
+                  format: date-time
+                  type: string
+                rotationInterval:
+                  default: 30
+                  maximum: 90
+                  minimum: 30
+                  type: integer
+                sliceGatewayProvider:
+                  description: WorkerSliceGatewayProvider defines the configuration
+                    for slicegateway
+                  properties:
+                    sliceCaType:
+                      default: Local
+                      type: string
+                    sliceGatewayServiceType:
+                      items:
+                        properties:
+                          cluster:
+                            type: string
+                          protocol:
+                            default: UDP
+                            enum:
+                              - TCP
+                              - UDP
+                            type: string
+                          type:
+                            default: NodePort
+                            enum:
+                              - NodePort
+                              - LoadBalancer
+                            type: string
+                        required:
+                          - cluster
+                          - protocol
+                          - type
+                        type: object
+                      type: array
+                    sliceGatewayType:
+                      default: OpenVPN
+                      enum:
+                        - OpenVPN
+                        - Wireguard
+                      type: string
+                  required:
+                    - sliceCaType
+                    - sliceGatewayType
+                  type: object
+                sliceIpamType:
+                  default: Local
+                  type: string
+                sliceSubnet:
+                  type: string
+                sliceType:
+                  default: Application
+                  type: string
+                standardQosProfileName:
+                  type: string
+                vpnConfig:
+                  description: VPNConfiguration defines the additional (optional) VPN
+                    Configuration to customise
+                  properties:
+                    cipher:
+                      default: AES-256-CBC
+                      enum:
+                        - AES-256-CBC
+                        - AES-128-CBC
+                      type: string
+                  required:
+                    - cipher
+                  type: object
+              required:
+                - maxClusters
+              type: object
+            status:
+              description: SliceConfigStatus defines the observed state of SliceConfig
+              properties:
+                kubesliceEvents:
+                  items:
+                    properties:
+                      action:
+                        description: Trigger action. Examples - CLUSTER_OFFBOARDING,
+                          NAMESPCE_OFFBOARDING etc
+                        type: string
+                      components:
+                        description: list of effected components on which action failed
+                        items:
+                          type: string
+                        type: array
+                      event:
+                        description: Event name (from monitoring framework schema)
+                        type: string
+                      identifier:
+                        description: Identifier of the component for which the action
+                          was triggered
+                        type: string
+                      isEventRaised:
+                        default: false
+                        description: Flag to determine if kubernetes event is already
+                          raised
+                        type: boolean
+                      reason:
+                        description: Reason message for the event
+                        type: string
+                      timestamp:
+                        description: Timestamp of the event
+                        format: date-time
+                        type: string
+                      type:
+                        description: Type of the event. Can be one of Error, Success
+                          or InProgress
+                        type: string
+                    required:
+                      - event
+                    type: object
+                  type: array
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: sliceqosconfigs.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: SliceQoSConfig
+    listKind: SliceQoSConfigList
+    plural: sliceqosconfigs
+    singular: sliceqosconfig
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: SliceQoSConfig is the Schema for the sliceqosconfigs API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: SliceQoSConfigSpec defines the desired state of SliceQoSConfig
+              properties:
+                bandwidthCeilingKbps:
+                  type: integer
+                bandwidthGuaranteedKbps:
+                  type: integer
+                dscpClass:
+                  enum:
+                    - Default
+                    - AF11
+                    - AF12
+                    - AF13
+                    - AF21
+                    - AF22
+                    - AF23
+                    - AF31
+                    - AF32
+                    - AF33
+                    - AF41
+                    - AF42
+                    - AF43
+                    - EF
+                  type: string
+                priority:
+                  type: integer
+                queueType:
+                  enum:
+                    - HTB
+                  type: string
+                tcType:
+                  enum:
+                    - BANDWIDTH_CONTROL
+                  type: string
+              required:
+                - bandwidthCeilingKbps
+                - bandwidthGuaranteedKbps
+                - dscpClass
+                - priority
+                - queueType
+                - tcType
+              type: object
+            status:
+              description: SliceQoSConfigStatus defines the observed state of SliceQoSConfig
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: vpnkeyrotations.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: VpnKeyRotation
+    listKind: VpnKeyRotationList
+    plural: vpnkeyrotations
+    singular: vpnkeyrotation
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: VpnKeyRotation is the Schema for the vpnkeyrotations API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: VpnKeyRotationSpec defines the desired state of VpnKeyRotation
+              properties:
+                certificateCreationTime:
+                  description: CertificateCreationTime is a time when certificate for
+                    all the gateway pairs is created/updated
+                  format: date-time
+                  type: string
+                certificateExpiryTime:
+                  description: CertificateExpiryTime is a time when certificate for
+                    all the gateway pairs will expire
+                  format: date-time
+                  type: string
+                clusterGatewayMapping:
+                  additionalProperties:
+                    items:
+                      type: string
+                    type: array
+                  description: |-
+                    ClusterGatewayMapping represents a map where key is cluster name and value is array of gateways present on that cluster.
+                    This is used to avoid unnecessary reconciliation in worker-operator.
+                  type: object
+                clusters:
+                  description: clusters contains the list of clusters attached to this
+                    slice
+                  items:
+                    type: string
+                  type: array
+                rotationCount:
+                  description: RotationCount represent the number of times rotation
+                    has been already performed.
+                  type: integer
+                rotationInterval:
+                  type: integer
+                sliceName:
+                  type: string
+              type: object
+            status:
+              description: VpnKeyRotationStatus defines the observed state of VpnKeyRotation
+              properties:
+                currentRotationState:
+                  additionalProperties:
+                    description: StatusOfKeyRotation represent per gateway status
+                    properties:
+                      lastUpdatedTimestamp:
+                        format: date-time
+                        type: string
+                      status:
+                        type: string
+                    type: object
+                  description: This is map of gateway name to the current rotation state
+                  type: object
+                statusHistory:
+                  additionalProperties:
+                    items:
+                      description: StatusOfKeyRotation represent per gateway status
+                      properties:
+                        lastUpdatedTimestamp:
+                          format: date-time
+                          type: string
+                        status:
+                          type: string
+                      type: object
+                    type: array
+                  description: This is circular array of last n number of rotation status.
+                  type: object
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: workerserviceimports.worker.kubeslice.io
+spec:
+  group: worker.kubeslice.io
+  names:
+    kind: WorkerServiceImport
+    listKind: WorkerServiceImportList
+    plural: workerserviceimports
+    singular: workerserviceimport
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: WorkerServiceImport is the Schema for the workerserviceimport
+            API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: WorkerServiceImportSpec defines the desired state of WorkerServiceImport
+              properties:
+                aliases:
+                  description: |-
+                    Alias names for the exported service. The service could be addressed by the alias names
+                    in addition to the slice.local name.
+                  items:
+                    type: string
+                  type: array
+                serviceDiscoveryEndpoints:
+                  description: the service discovery endpoint array
+                  items:
+                    properties:
+                      cluster:
+                        description: The ID of the cluster.
+                        type: string
+                      dnsName:
+                        description: the dns_name of the service
+                        type: string
+                      nsmIp:
+                        description: The NSM IP address.
+                        type: string
+                      podName:
+                        description: The name of the pod.
+                        type: string
+                      port:
+                        description: port of the service
+                        format: int32
+                        type: integer
+                    type: object
+                  type: array
+                serviceDiscoveryPorts:
+                  description: The ports for the given service.
+                  items:
+                    properties:
+                      name:
+                        description: The name of the port.
+                        type: string
+                      port:
+                        description: The target port number.
+                        format: int32
+                        type: integer
+                      protocol:
+                        description: The protocol.
+                        type: string
+                      servicePort:
+                        description: The port exposed by service
+                        format: int32
+                        type: integer
+                      serviceProtocol:
+                        description: The service protocol
+                        type: string
+                    type: object
+                  type: array
+                serviceName:
+                  description: ServiceName is the name of the service
+                  type: string
+                serviceNamespace:
+                  description: ServiceNamespace is the namespace of the service
+                  type: string
+                sliceName:
+                  description: The name of the slice.
+                  type: string
+                sourceClusters:
+                  description: clusterId is the id of the cluster where the service
+                    is available.
+                  items:
+                    type: string
+                  type: array
+              type: object
+            status:
+              description: WorkerServiceImportStatus defines the observed state of WorkerServiceImport
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: workersliceconfigs.worker.kubeslice.io
+spec:
+  group: worker.kubeslice.io
+  names:
+    kind: WorkerSliceConfig
+    listKind: WorkerSliceConfigList
+    plural: workersliceconfigs
+    singular: workersliceconfig
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: WorkerSliceConfig is the Schema for the slice API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: WorkerSliceConfigSpec defines the desired state of Slice
+              properties:
+                clusterSubnetCIDR:
+                  type: string
+                externalGatewayConfig:
+                  properties:
                     egress:
                       properties:
                         enabled:
@@ -422,8 +1077,9 @@ spec:
                       type: object
                     gatewayType:
                       enum:
-                      - none
-                      - istio
+                        - none
+                        - istio
+                        - envoy
                       type: string
                     ingress:
                       properties:
@@ -435,748 +1091,192 @@ spec:
                         enabled:
                           type: boolean
                       type: object
+                    vpcServiceAccess:
+                      properties:
+                        egress:
+                          properties:
+                            enabled:
+                              type: boolean
+                          type: object
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                          type: object
+                      type: object
                   type: object
-                type: array
-              maxClusters:
-                default: 16
-                maximum: 32
-                minimum: 2
-                type: integer
-              namespaceIsolationProfile:
-                properties:
-                  allowedNamespaces:
-                    items:
-                      properties:
-                        clusters:
-                          items:
-                            type: string
-                          type: array
-                        namespace:
-                          type: string
-                      type: object
-                    type: array
-                  applicationNamespaces:
-                    items:
-                      properties:
-                        clusters:
-                          items:
-                            type: string
-                          type: array
-                        namespace:
-                          type: string
-                      type: object
-                    type: array
-                  isolationEnabled:
-                    default: false
-                    type: boolean
-                type: object
-              overlayNetworkDeploymentMode:
-                default: single-network
-                enum:
-                - single-network
-                - multi-network
-                - no-network
-                type: string
-              qosProfileDetails:
-                description: The custom QOS Profile Details
-                properties:
-                  bandwidthCeilingKbps:
-                    type: integer
-                  bandwidthGuaranteedKbps:
-                    type: integer
-                  dscpClass:
-                    enum:
-                    - Default
-                    - AF11
-                    - AF12
-                    - AF13
-                    - AF21
-                    - AF22
-                    - AF23
-                    - AF31
-                    - AF32
-                    - AF33
-                    - AF41
-                    - AF42
-                    - AF43
-                    - EF
-                    type: string
-                  priority:
-                    type: integer
-                  queueType:
-                    default: HTB
-                    type: string
-                  tcType:
-                    default: BANDWIDTH_CONTROL
-                    type: string
-                required:
-                - bandwidthCeilingKbps
-                - bandwidthGuaranteedKbps
-                - dscpClass
-                - priority
-                - queueType
-                - tcType
-                type: object
-              renewBefore:
-                description: RenewBefore is used for renew now!
-                format: date-time
-                type: string
-              rotationInterval:
-                default: 30
-                maximum: 90
-                minimum: 30
-                type: integer
-              sliceGatewayProvider:
-                description: WorkerSliceGatewayProvider defines the configuration
-                  for slicegateway
-                properties:
-                  sliceCaType:
-                    default: Local
-                    type: string
-                  sliceGatewayServiceType:
-                    items:
-                      properties:
-                        cluster:
-                          type: string
-                        protocol:
-                          default: UDP
-                          enum:
-                          - TCP
-                          - UDP
-                          type: string
-                        type:
-                          default: NodePort
-                          enum:
-                          - NodePort
-                          - LoadBalancer
-                          type: string
-                      required:
-                      - cluster
-                      - protocol
-                      - type
-                      type: object
-                    type: array
-                  sliceGatewayType:
-                    default: OpenVPN
-                    type: string
-                required:
-                - sliceCaType
-                - sliceGatewayType
-                type: object
-              sliceIpamType:
-                default: Local
-                type: string
-              sliceSubnet:
-                type: string
-              sliceType:
-                default: Application
-                type: string
-              standardQosProfileName:
-                type: string
-              vpnConfig:
-                description: VPNConfiguration defines the additional (optional) VPN
-                  Configuration to customise
-                properties:
-                  cipher:
-                    default: AES-256-CBC
-                    enum:
-                    - AES-256-CBC
-                    - AES-128-CBC
-                    type: string
-                required:
-                - cipher
-                type: object
-            required:
-            - maxClusters
-            type: object
-          status:
-            description: SliceConfigStatus defines the observed state of SliceConfig
-            properties:
-              kubesliceEvents:
-                items:
+                ipamClusterOctet:
+                  type: integer
+                namespaceIsolationProfile:
                   properties:
-                    action:
-                      description: Trigger action. Examples - CLUSTER_OFFBOARDING,
-                        NAMESPCE_OFFBOARDING etc
-                      type: string
-                    components:
-                      description: list of effected components on which action failed
+                    allowedNamespaces:
                       items:
                         type: string
                       type: array
-                    event:
-                      description: Event name (from monitoring framework schema)
-                      type: string
-                    identifier:
-                      description: Identifier of the component for which the action
-                        was triggered
-                      type: string
-                    isEventRaised:
+                    applicationNamespaces:
+                      items:
+                        type: string
+                      type: array
+                    isolationEnabled:
                       default: false
-                      description: Flag to determine if kubernetes event is already
-                        raised
                       type: boolean
-                    reason:
-                      description: Reason message for the event
-                      type: string
-                    timestamp:
-                      description: Timestamp of the event
-                      format: date-time
-                      type: string
-                    type:
-                      description: Type of the event. Can be one of Error, Success
-                        or InProgress
-                      type: string
-                  required:
-                  - event
                   type: object
-                type: array
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
-  name: vpnkeyrotations.controller.kubeslice.io
-spec:
-  group: controller.kubeslice.io
-  names:
-    kind: VpnKeyRotation
-    listKind: VpnKeyRotationList
-    plural: vpnkeyrotations
-    singular: vpnkeyrotation
-  scope: Namespaced
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: VpnKeyRotation is the Schema for the vpnkeyrotations API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: VpnKeyRotationSpec defines the desired state of VpnKeyRotation
-            properties:
-              certificateCreationTime:
-                description: CertificateCreationTime is a time when certificate for
-                  all the gateway pairs is created/updated
-                format: date-time
-                type: string
-              certificateExpiryTime:
-                description: CertificateExpiryTime is a time when certificate for
-                  all the gateway pairs will expire
-                format: date-time
-                type: string
-              clusterGatewayMapping:
-                additionalProperties:
-                  items:
-                    type: string
-                  type: array
-                description: ClusterGatewayMapping represents a map where key is cluster
-                  name and value is array of gateways present on that cluster. This
-                  is used to avoid unnecessary reconciliation in worker-operator.
-                type: object
-              clusters:
-                description: clusters contains the list of clusters attached to this
-                  slice
-                items:
+                octet:
+                  type: integer
+                overlayNetworkDeploymentMode:
+                  default: single-network
+                  enum:
+                    - single-network
+                    - multi-network
+                    - no-network
                   type: string
-                type: array
-              rotationCount:
-                description: RotationCount represent the number of times rotation
-                  has been already performed.
-                type: integer
-              rotationInterval:
-                type: integer
-              sliceName:
-                type: string
-            type: object
-          status:
-            description: VpnKeyRotationStatus defines the observed state of VpnKeyRotation
-            properties:
-              currentRotationState:
-                additionalProperties:
-                  description: StatusOfKeyRotation represent per gateway status
+                qosProfileDetails:
+                  description: QOSProfile is the QOS Profile configuration from backend
                   properties:
-                    lastUpdatedTimestamp:
-                      format: date-time
+                    bandwidthCeilingKbps:
+                      type: integer
+                    bandwidthGuaranteedKbps:
+                      type: integer
+                    dscpClass:
+                      enum:
+                        - Default
+                        - AF11
+                        - AF12
+                        - AF13
+                        - AF21
+                        - AF22
+                        - AF23
+                        - AF31
+                        - AF32
+                        - AF33
+                        - AF41
+                        - AF42
+                        - AF43
+                        - EF
                       type: string
-                    status:
+                    priority:
+                      type: integer
+                    queueType:
+                      default: HTB
+                      type: string
+                    tcType:
                       type: string
                   type: object
-                description: This is map of gateway name to the current rotation state
-                type: object
-              statusHistory:
-                additionalProperties:
+                sliceGatewayProvider:
+                  description: WorkerSliceGatewayProvider defines the configuration
+                    for slicegateway
+                  properties:
+                    sliceCaType:
+                      default: Local
+                      type: string
+                    sliceGatewayProtocol:
+                      default: UDP
+                      enum:
+                        - TCP
+                        - UDP
+                      type: string
+                    sliceGatewayServiceType:
+                      default: NodePort
+                      enum:
+                        - NodePort
+                        - LoadBalancer
+                      type: string
+                    sliceGatewayType:
+                      default: OpenVPN
+                      type: string
+                  type: object
+                sliceIpamType:
+                  default: Local
+                  type: string
+                sliceName:
+                  type: string
+                sliceSubnet:
+                  type: string
+                sliceType:
+                  default: Application
+                  type: string
+              type: object
+            status:
+              description: WorkerSliceConfigStatus defines the observed state of Slice
+              properties:
+                connectedAppPods:
                   items:
-                    description: StatusOfKeyRotation represent per gateway status
+                    description: AppPod defines the app pods connected to slice
                     properties:
-                      lastUpdatedTimestamp:
-                        format: date-time
+                      nsmInterface:
+                        description: NsmInterface is the nsm interface of App
                         type: string
-                      status:
+                      nsmIp:
+                        description: NsmIP is the nsm ip of App
+                        type: string
+                      nsmPeerIp:
+                        description: PeerIp is the nsm peer ip of gateway
+                        type: string
+                      podIp:
+                        description: PodIP is App Pod IP
+                        type: string
+                      podName:
+                        description: PodName is App Pod Name
+                        type: string
+                      podNamespace:
+                        description: PodNamespace is App Pod Namespace
                         type: string
                     type: object
                   type: array
-                description: This is circular array of last n number of rotation status.
-                type: object
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
-  name: sliceqosconfigs.controller.kubeslice.io
-spec:
-  group: controller.kubeslice.io
-  names:
-    kind: SliceQoSConfig
-    listKind: SliceQoSConfigList
-    plural: sliceqosconfigs
-    singular: sliceqosconfig
-  scope: Namespaced
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: SliceQoSConfig is the Schema for the sliceqosconfigs API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: SliceQoSConfigSpec defines the desired state of SliceQoSConfig
-            properties:
-              bandwidthCeilingKbps:
-                type: integer
-              bandwidthGuaranteedKbps:
-                type: integer
-              dscpClass:
-                enum:
-                - Default
-                - AF11
-                - AF12
-                - AF13
-                - AF21
-                - AF22
-                - AF23
-                - AF31
-                - AF32
-                - AF33
-                - AF41
-                - AF42
-                - AF43
-                - EF
-                type: string
-              priority:
-                type: integer
-              queueType:
-                enum:
-                - HTB
-                type: string
-              tcType:
-                enum:
-                - BANDWIDTH_CONTROL
-                type: string
-            required:
-            - bandwidthCeilingKbps
-            - bandwidthGuaranteedKbps
-            - dscpClass
-            - priority
-            - queueType
-            - tcType
-            type: object
-          status:
-            description: SliceQoSConfigStatus defines the observed state of SliceQoSConfig
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
-  name: workerserviceimports.worker.kubeslice.io
-spec:
-  group: worker.kubeslice.io
-  names:
-    kind: WorkerServiceImport
-    listKind: WorkerServiceImportList
-    plural: workerserviceimports
-    singular: workerserviceimport
-  scope: Namespaced
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: WorkerServiceImport is the Schema for the workerserviceimport
-          API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WorkerServiceImportSpec defines the desired state of WorkerServiceImport
-            properties:
-              aliases:
-                description: Alias names for the exported service. The service could
-                  be addressed by the alias names in addition to the slice.local name.
-                items:
-                  type: string
-                type: array
-              serviceDiscoveryEndpoints:
-                description: the service discovery endpoint array
-                items:
-                  properties:
-                    cluster:
-                      description: The ID of the cluster.
-                      type: string
-                    dnsName:
-                      description: the dns_name of the service
-                      type: string
-                    nsmIp:
-                      description: The NSM IP address.
-                      type: string
-                    podName:
-                      description: The name of the pod.
-                      type: string
-                    port:
-                      description: port of the service
-                      format: int32
-                      type: integer
-                  type: object
-                type: array
-              serviceDiscoveryPorts:
-                description: The ports for the given service.
-                items:
-                  properties:
-                    name:
-                      description: The name of the port.
-                      type: string
-                    port:
-                      description: The target port number.
-                      format: int32
-                      type: integer
-                    protocol:
-                      description: The protocol.
-                      type: string
-                    servicePort:
-                      description: The port exposed by service
-                      format: int32
-                      type: integer
-                    serviceProtocol:
-                      description: The service protocol
-                      type: string
-                  type: object
-                type: array
-              serviceName:
-                description: ServiceName is the name of the service
-                type: string
-              serviceNamespace:
-                description: ServiceNamespace is the namespace of the service
-                type: string
-              sliceName:
-                description: The name of the slice.
-                type: string
-              sourceClusters:
-                description: clusterId is the id of the cluster where the service
-                  is available.
-                items:
-                  type: string
-                type: array
-            type: object
-          status:
-            description: WorkerServiceImportStatus defines the observed state of WorkerServiceImport
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
-  name: workersliceconfigs.worker.kubeslice.io
-spec:
-  group: worker.kubeslice.io
-  names:
-    kind: WorkerSliceConfig
-    listKind: WorkerSliceConfigList
-    plural: workersliceconfigs
-    singular: workersliceconfig
-  scope: Namespaced
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: WorkerSliceConfig is the Schema for the slice API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WorkerSliceConfigSpec defines the desired state of Slice
-            properties:
-              clusterSubnetCIDR:
-                type: string
-              externalGatewayConfig:
-                properties:
-                  egress:
+                onboardedAppNamespaces:
+                  items:
                     properties:
-                      enabled:
-                        type: boolean
+                      name:
+                        type: string
                     type: object
-                  gatewayType:
-                    enum:
-                    - none
-                    - istio
-                    type: string
-                  ingress:
-                    properties:
-                      enabled:
-                        type: boolean
-                    type: object
-                  nsIngress:
-                    properties:
-                      enabled:
-                        type: boolean
-                    type: object
-                type: object
-              ipamClusterOctet:
-                type: integer
-              namespaceIsolationProfile:
-                properties:
-                  allowedNamespaces:
-                    items:
-                      type: string
-                    type: array
-                  applicationNamespaces:
-                    items:
-                      type: string
-                    type: array
-                  isolationEnabled:
-                    default: false
-                    type: boolean
-                type: object
-              octet:
-                type: integer
-              overlayNetworkDeploymentMode:
-                default: single-network
-                enum:
-                - single-network
-                - multi-network
-                - no-network
-                type: string
-              qosProfileDetails:
-                description: QOSProfile is the QOS Profile configuration from backend
-                properties:
-                  bandwidthCeilingKbps:
-                    type: integer
-                  bandwidthGuaranteedKbps:
-                    type: integer
-                  dscpClass:
-                    enum:
-                    - Default
-                    - AF11
-                    - AF12
-                    - AF13
-                    - AF21
-                    - AF22
-                    - AF23
-                    - AF31
-                    - AF32
-                    - AF33
-                    - AF41
-                    - AF42
-                    - AF43
-                    - EF
-                    type: string
-                  priority:
-                    type: integer
-                  queueType:
-                    default: HTB
-                    type: string
-                  tcType:
-                    type: string
-                type: object
-              sliceGatewayProvider:
-                description: WorkerSliceGatewayProvider defines the configuration
-                  for slicegateway
-                properties:
-                  sliceCaType:
-                    default: Local
-                    type: string
-                  sliceGatewayProtocol:
-                    default: UDP
-                    enum:
-                    - TCP
-                    - UDP
-                    type: string
-                  sliceGatewayServiceType:
-                    default: NodePort
-                    enum:
-                    - NodePort
-                    - LoadBalancer
-                    type: string
-                  sliceGatewayType:
-                    default: OpenVPN
-                    type: string
-                type: object
-              sliceIpamType:
-                default: Local
-                type: string
-              sliceName:
-                type: string
-              sliceSubnet:
-                type: string
-              sliceType:
-                default: Application
-                type: string
-            type: object
-          status:
-            description: WorkerSliceConfigStatus defines the observed state of Slice
-            properties:
-              connectedAppPods:
-                items:
-                  description: AppPod defines the app pods connected to slice
+                  type: array
+                sliceHealth:
+                  description: SliceHealth shows the health of the slice in worker cluster
                   properties:
-                    nsmInterface:
-                      description: NsmInterface is the nsm interface of App
+                    componentStatuses:
+                      description: ComponentStatuses shows the health status of individual
+                        components in the cluster
+                      items:
+                        properties:
+                          component:
+                            description: Component name
+                            type: string
+                          componentHealthStatus:
+                            enum:
+                              - Normal
+                              - Warning
+                              - Error
+                            type: string
+                        required:
+                          - component
+                          - componentHealthStatus
+                        type: object
+                      type: array
+                    lastUpdated:
+                      description: LastUpdated is the timestamp when healthstatus was
+                        updated
+                      format: date-time
                       type: string
-                    nsmIp:
-                      description: NsmIP is the nsm ip of App
-                      type: string
-                    nsmPeerIp:
-                      description: PeerIp is the nsm peer ip of gateway
-                      type: string
-                    podIp:
-                      description: PodIP is App Pod IP
-                      type: string
-                    podName:
-                      description: PodName is App Pod Name
-                      type: string
-                    podNamespace:
-                      description: PodNamespace is App Pod Namespace
+                    sliceHealthStatus:
+                      description: SliceHealthStatus shows the overall health status
+                        of the slice
+                      enum:
+                        - Normal
+                        - Warning
                       type: string
                   type: object
-                type: array
-              onboardedAppNamespaces:
-                items:
-                  properties:
-                    name:
-                      type: string
-                  type: object
-                type: array
-              sliceHealth:
-                description: SliceHealth shows the health of the slice in worker cluster
-                properties:
-                  componentStatuses:
-                    description: ComponentStatuses shows the health status of individual
-                      components in the cluster
-                    items:
-                      properties:
-                        component:
-                          description: Component name
-                          type: string
-                        componentHealthStatus:
-                          enum:
-                          - Normal
-                          - Warning
-                          - Error
-                          type: string
-                      required:
-                      - component
-                      - componentHealthStatus
-                      type: object
-                    type: array
-                  lastUpdated:
-                    description: LastUpdated is the timestamp when healthstatus was
-                      updated
-                    format: date-time
-                    type: string
-                  sliceHealthStatus:
-                    description: SliceHealthStatus shows the overall health status
-                      of the slice
-                    enum:
-                    - Normal
-                    - Warning
-                    type: string
-                type: object
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: workerslicegateways.worker.kubeslice.io
 spec:
   group: worker.kubeslice.io
@@ -1187,130 +1287,137 @@ spec:
     singular: workerslicegateway
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: WorkerSliceGateway is the Schema for the slicegateways API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WorkerSliceGatewaySpec defines the desired state of WorkerSliceGateway
-            properties:
-              gatewayConnectivityType:
-                default: NodePort
-                enum:
-                - NodePort
-                - LoadBalancer
-                type: string
-              gatewayCredentials:
-                properties:
-                  secretName:
-                    type: string
-                type: object
-              gatewayHostType:
-                enum:
-                - Client
-                - Server
-                type: string
-              gatewayNumber:
-                type: integer
-              gatewayProtocol:
-                default: UDP
-                enum:
-                - TCP
-                - UDP
-                type: string
-              gatewayType:
-                default: OpenVPN
-                type: string
-              localGatewayConfig:
-                properties:
-                  clusterName:
-                    type: string
-                  gatewayName:
-                    type: string
-                  gatewaySubnet:
-                    type: string
-                  loadBalancerIps:
-                    items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: WorkerSliceGateway is the Schema for the slicegateways API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: WorkerSliceGatewaySpec defines the desired state of WorkerSliceGateway
+              properties:
+                gatewayConnectivityType:
+                  default: NodePort
+                  enum:
+                    - NodePort
+                    - LoadBalancer
+                  type: string
+                gatewayCredentials:
+                  properties:
+                    secretName:
                       type: string
-                    type: array
-                  nodeIp:
-                    type: string
-                  nodeIps:
-                    items:
+                  type: object
+                gatewayHostType:
+                  enum:
+                    - Client
+                    - Server
+                  type: string
+                gatewayNumber:
+                  type: integer
+                gatewayProtocol:
+                  default: UDP
+                  enum:
+                    - TCP
+                    - UDP
+                  type: string
+                gatewayType:
+                  default: OpenVPN
+                  enum:
+                    - OpenVPN
+                    - Wireguard
+                  type: string
+                localGatewayConfig:
+                  properties:
+                    clusterName:
                       type: string
-                    type: array
-                  nodePort:
-                    type: integer
-                  nodePorts:
-                    items:
+                    gatewayName:
+                      type: string
+                    gatewaySubnet:
+                      type: string
+                    loadBalancerIps:
+                      items:
+                        type: string
+                      type: array
+                    nodeIp:
+                      type: string
+                    nodeIps:
+                      items:
+                        type: string
+                      type: array
+                    nodePort:
                       type: integer
-                    type: array
-                  vpnIp:
-                    type: string
-                type: object
-              remoteGatewayConfig:
-                properties:
-                  clusterName:
-                    type: string
-                  gatewayName:
-                    type: string
-                  gatewaySubnet:
-                    type: string
-                  loadBalancerIps:
-                    items:
+                    nodePorts:
+                      items:
+                        type: integer
+                      type: array
+                    vpnIp:
                       type: string
-                    type: array
-                  nodeIp:
-                    type: string
-                  nodeIps:
-                    items:
+                  type: object
+                remoteGatewayConfig:
+                  properties:
+                    clusterName:
                       type: string
-                    type: array
-                  nodePort:
-                    type: integer
-                  nodePorts:
-                    items:
+                    gatewayName:
+                      type: string
+                    gatewaySubnet:
+                      type: string
+                    loadBalancerIps:
+                      items:
+                        type: string
+                      type: array
+                    nodeIp:
+                      type: string
+                    nodeIps:
+                      items:
+                        type: string
+                      type: array
+                    nodePort:
                       type: integer
-                    type: array
-                  vpnIp:
-                    type: string
-                type: object
-              sliceName:
-                type: string
-            type: object
-          status:
-            description: WorkerSliceGatewayStatus defines the observed state of WorkerSliceGateway
-            properties:
-              clusterInsertionIndex:
-                type: integer
-              gatewayNumber:
-                type: integer
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                    nodePorts:
+                      items:
+                        type: integer
+                      type: array
+                    vpnIp:
+                      type: string
+                  type: object
+                sliceName:
+                  type: string
+              type: object
+            status:
+              description: WorkerSliceGatewayStatus defines the observed state of WorkerSliceGateway
+              properties:
+                clusterInsertionIndex:
+                  type: integer
+                gatewayNumber:
+                  type: integer
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: workerslicegwrecyclers.worker.kubeslice.io
 spec:
   group: worker.kubeslice.io
@@ -1321,74 +1428,79 @@ spec:
     singular: workerslicegwrecycler
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: WorkerSliceGwRecycler is the Schema for the workerslicegwrecyclers
-          API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WorkerSliceGwRecyclerSpec defines the desired state of WorkerSliceGwRecycler
-            properties:
-              clientRedundancyNumber:
-                type: integer
-              gwPair:
-                properties:
-                  clientId:
-                    type: string
-                  serverId:
-                    type: string
-                type: object
-              request:
-                type: string
-              serverRedundancyNumber:
-                type: integer
-              sliceGwClient:
-                type: string
-              sliceGwServer:
-                type: string
-              sliceName:
-                type: string
-              state:
-                type: string
-            type: object
-          status:
-            description: WorkerSliceGwRecyclerStatus defines the observed state of
-              WorkerSliceGwRecycler
-            properties:
-              client:
-                properties:
-                  recycledClient:
-                    type: string
-                  response:
-                    type: string
-                type: object
-              recycledServers:
-                items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: WorkerSliceGwRecycler is the Schema for the workerslicegwrecyclers
+            API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: WorkerSliceGwRecyclerSpec defines the desired state of WorkerSliceGwRecycler
+              properties:
+                clientRedundancyNumber:
+                  type: integer
+                gwPair:
+                  properties:
+                    clientId:
+                      type: string
+                    serverId:
+                      type: string
+                  type: object
+                request:
                   type: string
-                type: array
-              serversToRecycle:
-                items:
+                serverRedundancyNumber:
+                  type: integer
+                sliceGwClient:
                   type: string
-                type: array
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                sliceGwServer:
+                  type: string
+                sliceName:
+                  type: string
+                state:
+                  type: string
+              type: object
+            status:
+              description: WorkerSliceGwRecyclerStatus defines the observed state of
+                WorkerSliceGwRecycler
+              properties:
+                client:
+                  properties:
+                    recycledClient:
+                      type: string
+                    response:
+                      type: string
+                  type: object
+                recycledServers:
+                  items:
+                    type: string
+                  type: array
+                serversToRecycle:
+                  items:
+                    type: string
+                  type: array
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1598,6 +1710,14 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
