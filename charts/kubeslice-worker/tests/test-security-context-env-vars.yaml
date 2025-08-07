@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "kubeslice-operator.fullname" . }}-test-security-context"
+  labels:
+    {{- include "kubeslice-operator.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  containers:
+    - name: test-security-context
+      image: busybox:1.35
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - |
+          echo "Testing SecurityContext environment variables..."
+          
+          # Test router security context env var exists
+          if [ -z "$AVESHA_VL3_ROUTER_SECURITY_CONTEXT" ]; then
+            echo "FAIL: AVESHA_VL3_ROUTER_SECURITY_CONTEXT not found"
+            exit 1
+          fi
+          echo "PASS: AVESHA_VL3_ROUTER_SECURITY_CONTEXT found"
+          
+          # Test router pod security context env var exists  
+          if [ -z "$AVESHA_VL3_ROUTER_POD_SECURITY_CONTEXT" ]; then
+            echo "FAIL: AVESHA_VL3_ROUTER_POD_SECURITY_CONTEXT not found"
+            exit 1
+          fi
+          echo "PASS: AVESHA_VL3_ROUTER_POD_SECURITY_CONTEXT found"
+          
+          # Test sidecar security context env var exists
+          if [ -z "$AVESHA_VL3_SIDECAR_SECURITY_CONTEXT" ]; then
+            echo "FAIL: AVESHA_VL3_SIDECAR_SECURITY_CONTEXT not found"
+            exit 1
+          fi
+          echo "PASS: AVESHA_VL3_SIDECAR_SECURITY_CONTEXT found"
+          
+          # Test sidecar pod security context env var exists
+          if [ -z "$AVESHA_VL3_SIDECAR_POD_SECURITY_CONTEXT" ]; then
+            echo "FAIL: AVESHA_VL3_SIDECAR_POD_SECURITY_CONTEXT not found"
+            exit 1
+          fi
+          echo "PASS: AVESHA_VL3_SIDECAR_POD_SECURITY_CONTEXT found"
+          
+          # Test router security context contains required fields
+          if ! echo "$AVESHA_VL3_ROUTER_SECURITY_CONTEXT" | grep -q "allowPrivilegeEscalation.*false"; then
+            echo "FAIL: Router SecurityContext missing allowPrivilegeEscalation:false"
+            exit 1
+          fi
+          echo "PASS: Router SecurityContext has allowPrivilegeEscalation:false"
+          
+          if ! echo "$AVESHA_VL3_ROUTER_SECURITY_CONTEXT" | grep -q "NET_ADMIN"; then
+            echo "FAIL: Router SecurityContext missing NET_ADMIN capability"
+            exit 1
+          fi
+          echo "PASS: Router SecurityContext has NET_ADMIN capability"
+          
+          echo "All SecurityContext tests passed!"
+      env:
+        - name: AVESHA_VL3_ROUTER_SECURITY_CONTEXT
+          value: {{ .Values.router.securityContext | toJson | quote }}
+        - name: AVESHA_VL3_ROUTER_POD_SECURITY_CONTEXT
+          value: {{ .Values.router.podSecurityContext | toJson | quote }}
+        - name: AVESHA_VL3_SIDECAR_SECURITY_CONTEXT
+          value: {{ .Values.routerSidecar.securityContext | toJson | quote }}
+        - name: AVESHA_VL3_SIDECAR_POD_SECURITY_CONTEXT
+          value: {{ .Values.routerSidecar.podSecurityContext | toJson | quote }}
+  restartPolicy: Never
