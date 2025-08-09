@@ -17,13 +17,13 @@ jobs:
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     name: Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.32.0 # Point to specific version insted of 'master'
         with:
           scan-type: 'repo'
           ignore-unfixed: true
@@ -33,7 +33,7 @@ jobs:
           github-pat: ${{ secrets.TOKEN }}
 
       - name: upload github artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-results
           path: ./trivy-results

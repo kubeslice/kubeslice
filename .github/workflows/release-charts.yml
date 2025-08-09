@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Fetch history
         run: git fetch --prune --unshallow
@@ -100,15 +100,13 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Set up Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: v3.8.1
+        uses: azure/setup-helm@v4
           
       - name: Run cert-manager chart-releaser
         if: ${{ github.event.inputs.cert-manager == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/
+          charts_dir: charts/cert-manager/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
