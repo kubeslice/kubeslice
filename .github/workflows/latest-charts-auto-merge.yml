@@ -1,4 +1,4 @@
-name: Merge latest-charts againt master
+name: Merge latest-charts against master
 on:
   workflow_run:
     workflows: ["Opensource Charts Validation"]
@@ -12,6 +12,6 @@ jobs:
     steps:
       - id: automerge
         name: automerge
-        uses: "pascalgn/automerge-action@v0.15.5"
+        uses: "pascalgn/automerge-action@v0.16.4"
         env:
           GITHUB_TOKEN: "${{ secrets.TOKEN }}"
