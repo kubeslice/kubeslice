@@ -1,0 +1,16 @@
+# slice.yaml
+# Example Kubeslice slice definition for Bookinfo cross-cluster communication
+apiVersion: kubeslice.io/v1alpha1
+kind: Slice
+metadata:
+  name: bookinfo-slice
+spec:
+  clusters:
+    - controller
+    - worker1
+    - worker2
+  namespaceIsolationProfile:
+    enabled: false
+  serviceExportProfile:
+    allowedNamespaces:
+      - bookinfo

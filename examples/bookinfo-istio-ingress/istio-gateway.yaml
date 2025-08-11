@@ -1,0 +1,38 @@
+# istio-gateway.yaml
+# Istio Gateway and VirtualService to expose Product Page
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+  namespace: bookinfo
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: productpage
+  namespace: bookinfo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - bookinfo-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/productpage"
+    route:
+    - destination:
+        host: productpage.bookinfo.svc.cluster.local
+        port:
+          number: 9080
