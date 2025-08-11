@@ -1,0 +1,9 @@
+# project.yaml
+# Example Kubeslice project definition
+apiVersion: kubeslice.io/v1alpha1
+kind: Project
+metadata:
+  name: bookinfo-project
+spec:
+  slices:
+    - bookinfo-slice
