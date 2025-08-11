@@ -4,6 +4,13 @@ operator:
   logLevel: INFO
   tag: 1.4.0
 
+  # Add security-context for worker-operator pod
+  securityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+    runAsGroup: 65534
+    fsGroup: 65534
+
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
   namespace:

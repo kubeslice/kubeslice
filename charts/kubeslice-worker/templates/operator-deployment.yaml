@@ -119,6 +119,8 @@ spec:
             readOnly: true
       serviceAccountName: kubeslice-controller-manager
       terminationGracePeriodSeconds: 10
+      securityContext:
+        {{- toYaml .Values.operator.securityContext | nindent 8 }}
       volumes:
         - name: kubeslice-worker-event-schema-conf
           configMap:
