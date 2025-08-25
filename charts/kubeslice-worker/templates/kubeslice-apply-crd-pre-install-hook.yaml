@@ -81,14 +81,12 @@ metadata:
     "helm.sh/hook-weight": "1"
 data:
   networking.kubeslice.io_serviceexports.yaml: |2
-
     ---
     apiVersion: apiextensions.k8s.io/v1
     kind: CustomResourceDefinition
     metadata:
       annotations:
-        controller-gen.kubebuilder.io/version: v0.7.0
-      creationTimestamp: null
+        controller-gen.kubebuilder.io/version: v0.17.3
       name: serviceexports.networking.kubeslice.io
     spec:
       group: networking.kubeslice.io
@@ -97,243 +95,251 @@ data:
         listKind: ServiceExportList
         plural: serviceexports
         shortNames:
-        - svcex
+          - svcex
         singular: serviceexport
       scope: Namespaced
       versions:
-      - additionalPrinterColumns:
-        - jsonPath: .spec.slice
-          name: Slice
-          type: string
-        - jsonPath: .spec.ingressEnabled
-          name: Ingress
-          type: boolean
-        - jsonPath: .status.servicePorts
-          name: ServicePort(s)
-          type: string
-        - jsonPath: .status.exposedPorts
-          name: Port(s)
-          type: string
-        - jsonPath: .status.availableEndpoints
-          name: Endpoints
-          type: integer
-        - jsonPath: .status.exportStatus
-          name: Status
-          type: string
-        - jsonPath: .spec.aliases
-          name: Alias
-          type: string
-        name: v1beta1
-        schema:
-          openAPIV3Schema:
-            description: ServiceExport is the Schema for the serviceexports API
-            properties:
-              apiVersion:
-                description: 'APIVersion defines the versioned schema of this representation
-                  of an object. Servers should convert recognized schemas to the latest
-                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-                type: string
-              kind:
-                description: 'Kind is a string value representing the REST resource this
-                  object represents. Servers may infer this from the endpoint the client
-                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                type: string
-              metadata:
-                type: object
-              spec:
-                description: ServiceExportSpec defines the desired state of ServiceExport
-                properties:
-                  aliases:
-                    description: Alias names for the exported service. The service could
-                      be addressed by the alias names in addition to the slice.local name.
-                    items:
-                      type: string
-                    type: array
-                  ingressEnabled:
-                    description: IngressEnabled denotes whether the traffic should be
-                      proxied through an ingress gateway
-                    type: boolean
-                  ports:
-                    description: Ports which should be exposed through the service
-                    items:
-                      description: ServicePort is the port exposed by ServicePod
-                      properties:
-                        containerPort:
-                          description: Port number exposed from the container
-                          format: int32
-                          type: integer
-                        name:
-                          description: Name of the port
-                          type: string
-                        protocol:
-                          default: TCP
-                          description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
-                            to "TCP".
-                          type: string
-                        servicePort:
-                          description: Port number of the exported service
-                          format: int32
-                          type: integer
-                        serviceProtocol:
-                          default: HTTP
-                          description: The protocol being used by the exported service
-                            (for multinet slice)
-                          enum:
-                          - HTTP
-                          - HTTPS
-                          maxLength: 255
-                          minLength: 1
-                          pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
-                          type: string
-                      required:
-                      - containerPort
-                      type: object
-                    type: array
-                  selector:
-                    description: Selector is a label query over pods that should be exposed
-                      as a service
-                    properties:
-                      matchExpressions:
-                        description: matchExpressions is a list of label selector requirements.
-                          The requirements are ANDed.
-                        items:
-                          description: A label selector requirement is a selector that
-                            contains values, a key, and an operator that relates the key
-                            and values.
-                          properties:
-                            key:
-                              description: key is the label key that the selector applies
-                                to.
-                              type: string
-                            operator:
-                              description: operator represents a key's relationship to
-                                a set of values. Valid operators are In, NotIn, Exists
-                                and DoesNotExist.
-                              type: string
-                            values:
-                              description: values is an array of string values. If the
-                                operator is In or NotIn, the values array must be non-empty.
-                                If the operator is Exists or DoesNotExist, the values
-                                array must be empty. This array is replaced during a strategic
-                                merge patch.
-                              items:
-                                type: string
-                              type: array
-                          required:
-                          - key
-                          - operator
-                          type: object
-                        type: array
-                      matchLabels:
-                        additionalProperties:
-                          type: string
-                        description: matchLabels is a map of {key,value} pairs. A single
-                          {key,value} in the matchLabels map is equivalent to an element
-                          of matchExpressions, whose key field is "key", the operator
-                          is "In", and the values array contains only "value". The requirements
-                          are ANDed.
+        - additionalPrinterColumns:
+            - jsonPath: .spec.slice
+              name: Slice
+              type: string
+            - jsonPath: .spec.ingressEnabled
+              name: Ingress
+              type: boolean
+            - jsonPath: .status.servicePorts
+              name: ServicePort(s)
+              type: string
+            - jsonPath: .status.exposedPorts
+              name: Port(s)
+              type: string
+            - jsonPath: .status.availableEndpoints
+              name: Endpoints
+              type: integer
+            - jsonPath: .status.exportStatus
+              name: Status
+              type: string
+            - jsonPath: .spec.aliases
+              name: Alias
+              type: string
+          name: v1beta1
+          schema:
+            openAPIV3Schema:
+              description: ServiceExport is the Schema for the serviceexports API
+              properties:
+                apiVersion:
+                  description: |-
+                    APIVersion defines the versioned schema of this representation of an object.
+                    Servers should convert recognized schemas to the latest internal value, and
+                    may reject unrecognized values.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                  type: string
+                kind:
+                  description: |-
+                    Kind is a string value representing the REST resource this object represents.
+                    Servers may infer this from the endpoint the client submits requests to.
+                    Cannot be updated.
+                    In CamelCase.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                  type: string
+                metadata:
+                  type: object
+                spec:
+                  description: ServiceExportSpec defines the desired state of ServiceExport
+                  properties:
+                    aliases:
+                      description: |-
+                        Alias names for the exported service. The service could be addressed by the alias names
+                        in addition to the slice.local name.
+                      items:
+                        type: string
+                      type: array
+                    ingressEnabled:
+                      description: IngressEnabled denotes whether the traffic should be
+                        proxied through an ingress gateway
+                      type: boolean
+                    ports:
+                      description: Ports which should be exposed through the service
+                      items:
+                        description: ServicePort is the port exposed by ServicePod
+                        properties:
+                          containerPort:
+                            description: Port number exposed from the container
+                            format: int32
+                            type: integer
+                          name:
+                            description: Name of the port
+                            type: string
+                          protocol:
+                            description: |-
+                              Protocol for port. Must be UDP, TCP, or SCTP.
+                              Defaults to "TCP".
+                            type: string
+                          servicePort:
+                            description: Port number of the exported service
+                            format: int32
+                            type: integer
+                          serviceProtocol:
+                            default: HTTP
+                            description: The protocol being used by the exported service
+                              (for multinet slice)
+                            enum:
+                              - HTTP
+                              - HTTPS
+                            maxLength: 255
+                            minLength: 1
+                            pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
+                            type: string
+                        required:
+                          - containerPort
                         type: object
-                    type: object
-                  slice:
-                    description: Slice denotes the slice which the app is part of
-                    type: string
-                required:
-                - ports
-                - selector
-                - slice
-                type: object
-              status:
-                description: ServiceExportStatus defines the observed state of ServiceExport
-                properties:
-                  aliases:
-                    description: Alias names for the exported service. The service could
-                      be addressed by the alias names in addition to the slice.local name.
-                    items:
-                      type: string
-                    type: array
-                  availableEndpoints:
-                    description: AvailableEndpoints shows the number of available endpoints
-                    type: integer
-                  dnsName:
-                    description: DNSName is the FQDN to reach the service
-                    type: string
-                  exportStatus:
-                    description: ExportStatus denotes the export status of the service
-                    type: string
-                  exposedPorts:
-                    description: ExposedPorts shows a one line representation of ports
-                      and protocols exposed only used to show as a printercolumn
-                    type: string
-                  ingressGwEnabled:
-                    description: IngressGwEnabled denotes ingress gw is enabled for the
-                      serviceexport
-                    type: boolean
-                  ingressGwPod:
-                    description: IngressGwPod contains ingress gateway pod info
-                    properties:
-                      name:
-                        description: Name of the pod
-                        type: string
-                      nsmIp:
-                        description: NsmIP of the pod which is reachable within slice
-                        type: string
-                    required:
-                    - name
-                    type: object
-                  lastSync:
-                    description: Last sync time with backend
-                    format: int64
-                    type: integer
-                  pods:
-                    description: Pods denotes the service endpoint pods
-                    items:
-                      description: ServicePod contains pod information which offers a
-                        service
+                      type: array
+                    selector:
+                      description: Selector is a label query over pods that should be exposed
+                        as a service
                       properties:
-                        dnsName:
-                          description: DNSName is the dns A record name for the pod
-                          type: string
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector requirements.
+                            The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector applies
+                                  to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                              - key
+                              - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    slice:
+                      description: Slice denotes the slice which the app is part of
+                      type: string
+                  required:
+                    - ports
+                    - selector
+                    - slice
+                  type: object
+                status:
+                  description: ServiceExportStatus defines the observed state of ServiceExport
+                  properties:
+                    aliases:
+                      description: |-
+                        Alias names for the exported service. The service could be addressed by the alias names
+                        in addition to the slice.local name.
+                      items:
+                        type: string
+                      type: array
+                    availableEndpoints:
+                      description: AvailableEndpoints shows the number of available endpoints
+                      type: integer
+                    dnsName:
+                      description: DNSName is the FQDN to reach the service
+                      type: string
+                    exportStatus:
+                      description: ExportStatus denotes the export status of the service
+                      type: string
+                    exposedPorts:
+                      description: |-
+                        ExposedPorts shows a one line representation of ports and protocols exposed
+                        only used to show as a printercolumn
+                      type: string
+                    ingressGwEnabled:
+                      description: IngressGwEnabled denotes ingress gw is enabled for the
+                        serviceexport
+                      type: boolean
+                    ingressGwPod:
+                      description: IngressGwPod contains ingress gateway pod info
+                      properties:
                         name:
                           description: Name of the pod
                           type: string
                         nsmIp:
                           description: NsmIP of the pod which is reachable within slice
                           type: string
-                        podIp:
-                          description: PodIp of the pod which is reachable within cluster
-                          type: string
                       required:
-                      - dnsName
-                      - name
-                      - podIp
+                        - name
                       type: object
-                    type: array
-                  servicePorts:
-                    description: ServicePorts shows a one line representation of service
-                      ports and protocols
-                    type: string
-                type: object
-            type: object
-        served: true
-        storage: true
-        subresources:
-          status: {}
+                    lastSync:
+                      description: Last sync time with backend
+                      format: int64
+                      type: integer
+                    pods:
+                      description: Pods denotes the service endpoint pods
+                      items:
+                        description: ServicePod contains pod information which offers a
+                          service
+                        properties:
+                          dnsName:
+                            description: DNSName is the dns A record name for the pod
+                            type: string
+                          name:
+                            description: Name of the pod
+                            type: string
+                          nsmIp:
+                            description: NsmIP of the pod which is reachable within slice
+                            type: string
+                          podIp:
+                            description: PodIp of the pod which is reachable within cluster
+                            type: string
+                        required:
+                          - dnsName
+                          - name
+                          - podIp
+                        type: object
+                      type: array
+                    servicePorts:
+                      description: ServicePorts shows a one line representation of service
+                        ports and protocols
+                      type: string
+                  type: object
+              type: object
+          served: true
+          storage: true
+          subresources:
+            status: {}
     status:
       acceptedNames:
         kind: ""
         plural: ""
       conditions: []
       storedVersions: []
-      
-  networking.kubeslice.io_serviceimports.yaml: |2
 
+  networking.kubeslice.io_serviceimports.yaml: |2
     ---
     apiVersion: apiextensions.k8s.io/v1
     kind: CustomResourceDefinition
     metadata:
       annotations:
-        controller-gen.kubebuilder.io/version: v0.7.0
-      creationTimestamp: null
+        controller-gen.kubebuilder.io/version: v0.17.3
       name: serviceimports.networking.kubeslice.io
     spec:
       group: networking.kubeslice.io
@@ -342,155 +348,162 @@ data:
         listKind: ServiceImportList
         plural: serviceimports
         shortNames:
-        - svcim
+          - svcim
         singular: serviceimport
       scope: Namespaced
       versions:
-      - additionalPrinterColumns:
-        - jsonPath: .spec.slice
-          name: Slice
-          type: string
-        - jsonPath: .status.exposedPorts
-          name: Port(s)
-          type: string
-        - jsonPath: .status.availableEndpoints
-          name: Endpoints
-          type: integer
-        - jsonPath: .status.importStatus
-          name: Status
-          type: string
-        - jsonPath: .spec.aliases
-          name: Alias
-          type: string
-        name: v1beta1
-        schema:
-          openAPIV3Schema:
-            description: ServiceImport is the Schema for the serviceimports API
-            properties:
-              apiVersion:
-                description: 'APIVersion defines the versioned schema of this representation
-                  of an object. Servers should convert recognized schemas to the latest
-                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-                type: string
-              kind:
-                description: 'Kind is a string value representing the REST resource this
-                  object represents. Servers may infer this from the endpoint the client
-                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                type: string
-              metadata:
-                type: object
-              spec:
-                description: ServiceImportSpec defines the desired state of ServiceImport
-                properties:
-                  aliases:
-                    description: Alias names for the exported service. The service could
-                      be addressed by the alias names in addition to the slice.local name.
-                    items:
+        - additionalPrinterColumns:
+            - jsonPath: .spec.slice
+              name: Slice
+              type: string
+            - jsonPath: .status.exposedPorts
+              name: Port(s)
+              type: string
+            - jsonPath: .status.availableEndpoints
+              name: Endpoints
+              type: integer
+            - jsonPath: .status.importStatus
+              name: Status
+              type: string
+            - jsonPath: .spec.aliases
+              name: Alias
+              type: string
+          name: v1beta1
+          schema:
+            openAPIV3Schema:
+              description: ServiceImport is the Schema for the serviceimports API
+              properties:
+                apiVersion:
+                  description: |-
+                    APIVersion defines the versioned schema of this representation of an object.
+                    Servers should convert recognized schemas to the latest internal value, and
+                    may reject unrecognized values.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                  type: string
+                kind:
+                  description: |-
+                    Kind is a string value representing the REST resource this object represents.
+                    Servers may infer this from the endpoint the client submits requests to.
+                    Cannot be updated.
+                    In CamelCase.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                  type: string
+                metadata:
+                  type: object
+                spec:
+                  description: ServiceImportSpec defines the desired state of ServiceImport
+                  properties:
+                    aliases:
+                      description: |-
+                        Alias names for the exported service. The service could be addressed by the alias names
+                        in addition to the slice.local name.
+                      items:
+                        type: string
+                      type: array
+                    dnsName:
+                      description: DNSName shows the FQDN to reach the service
                       type: string
-                    type: array
-                  dnsName:
-                    description: DNSName shows the FQDN to reach the service
-                    type: string
-                  ports:
-                    description: Ports which should be exposed through the service
-                    items:
-                      description: ServicePort is the port exposed by ServicePod
-                      properties:
-                        containerPort:
-                          description: Port number exposed from the container
-                          format: int32
-                          type: integer
-                        name:
-                          description: Name of the port
-                          type: string
-                        protocol:
-                          default: TCP
-                          description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
-                            to "TCP".
-                          type: string
-                        servicePort:
-                          description: Port number of the exported service
-                          format: int32
-                          type: integer
-                        serviceProtocol:
-                          default: HTTP
-                          description: The protocol being used by the exported service
-                            (for multinet slice)
-                          enum:
-                          - HTTP
-                          - HTTPS
-                          maxLength: 255
-                          minLength: 1
-                          pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
-                          type: string
-                      required:
-                      - containerPort
-                      type: object
-                    type: array
-                  slice:
-                    description: Slice denotes the slice which the app is part of
-                    type: string
-                required:
-                - dnsName
-                - ports
-                - slice
-                type: object
-              status:
-                description: ServiceImportStatus defines the observed state of ServiceImport
-                properties:
-                  availableEndpoints:
-                    description: AvailableEndpoints shows the number of available endpoints
-                    type: integer
-                  endpoints:
-                    description: Endpoints which provide the service
-                    items:
-                      description: ServiceEndpoint contains details of a single endpoint
-                        which offers a particular service
-                      properties:
-                        clusterId:
-                          description: ClusterID which the endpoint belongs to
-                          type: string
-                        dnsName:
-                          description: DNSName
-                          type: string
-                        ip:
-                          description: IP of the pod which is reachable within slice
-                          type: string
-                        name:
-                          description: Name of the endpoint
-                          type: string
-                        port:
-                          description: Port to reach the endpoint
-                          format: int32
-                          type: integer
-                      required:
-                      - clusterId
-                      - dnsName
-                      - ip
-                      - port
-                      type: object
-                    type: array
-                  exposedPorts:
-                    description: ExposedPorts shows a one line representation of ports
-                      and protocols exposed only used to show as a printercolumn
-                    type: string
-                  importStatus:
-                    description: ImportStatus denotes the status of the imported service
-                    type: string
-                  lastSync:
-                    description: Last sync time with backend
-                    format: int64
-                    type: integer
-                  updatedOn:
-                    description: Used to match if the service is updated from backend
-                    format: int64
-                    type: integer
-                type: object
-            type: object
-        served: true
-        storage: true
-        subresources:
-          status: {}
+                    ports:
+                      description: Ports which should be exposed through the service
+                      items:
+                        description: ServicePort is the port exposed by ServicePod
+                        properties:
+                          containerPort:
+                            description: Port number exposed from the container
+                            format: int32
+                            type: integer
+                          name:
+                            description: Name of the port
+                            type: string
+                          protocol:
+                            description: |-
+                              Protocol for port. Must be UDP, TCP, or SCTP.
+                              Defaults to "TCP".
+                            type: string
+                          servicePort:
+                            description: Port number of the exported service
+                            format: int32
+                            type: integer
+                          serviceProtocol:
+                            default: HTTP
+                            description: The protocol being used by the exported service
+                              (for multinet slice)
+                            enum:
+                              - HTTP
+                              - HTTPS
+                            maxLength: 255
+                            minLength: 1
+                            pattern: ^[a-zA-Z0-9]([-a-zSA-Z0-9]*[a-zA-Z0-9])?$|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9]+$
+                            type: string
+                        required:
+                          - containerPort
+                        type: object
+                      type: array
+                    slice:
+                      description: Slice denotes the slice which the app is part of
+                      type: string
+                  required:
+                    - dnsName
+                    - ports
+                    - slice
+                  type: object
+                status:
+                  description: ServiceImportStatus defines the observed state of ServiceImport
+                  properties:
+                    availableEndpoints:
+                      description: AvailableEndpoints shows the number of available endpoints
+                      type: integer
+                    endpoints:
+                      description: Endpoints which provide the service
+                      items:
+                        description: ServiceEndpoint contains details of a single endpoint
+                          which offers a particular service
+                        properties:
+                          clusterId:
+                            description: ClusterID which the endpoint belongs to
+                            type: string
+                          dnsName:
+                            description: DNSName
+                            type: string
+                          ip:
+                            description: IP of the pod which is reachable within slice
+                            type: string
+                          name:
+                            description: Name of the endpoint
+                            type: string
+                          port:
+                            description: Port to reach the endpoint
+                            format: int32
+                            type: integer
+                        required:
+                          - clusterId
+                          - dnsName
+                          - ip
+                          - port
+                        type: object
+                      type: array
+                    exposedPorts:
+                      description: |-
+                        ExposedPorts shows a one line representation of ports and protocols exposed
+                        only used to show as a printercolumn
+                      type: string
+                    importStatus:
+                      description: ImportStatus denotes the status of the imported service
+                      type: string
+                    lastSync:
+                      description: Last sync time with backend
+                      format: int64
+                      type: integer
+                    updatedOn:
+                      description: Used to match if the service is updated from backend
+                      format: int64
+                      type: integer
+                  type: object
+              type: object
+          served: true
+          storage: true
+          subresources:
+            status: {}
     status:
       acceptedNames:
         kind: ""
@@ -499,14 +512,12 @@ data:
       storedVersions: []
       
   networking.kubeslice.io_slicegateways.yaml: |2
-
     ---
     apiVersion: apiextensions.k8s.io/v1
     kind: CustomResourceDefinition
     metadata:
       annotations:
-        controller-gen.kubebuilder.io/version: v0.7.0
-      creationTimestamp: null
+        controller-gen.kubebuilder.io/version: v0.17.3
       name: slicegateways.networking.kubeslice.io
     spec:
       group: networking.kubeslice.io
@@ -515,215 +526,240 @@ data:
         listKind: SliceGatewayList
         plural: slicegateways
         shortNames:
-        - gw
-        - slicegw
+          - gw
+          - slicegw
         singular: slicegateway
       scope: Namespaced
       versions:
-      - additionalPrinterColumns:
-        - jsonPath: .status.config.sliceGatewaySubnet
-          name: Subnet
-          type: string
-        - jsonPath: .status.config.sliceGatewayRemoteSubnet
-          name: Remote Subnet
-          type: string
-        - jsonPath: .status.config.sliceGatewayRemoteClusterId
-          name: Remote Cluster
-          type: string
-        - jsonPath: .status.config.sliceGatewayStatus
-          name: GW Status
-          type: string
-        name: v1beta1
-        schema:
-          openAPIV3Schema:
-            description: SliceGateway is the Schema for the slicegateways API
-            properties:
-              apiVersion:
-                description: 'APIVersion defines the versioned schema of this representation
-                  of an object. Servers should convert recognized schemas to the latest
-                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-                type: string
-              kind:
-                description: 'Kind is a string value representing the REST resource this
-                  object represents. Servers may infer this from the endpoint the client
-                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                type: string
-              metadata:
-                type: object
-              spec:
-                description: SliceGatewaySpec defines the desired state of SliceGateway
-                properties:
-                  siteName:
-                    description: SiteName is site name
-                    type: string
-                  sliceName:
-                    description: SliceName is the Name of the slice this gateway is attached
-                      into
-                    type: string
-                type: object
-              status:
-                description: SliceGatewayStatus defines the observed state of SliceGateway
-                properties:
-                  config:
-                    description: SliceGatewayConfig defines the config received from backend
-                    properties:
-                      sliceGatewayConnectivityType:
-                        description: SliceGateway Connectivity Type
-                        type: string
-                      sliceGatewayHostType:
-                        description: 'Host Type : server or client'
-                        type: string
-                      sliceGatewayId:
-                        description: UUID of the slice gateway.
-                        type: string
-                      sliceGatewayIntermediateDeployments:
-                        description: Intermediate Slice Gw Deployments
-                        items:
-                          type: string
-                        type: array
-                      sliceGatewayLocalVpnIp:
-                        description: Local VPN IP
-                        type: string
-                      sliceGatewayName:
-                        description: Slice Gateway Name
-                        type: string
-                      sliceGatewayNodePorts:
-                        description: Node port
-                        items:
-                          type: integer
-                        type: array
-                      sliceGatewayProtocol:
-                        description: 'SliceGateway Protocol Type: UDP or TCP'
-                        type: string
-                      sliceGatewayRemoteClusterId:
-                        description: Remote Cluster ID
-                        type: string
-                      sliceGatewayRemoteGatewayId:
-                        description: Remote Gateway ID
-                        type: string
-                      sliceGatewayRemoteNodeIps:
-                        description: Remote Node IPs
-                        items:
-                          type: string
-                        type: array
-                      sliceGatewayRemoteNodePorts:
-                        description: Remote Node Port
-                        items:
-                          type: integer
-                        type: array
-                      sliceGatewayRemoteSubnet:
-                        description: Remote Node Subnet
-                        type: string
-                      sliceGatewayRemoteVpnIp:
-                        description: Remote VPN IP
-                        type: string
-                      sliceGatewayServerLBIps:
-                        description: Slice gateway server LB IPs
-                        items:
-                          type: string
-                        type: array
-                      sliceGatewayStatus:
-                        description: SliceGateway status
-                        type: string
-                      sliceGatewaySubnet:
-                        description: Slice gateway subnet range.
-                        type: string
-                      sliceName:
-                        description: Name of the slice.
-                        type: string
-                      sliceSiteName:
-                        description: Slice gateway subnet range.
-                        type: string
-                    type: object
-                  configUpdatedOn:
-                    description: ConfigUpdatedOn is the time when Config updated from
-                      backend
-                    format: int64
-                    type: integer
-                  connectionContextUpdatedOn:
-                    description: ConnectionContextUpdated is the time when context updated
-                      in pod
-                    format: int64
-                    type: integer
-                  gatewayPodStatus:
-                    description: gatewayPodStatus is a list that consists of status of
-                      individual gatewaypods
-                    items:
+        - additionalPrinterColumns:
+            - jsonPath: .status.config.sliceGatewaySubnet
+              name: Subnet
+              type: string
+            - jsonPath: .status.config.sliceGatewayRemoteSubnet
+              name: Remote Subnet
+              type: string
+            - jsonPath: .status.config.sliceGatewayRemoteClusterId
+              name: Remote Cluster
+              type: string
+            - jsonPath: .status.config.sliceGatewayStatus
+              name: GW Status
+              type: string
+          name: v1beta1
+          schema:
+            openAPIV3Schema:
+              description: SliceGateway is the Schema for the slicegateways API
+              properties:
+                apiVersion:
+                  description: |-
+                    APIVersion defines the versioned schema of this representation of an object.
+                    Servers should convert recognized schemas to the latest internal value, and
+                    may reject unrecognized values.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                  type: string
+                kind:
+                  description: |-
+                    Kind is a string value representing the REST resource this object represents.
+                    Servers may infer this from the endpoint the client submits requests to.
+                    Cannot be updated.
+                    In CamelCase.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                  type: string
+                metadata:
+                  type: object
+                spec:
+                  description: SliceGatewaySpec defines the desired state of SliceGateway
+                  properties:
+                    siteName:
+                      description: SiteName is site name
+                      type: string
+                    sliceName:
+                      description: SliceName is the Name of the slice this gateway is attached
+                        into
+                      type: string
+                  type: object
+                status:
+                  description: SliceGatewayStatus defines the observed state of SliceGateway
+                  properties:
+                    config:
+                      description: SliceGatewayConfig defines the config received from backend
                       properties:
-                        localNsmIP:
+                        sliceGatewayConnectivityType:
+                          description: SliceGateway Connectivity Type
                           type: string
-                        originalPodCreationTS:
-                          description: originalPodCreationTS indicates how old the gw
-                            pod is even if is restarted
-                          format: date-time
+                        sliceGatewayHostType:
+                          description: 'Host Type : server or client'
                           type: string
-                        peerPodName:
+                        sliceGatewayId:
+                          description: UUID of the slice gateway.
                           type: string
-                        podCreationTS:
-                          description: podCreationTS indicates the creation TS of a pod
-                          format: date-time
+                        sliceGatewayIntermediateDeployments:
+                          description: Intermediate Slice Gw Deployments
+                          items:
+                            type: string
+                          type: array
+                        sliceGatewayLocalVpnIp:
+                          description: Local VPN IP
                           type: string
-                        podIP:
+                        sliceGatewayName:
+                          description: Slice Gateway Name
                           type: string
-                        podName:
+                        sliceGatewayNodePorts:
+                          description: Node port
+                          items:
+                            type: integer
+                          type: array
+                        sliceGatewayProtocol:
+                          description: 'SliceGateway Protocol Type: UDP or TCP'
                           type: string
-                        routeRemoved:
-                          format: int32
-                          type: integer
-                        tunnelStatus:
-                          properties:
-                            IntfName:
-                              type: string
-                            Latency:
-                              format: int64
-                              type: integer
-                            LocalIP:
-                              type: string
-                            PacketLoss:
-                              format: int64
-                              type: integer
-                            RemoteIP:
-                              type: string
-                            RxRate:
-                              format: int64
-                              type: integer
-                            Status:
-                              format: int32
-                              type: integer
-                            TxRate:
-                              format: int64
-                              type: integer
-                          type: object
+                        sliceGatewayRemoteClusterId:
+                          description: Remote Cluster ID
+                          type: string
+                        sliceGatewayRemoteGatewayId:
+                          description: Remote Gateway ID
+                          type: string
+                        sliceGatewayRemoteNodeIps:
+                          description: Remote Node IPs
+                          items:
+                            type: string
+                          type: array
+                        sliceGatewayRemoteNodePorts:
+                          description: Remote Node Port
+                          items:
+                            type: integer
+                          type: array
+                        sliceGatewayRemoteSubnet:
+                          description: Remote Node Subnet
+                          type: string
+                        sliceGatewayRemoteVpnIp:
+                          description: Remote VPN IP
+                          type: string
+                        sliceGatewayServerLBIps:
+                          description: Slice gateway server LB IPs
+                          items:
+                            type: string
+                          type: array
+                        sliceGatewayStatus:
+                          description: SliceGateway status
+                          type: string
+                        sliceGatewaySubnet:
+                          description: Slice gateway subnet range.
+                          type: string
+                        sliceGatewayType:
+                          description: Slice gateway vpn type
+                          enum:
+                            - OpenVPN
+                            - Wireguard
+                          type: string
+                        sliceName:
+                          description: Name of the slice.
+                          type: string
+                        sliceSiteName:
+                          description: Slice gateway subnet range.
+                          type: string
                       type: object
-                    type: array
-                  peerIp:
-                    description: PeerIP is the gateway tunnel peer ip
-                    type: string
-                  podIps:
-                    description: PodIPs is the list of Ip of the gateway pods running
-                      in cluster
-                    items:
+                    configUpdatedOn:
+                      description: ConfigUpdatedOn is the time when Config updated from
+                        backend
+                      format: int64
+                      type: integer
+                    connectionContextUpdatedOn:
+                      description: ConnectionContextUpdated is the time when context updated
+                        in pod
+                      format: int64
+                      type: integer
+                    gatewayPodStatus:
+                      description: gatewayPodStatus is a list that consists of status of
+                        individual gatewaypods
+                      items:
+                        properties:
+                          localNsmIP:
+                            type: string
+                          originalPodCreationTS:
+                            description: originalPodCreationTS indicates how old the gw
+                              pod is even if is restarted
+                            format: date-time
+                            type: string
+                          peerPodName:
+                            type: string
+                          podCreationTS:
+                            description: podCreationTS indicates the creation TS of a pod
+                            format: date-time
+                            type: string
+                          podIP:
+                            type: string
+                          podName:
+                            type: string
+                          remotePort:
+                            description: |-
+                              RemotePort is the port number this gw pod is connected to on the remote cluster.
+                              Applicable only for gw clients. Would be set to 0 for gw servers.
+                            format: int32
+                            type: integer
+                          routeRemoved:
+                            format: int32
+                            type: integer
+                          tunnelStatus:
+                            description: TunnelStatus is the status of the tunnel between
+                              this gw pod and its peer
+                            properties:
+                              IntfName:
+                                type: string
+                              Latency:
+                                format: int64
+                                type: integer
+                              LocalIP:
+                                type: string
+                              PacketLoss:
+                                format: int64
+                                type: integer
+                              RemoteIP:
+                                type: string
+                              RxRate:
+                                format: int64
+                                type: integer
+                              Status:
+                                description: 'Status is the status of the tunnel. 0: DOWN,
+                                1: UP'
+                                format: int32
+                                type: integer
+                              TunnelState:
+                                description: 'TunnelState is the state of the tunnel in
+                                string format: UP, DOWN, UNKNOWN'
+                                type: string
+                              TxRate:
+                                format: int64
+                                type: integer
+                            type: object
+                        type: object
+                      type: array
+                    peerIp:
+                      description: PeerIP is the gateway tunnel peer ip
                       type: string
-                    type: array
-                  podName:
-                    description: Deprecated PodName is the name of the gateway pod running
-                      in cluster
-                    type: string
-                  podNames:
-                    description: PodNames is the list of names of the gateway pods running
-                      in cluster
-                    items:
+                    podIps:
+                      description: PodIPs is the list of Ip of the gateway pods running
+                        in cluster
+                      items:
+                        type: string
+                      type: array
+                    podName:
+                      description: Deprecated PodName is the name of the gateway pod running
+                        in cluster
                       type: string
-                    type: array
-                  podStatus:
-                    description: PodStatus shows whether gateway pod is healthy
-                    type: string
-                type: object
-            type: object
-        served: true
-        storage: true
-        subresources:
-          status: {}
+                    podNames:
+                      description: PodNames is the list of names of the gateway pods running
+                        in cluster
+                      items:
+                        type: string
+                      type: array
+                    podStatus:
+                      description: PodStatus shows whether gateway pod is healthy
+                      type: string
+                  type: object
+              type: object
+          served: true
+          storage: true
+          subresources:
+            status: {}
     status:
       acceptedNames:
         kind: ""
@@ -733,14 +769,12 @@ data:
 
 
   networking.kubeslice.io_slices.yaml: |2-
-
     ---
     apiVersion: apiextensions.k8s.io/v1
     kind: CustomResourceDefinition
     metadata:
       annotations:
-        controller-gen.kubebuilder.io/version: v0.7.0
-      creationTimestamp: null
+        controller-gen.kubebuilder.io/version: v0.17.3
       name: slices.networking.kubeslice.io
     spec:
       group: networking.kubeslice.io
@@ -751,204 +785,219 @@ data:
         singular: slice
       scope: Namespaced
       versions:
-      - name: v1beta1
-        schema:
-          openAPIV3Schema:
-            description: Slice is the Schema for the slices API
-            properties:
-              apiVersion:
-                description: 'APIVersion defines the versioned schema of this representation
-                  of an object. Servers should convert recognized schemas to the latest
-                  internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-                type: string
-              kind:
-                description: 'Kind is a string value representing the REST resource this
-                  object represents. Servers may infer this from the endpoint the client
-                  submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                type: string
-              metadata:
-                type: object
-              spec:
-                description: SliceSpec defines the desired state of Slice
-                type: object
-              status:
-                description: SliceStatus defines the observed state of Slice
-                properties:
-                  allowedNamespaces:
-                    description: Slice Allowed Namespace list
-                    items:
+        - name: v1beta1
+          schema:
+            openAPIV3Schema:
+              description: Slice is the Schema for the slices API
+              properties:
+                apiVersion:
+                  description: |-
+                    APIVersion defines the versioned schema of this representation of an object.
+                    Servers should convert recognized schemas to the latest internal value, and
+                    may reject unrecognized values.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                  type: string
+                kind:
+                  description: |-
+                    Kind is a string value representing the REST resource this object represents.
+                    Servers may infer this from the endpoint the client submits requests to.
+                    Cannot be updated.
+                    In CamelCase.
+                    More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                  type: string
+                metadata:
+                  type: object
+                spec:
+                  description: SliceSpec defines the desired state of Slice
+                  type: object
+                status:
+                  description: SliceStatus defines the observed state of Slice
+                  properties:
+                    allowedNamespaces:
+                      description: Slice Allowed Namespace list
+                      items:
+                        type: string
+                      type: array
+                    appPods:
+                      description: AppPods contains the list of app pods connected to the slice
+                      items:
+                        description: AppPod defines the app pods connected to slice
+                        properties:
+                          nsmInterface:
+                            description: NsmInterface is the nsm interface of App
+                            type: string
+                          nsmIp:
+                            description: NsmIP is the nsm ip of App
+                            type: string
+                          nsmPeerIp:
+                            description: PeerIp is the nsm peer ip of gateway
+                            type: string
+                          podIp:
+                            description: PodIP is App Pod IP
+                            type: string
+                          podName:
+                            description: PodName is App Pod Name
+                            type: string
+                          podNamespace:
+                            description: PodNamespace is App Pod Namespace
+                            type: string
+                        type: object
+                      type: array
+                    appPodsUpdatedOn:
+                      description: AppPodsUpdatedOn is the time when app pods list was updated
+                      format: int64
+                      type: integer
+                    applicationNamespaces:
+                      description: Slice Application Namespace list
+                      items:
+                        type: string
+                      type: array
+                    dnsIP:
+                      description: DNSIP is the IP of Coredns server
                       type: string
-                    type: array
-                  appPods:
-                    description: AppPods contains the list of app pods connected to the
-                      slice
-                    items:
-                      description: AppPod defines the app pods connected to slice
+                    networkPoliciesInstalled:
+                      default: false
+                      description: NetworkPoliciesInstalled defines whether the netpol are installed in at least one applicationNamespace
+                      type: boolean
+                    sliceConfig:
+                      description: SliceConfig is the spec for slice received from hub cluster
                       properties:
-                        nsmInterface:
-                          description: NsmInterface is the nsm interface of App
+                        clusterSubnetCIDR:
+                          description: ClusterSubnetCIDR is the subnet to be used by the current cluster
                           type: string
-                        nsmIp:
-                          description: NsmIP is the nsm ip of App
+                        externalGatewayConfig:
+                          description: ExternalGatewayConfig determines istio ingress/egress configuration
+                          properties:
+                            egress:
+                              properties:
+                                enabled:
+                                  type: boolean
+                              type: object
+                            gatewayType:
+                              enum:
+                                - none
+                                - istio
+                                - envoy
+                              type: string
+                            ingress:
+                              properties:
+                                enabled:
+                                  type: boolean
+                              type: object
+                            nsIngress:
+                              properties:
+                                enabled:
+                                  type: boolean
+                              type: object
+                            vpcServiceAccess:
+                              properties:
+                                egress:
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                  type: object
+                                ingress:
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                  type: object
+                              type: object
+                          type: object
+                        namespaceIsolationProfile:
+                          description: Namespace Isolation profile contains fields related to namespace binding to slice
+                          properties:
+                            allowedNamespaces:
+                              description: Allowed namespaces is a list of namespaces that can send and receive traffic to app namespaces
+                              items:
+                                type: string
+                              type: array
+                            applicationNamespaces:
+                              description: Application namespaces is a list of namespaces that are bound to the slice
+                              items:
+                                type: string
+                              type: array
+                            isolationEnabled:
+                              default: false
+                              description: Enable Namespace Isolation in the slice
+                              type: boolean
+                          type: object
+                        qosProfileDetails:
+                          description: QOS profile details
+                          properties:
+                            bandwidthCeilingKbps:
+                              description: Bandwidth Ceiling eg:5000
+                              type: integer
+                            bandwidthGuaranteedKbps:
+                              description: Bandwidth Guaranteed eg:4000
+                              type: integer
+                            dscpClass:
+                              description: DSCP code for inter cluster traffic
+                              type: string
+                            priority:
+                              description: Priority 0-3
+                              type: integer
+                            queueType:
+                              description: Queue Type
+                              type: string
+                            tcType:
+                              description: TC type
+                              type: string
+                          type: object
+                        sliceDisplayName:
+                          description: display name of the slice.
                           type: string
-                        nsmPeerIp:
-                          description: PeerIp is the nsm peer ip of gateway
+                        sliceGatewayProtocol:
+                          description: 'SliceGateway Protocol Type: UDP or TCP'
                           type: string
-                        podIp:
-                          description: PodIP is App Pod IP
+                        sliceGatewayServiceType:
+                          description: SliceGateway Service Type
                           type: string
-                        podName:
-                          description: PodName is App Pod Name
+                        sliceId:
+                          description: UUID of the slice.
                           type: string
-                        podNamespace:
-                          description: PodNamespace is App Pod Namespace
+                        sliceIpam:
+                          description: IPAM configuration for the slice
+                          properties:
+                            ipamClusterOctet:
+                              description: Cluster specific octet for IPAM root subnet
+                              type: integer
+                            sliceIpamType:
+                              description: IPAM Type for slice
+                              type: string
+                          required:
+                            - sliceIpamType
+                          type: object
+                        sliceOverlayNetworkDeploymentMode:
+                          description: 'Slice overlay network deployment mode: single-network, multi-network or no-network'
+                          enum:
+                            - single-network
+                            - multi-network
+                            - no-network
                           type: string
+                        sliceSubnet:
+                          description: IP subnet range of the slice.
+                          type: string
+                        sliceType:
+                          description: Type of the slice.
+                          type: string
+                      required:
+                        - sliceDisplayName
+                        - sliceId
+                        - sliceType
                       type: object
-                    type: array
-                  appPodsUpdatedOn:
-                    description: AppPodsUpdatedOn is the time when app pods list was updated
-                    format: int64
-                    type: integer
-                  applicationNamespaces:
-                    description: Slice Application Namespace list
-                    items:
-                      type: string
-                    type: array
-                  dnsIP:
-                    description: DNSIP is the IP of Coredns server
-                    type: string
-                  networkPoliciesInstalled:
-                    default: false
-                    description: NetworkPoliciesInstalled defines whether the netpol are
-                      installed in atleast one applicationNamespace
-                    type: boolean
-                  sliceConfig:
-                    description: SliceConfig is the spec for slice received from hub cluster
-                    properties:
-                      clusterSubnetCIDR:
-                        description: ClusterSubnetCIDR is the subnet to be used by the
-                          current cluster
-                        type: string
-                      externalGatewayConfig:
-                        description: ExternalGatewayConfig determines istio ingress/egress
-                          configuration
-                        properties:
-                          egress:
-                            properties:
-                              enabled:
-                                type: boolean
-                            type: object
-                          gatewayType:
-                            type: string
-                          ingress:
-                            properties:
-                              enabled:
-                                type: boolean
-                            type: object
-                          nsIngress:
-                            properties:
-                              enabled:
-                                type: boolean
-                            type: object
-                        type: object
-                      namespaceIsolationProfile:
-                        description: Namespace Isolation profile contains fields related
-                          to namespace binding to slice
-                        properties:
-                          allowedNamespaces:
-                            description: Allowed namespaces is a list of namespaces that
-                              can send and receive traffic to app namespaces
-                            items:
-                              type: string
-                            type: array
-                          applicationNamespaces:
-                            description: Application namespaces is a list of namespaces
-                              that are bound to the slice
-                            items:
-                              type: string
-                            type: array
-                          isolationEnabled:
-                            default: false
-                            description: Enable Namespace Isolation in the slice
-                            type: boolean
-                        type: object
-                      qosProfileDetails:
-                        description: QOS profile details
-                        properties:
-                          bandwidthCeilingKbps:
-                            description: Bandwidth Ceiling eg:5000
-                            type: integer
-                          bandwidthGuaranteedKbps:
-                            description: Bandwidth Guaranteed eg:4000
-                            type: integer
-                          dscpClass:
-                            description: DSCP code for inter cluster traffic
-                            type: string
-                          priority:
-                            description: Priority 0-3
-                            type: integer
-                          queueType:
-                            description: Queue Type
-                            type: string
-                          tcType:
-                            description: TC type
-                            type: string
-                        type: object
-                      sliceDisplayName:
-                        description: display name of the slice.
-                        type: string
-                      sliceGatewayProtocol:
-                        description: 'SliceGateway Protocol Type: UDP or TCP'
-                        type: string
-                      sliceGatewayServiceType:
-                        description: SliceGateway Service Type
-                        type: string
-                      sliceId:
-                        description: UUID of the slice.
-                        type: string
-                      sliceIpam:
-                        description: IPAM configuration for the slice
-                        properties:
-                          ipamClusterOctet:
-                            description: Cluster specific octet for IPAM root subnet
-                            type: integer
-                          sliceIpamType:
-                            description: IPAM Type for slice
-                            type: string
-                        required:
-                        - sliceIpamType
-                        type: object
-                      sliceOverlayNetworkDeploymentMode:
-                        description: 'Slice overlay network deployment mode: single-network,
-                          multi-network or no-network'
-                        enum:
-                        - single-network
-                        - multi-network
-                        - no-network
-                        type: string
-                      sliceSubnet:
-                        description: IP subnet range of the slice.
-                        type: string
-                      sliceType:
-                        description: Type of the slice.
-                        type: string
-                    required:
-                    - sliceDisplayName
-                    - sliceId
-                    - sliceType
-                    type: object
-                type: object
-            type: object
-        served: true
-        storage: true
-        subresources:
-          status: {}
+                  type: object
+              type: object
+          served: true
+          storage: true
+          subresources:
+            status: { }
     status:
       acceptedNames:
         kind: ""
         plural: ""
-      conditions: []
-      storedVersions: []
+      conditions: [ ]
+      storedVersions: [ ]
+
 ---
 apiVersion: batch/v1
 kind: Job
@@ -973,7 +1022,7 @@ spec:
       serviceAccountName: kubeslice-install-crds
       containers:
         - name: kubectl
-          image: "alpine/k8s:1.22.9"
+          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.32.2"
           command:
             - /bin/sh
             - -c

@@ -159,7 +159,7 @@ spec:
       serviceAccountName: nsm-install-crds
       containers:
         - name: kubectl
-          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.0.1"
+          image: "{{ .Values.global.imageRegistry }}/alpine-k8s:1.32.2"
           command:
             - /bin/sh
             - -c

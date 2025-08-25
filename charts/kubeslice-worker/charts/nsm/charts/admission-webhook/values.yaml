@@ -8,20 +8,20 @@ global:
   # IF You dont have existing secret then pass all below values it will create new secret "avesha-docker-ips"
   ## MANDOTORY FIELDS IF EXISTING SECRET NOT PRESENT ##
   nsmw_docker_imagePullSecrets:
-    repository: 
+    repository:
     username: ''
     password: ''
     email: ''
-  imageRegistry: docker.io/aveshasystems
+  imageRegistry: ghcr.io/kube-slice
 
 webhookImageRegistry: cmd-admission-webhook-k8s
-webhookImageTag: 1.7.3
+webhookImageTag: v1.7.3
 
 nsmInjectContainerImageRegistry: cmd-nsc
-nsmInjectContainerImageTag: 1.5.13
+nsmInjectContainerImageTag: v1.5.12
 
 nsmInjectInitContainerImageRegistry: cmd-nsc-init
-nsmInjectInitContainerImageTag: 1.5.9
+nsmInjectInitContainerImageTag: v1.5.8
 nsmInitContainerUpdateDNSConfig: true
 
 # nsm admission webhook ns

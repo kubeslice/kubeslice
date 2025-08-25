@@ -80,14 +80,20 @@ spec:
             value: '{{ .Values.openvpn.client.pullPolicy }}'
           - name: AVESHA_SLICE_GW_EDGE_IMAGE
             value: "{{ .Values.gatewayEdge.image }}:{{ .Values.gatewayEdge.tag }}"
-          - name: WORKER_INSTALLER_IMAGE
-            value: "{{ .Values.workerInstaller.image }}:{{ .Values.workerInstaller.tag }}"
+          - name: WIREGUARD_SERVER_IMAGE
+            value: '{{ .Values.wireguard.server.image }}:{{ .Values.wireguard.server.tag }}'
+          - name: WIREGUARD_SERVER_PULLPOLICY
+            value: '{{ .Values.wireguard.server.pullPolicy }}'
+          - name: WIREGUARD_CLIENT_IMAGE
+            value: '{{ .Values.wireguard.client.image }}:{{ .Values.wireguard.client.tag }}'
+          - name: WIREGUARD_CLIENT_PULLPOLICY
+            value: '{{ .Values.wireguard.client.pullPolicy }}'
 
           {{- if .Values.imagePullSecrets }}
           - name: IMAGE_PULL_SECRET_NAME
             value: ""
           {{- end }}
-          
+
         livenessProbe:
           httpGet:
             path: /healthz
@@ -157,9 +163,9 @@ data:
     disabledEvents:
     - LicenseSecretNotFound
   {{ else }}
-  worker.yaml: |- 
+  worker.yaml: |-
     disabledEvents:
-  {{ end }} 
+  {{ end }}
 kind: ConfigMap
 metadata:
   labels:
