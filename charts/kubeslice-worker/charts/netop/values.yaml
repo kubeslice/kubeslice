@@ -13,3 +13,10 @@ netop:
   image: netops
   tag: 0.2.2 
   pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
