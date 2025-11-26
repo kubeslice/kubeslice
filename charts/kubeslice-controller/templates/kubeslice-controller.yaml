@@ -589,6 +589,7 @@ spec:
                 enum:
                 - Static
                 - Dynamic
+                - Local
                 type: string
               sliceSubnet:
                 type: string
@@ -1274,6 +1275,7 @@ spec:
                 enum:
                 - Static
                 - Dynamic
+                - Local
                 type: string
               sliceName:
                 type: string
