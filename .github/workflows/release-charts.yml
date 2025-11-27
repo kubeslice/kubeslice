@@ -105,7 +105,7 @@ jobs:
           version: v3.8.1
           
       - name: Run cert-manager chart-releaser
-        if: ${{ github.event.inputs.cert-manager == 'Yes' }}
+        if: ${{ github.event.inputs['cert-manager'] == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
           charts_dir: charts/
@@ -113,34 +113,34 @@ jobs:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
       - name: Run istio-base chart-releaser
-        if: ${{ github.event.inputs.istio-base == 'Yes' }}
+        if: ${{ github.event.inputs['istio-base'] == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/istio-base/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
       - name: Run istio-discovery chart-releaser
-        if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
+        if: ${{ github.event.inputs['istio-discovery'] == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/istio-discovery/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
       - name: Run kubeslice-controller chart-releaser
-        if: ${{ github.event.inputs.kubeslice-controller == 'Yes' }}
+        if: ${{ github.event.inputs['kubeslice-controller'] == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/kubeslice-controller/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
       - name: Run kubeslice-worker chart-releaser
-        if: ${{ github.event.inputs.kubeslice-worker == 'Yes' }}
+        if: ${{ github.event.inputs['kubeslice-worker'] == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/kubeslice-worker/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -148,7 +148,7 @@ jobs:
         if: ${{ github.event.inputs.prometheus == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/prometheus/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -156,6 +156,6 @@ jobs:
         if: ${{ github.event.inputs.botkube == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/botkube/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
