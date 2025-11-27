@@ -12,16 +12,16 @@ global:
     username: ''
     password: ''
     email: ''
-  imageRegistry: ghcr.io/kube-slice
+  imageRegistry: aveshadev #ghcr.io/kube-slice
 
 webhookImageRegistry: cmd-admission-webhook-k8s
-webhookImageTag: v1.7.3
+webhookImageTag: 1.7.4-SNAPSHOT-05c5e54d
 
 nsmInjectContainerImageRegistry: cmd-nsc
-nsmInjectContainerImageTag: v1.5.12
+nsmInjectContainerImageTag: 1.5.13-SNAPSHOT-0b5e6909
 
 nsmInjectInitContainerImageRegistry: cmd-nsc-init
-nsmInjectInitContainerImageTag: v1.5.8
+nsmInjectInitContainerImageTag: 1.5.9-SNAPSHOT-38fa944a
 nsmInitContainerUpdateDNSConfig: true
 
 # nsm admission webhook ns
