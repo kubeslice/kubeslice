@@ -3,7 +3,7 @@ pluginName: csi.spiffe.io
 
 image:
   # -- The OCI registry to pull the image from
-  registry: docker.io/aveshasystems
+  registry: ghcr.io/kube-slice
   # -- The repository within the registry
   repository: spiffe-csi-driver
   # -- The image pull policy
@@ -66,7 +66,7 @@ nodeSelector: {}
 nodeDriverRegistrar:
   image:
     # -- The OCI registry to pull the image from
-    registry: docker.io/aveshasystems
+    registry: ghcr.io/kube-slice
     # -- The repository within the registry
     repository: sig-storage-csi-node-driver-registrar
     # -- The image pull policy

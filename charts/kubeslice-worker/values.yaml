@@ -1,8 +1,8 @@
 operator:
-  image: docker.io/aveshasystems/worker-operator
+  image: ghcr.io/kube-slice/worker-operator
   pullPolicy: IfNotPresent
   logLevel: INFO
-  tag: 1.4.0
+  tag: v1.6.0-ac
 
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
@@ -17,44 +17,50 @@ cluster:
   endpoint:
 
 router:
-  image: docker.io/aveshasystems/cmd-nse-vl3
-  tag: 1.0.6
+  image: ghcr.io/kube-slice/cmd-nse-vl3
+  tag: v1.0.6
   pullPolicy: IfNotPresent                                                                                     
 
 routerSidecar:
-  image: docker.io/aveshasystems/kubeslice-router-sidecar
-  tag: 1.4.6
+  image: ghcr.io/kube-slice/router-sidecar
+  tag: v1.5.0-ac
   pullPolicy: IfNotPresent
 
 
 gateway:
-  image: docker.io/aveshasystems/gw-sidecar
-  tag: 1.0.3
+  image: ghcr.io/kube-slice/gateway-sidecar
+  tag: v1.1.0-ac
   pullPolicy: IfNotPresent
   logLevel: INFO
 
 gatewayEdge:
-  image: aveshasystems/slicegw-edge
-  tag: 1.0.6
+  image: ghcr.io/kube-slice/slicegw-edge
+  tag: v1.1.0-ac
 
 openvpn:
   server:
-    image: docker.io/aveshasystems/openvpn-server.alpine
-    tag: 1.0.4
+    image: ghcr.io/kube-slice/openvpn-server.alpine
+    tag: v1.0.4
     pullPolicy: IfNotPresent
   client:
-    image: docker.io/aveshasystems/openvpn-client.alpine
-    tag: 1.0.4
+    image: ghcr.io/kube-slice/openvpn-server.alpine
+    tag: v1.0.4
+    pullPolicy: IfNotPresent
+
+wireguard:
+  server:
+    image: ghcr.io/kube-slice/wireguard-server.alpine
+    tag: v0.1.0-ac
+    pullPolicy: IfNotPresent
+  client:
+    image: ghcr.io/kube-slice/wireguard-client.alpine
+    tag: v0.1.0-ac
     pullPolicy: IfNotPresent
 
 dns:
-  image: docker.io/aveshasystems/dns
-  tag: 0.1.4
+  image: ghcr.io/kube-slice/dns
+  tag: v0.2.0-ac
   pullPolicy: IfNotPresent
-
-workerInstaller:
-  image: docker.io/aveshasystems/worker-installer
-  tag: 1.5.0
 
 jaeger:
   enabled: false
@@ -62,13 +68,14 @@ jaeger:
 events:
   disabled: true
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: regcred
 
 # change ths value for intracluster where controller cluster is in same cluster as worker as is different from default
 controllerNamespace: kubeslice-controller
 
 global:
-  imageRegistry: docker.io/aveshasystems
+  imageRegistry: ghcr.io/kube-slice
   profile:
     openshift: false
 

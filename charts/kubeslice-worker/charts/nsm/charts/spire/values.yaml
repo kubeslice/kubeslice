@@ -3,14 +3,14 @@
 # Declare variables to be passed into your templates.
 
 global:
-  imageRegistry: docker.io/aveshasystems
+  imageRegistry: ghcr.io/kube-slice
 
 # Variables added
 spireAgent:
   imageRegistry: spire-agent
   imageTag: 1.9.2
   waitForItImageRegistry: wait-for-it
-  waitForItImageTag: 1.0.2
+  waitForItImageTag: v1.1.0-ac
 
 # TODO: use these values/remove them
 # TODO: figure how how to make this work outside of spire NS

@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: slicegateways.networking.kubeslice.io
 spec:
   group: networking.kubeslice.io
@@ -14,218 +12,237 @@ spec:
     listKind: SliceGatewayList
     plural: slicegateways
     shortNames:
-    - gw
-    - slicegw
+      - gw
+      - slicegw
     singular: slicegateway
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - jsonPath: .status.config.sliceGatewaySubnet
-      name: Subnet
-      type: string
-    - jsonPath: .status.config.sliceGatewayRemoteSubnet
-      name: Remote Subnet
-      type: string
-    - jsonPath: .status.config.sliceGatewayRemoteClusterId
-      name: Remote Cluster
-      type: string
-    - jsonPath: .status.config.sliceGatewayStatus
-      name: GW Status
-      type: string
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: SliceGateway is the Schema for the slicegateways API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: SliceGatewaySpec defines the desired state of SliceGateway
-            properties:
-              siteName:
-                description: SiteName is site name
-                type: string
-              sliceName:
-                description: SliceName is the Name of the slice this gateway is attached
-                  into
-                type: string
-            type: object
-          status:
-            description: SliceGatewayStatus defines the observed state of SliceGateway
-            properties:
-              config:
-                description: SliceGatewayConfig defines the config received from backend
-                properties:
-                  sliceGatewayConnectivityType:
-                    description: SliceGateway Connectivity Type
-                    type: string
-                  sliceGatewayHostType:
-                    description: 'Host Type : server or client'
-                    type: string
-                  sliceGatewayId:
-                    description: UUID of the slice gateway.
-                    type: string
-                  sliceGatewayIntermediateDeployments:
-                    description: Intermediate Slice Gw Deployments
-                    items:
-                      type: string
-                    type: array
-                  sliceGatewayLocalVpnIp:
-                    description: Local VPN IP
-                    type: string
-                  sliceGatewayName:
-                    description: Slice Gateway Name
-                    type: string
-                  sliceGatewayNodePorts:
-                    description: Node port
-                    items:
-                      type: integer
-                    type: array
-                  sliceGatewayProtocol:
-                    description: 'SliceGateway Protocol Type: UDP or TCP'
-                    type: string
-                  sliceGatewayRemoteClusterId:
-                    description: Remote Cluster ID
-                    type: string
-                  sliceGatewayRemoteGatewayId:
-                    description: Remote Gateway ID
-                    type: string
-                  sliceGatewayRemoteNodeIps:
-                    description: Remote Node IPs
-                    items:
-                      type: string
-                    type: array
-                  sliceGatewayRemoteNodePorts:
-                    description: Remote Node Port
-                    items:
-                      type: integer
-                    type: array
-                  sliceGatewayRemoteSubnet:
-                    description: Remote Node Subnet
-                    type: string
-                  sliceGatewayRemoteVpnIp:
-                    description: Remote VPN IP
-                    type: string
-                  sliceGatewayServerLBIps:
-                    description: Slice gateway server LB IPs
-                    items:
-                      type: string
-                    type: array
-                  sliceGatewayStatus:
-                    description: SliceGateway status
-                    type: string
-                  sliceGatewaySubnet:
-                    description: Slice gateway subnet range.
-                    type: string
-                  sliceName:
-                    description: Name of the slice.
-                    type: string
-                  sliceSiteName:
-                    description: Slice gateway subnet range.
-                    type: string
-                type: object
-              configUpdatedOn:
-                description: ConfigUpdatedOn is the time when Config updated from
-                  backend
-                format: int64
-                type: integer
-              connectionContextUpdatedOn:
-                description: ConnectionContextUpdated is the time when context updated
-                  in pod
-                format: int64
-                type: integer
-              gatewayPodStatus:
-                description: gatewayPodStatus is a list that consists of status of
-                  individual gatewaypods
-                items:
+    - additionalPrinterColumns:
+        - jsonPath: .status.config.sliceGatewaySubnet
+          name: Subnet
+          type: string
+        - jsonPath: .status.config.sliceGatewayRemoteSubnet
+          name: Remote Subnet
+          type: string
+        - jsonPath: .status.config.sliceGatewayRemoteClusterId
+          name: Remote Cluster
+          type: string
+        - jsonPath: .status.config.sliceGatewayStatus
+          name: GW Status
+          type: string
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: SliceGateway is the Schema for the slicegateways API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: SliceGatewaySpec defines the desired state of SliceGateway
+              properties:
+                siteName:
+                  description: SiteName is site name
+                  type: string
+                sliceName:
+                  description: SliceName is the Name of the slice this gateway is attached
+                    into
+                  type: string
+              type: object
+            status:
+              description: SliceGatewayStatus defines the observed state of SliceGateway
+              properties:
+                config:
+                  description: SliceGatewayConfig defines the config received from backend
                   properties:
-                    localNsmIP:
+                    sliceGatewayConnectivityType:
+                      description: SliceGateway Connectivity Type
                       type: string
-                    originalPodCreationTS:
-                      description: originalPodCreationTS indicates how old the gw
-                        pod is even if is restarted
-                      format: date-time
+                    sliceGatewayHostType:
+                      description: 'Host Type : server or client'
                       type: string
-                    peerPodName:
+                    sliceGatewayId:
+                      description: UUID of the slice gateway.
                       type: string
-                    podCreationTS:
-                      description: podCreationTS indicates the creation TS of a pod
-                      format: date-time
+                    sliceGatewayIntermediateDeployments:
+                      description: Intermediate Slice Gw Deployments
+                      items:
+                        type: string
+                      type: array
+                    sliceGatewayLocalVpnIp:
+                      description: Local VPN IP
                       type: string
-                    podIP:
+                    sliceGatewayName:
+                      description: Slice Gateway Name
                       type: string
-                    podName:
+                    sliceGatewayNodePorts:
+                      description: Node port
+                      items:
+                        type: integer
+                      type: array
+                    sliceGatewayProtocol:
+                      description: 'SliceGateway Protocol Type: UDP or TCP'
                       type: string
-                    routeRemoved:
-                      format: int32
-                      type: integer
-                    tunnelStatus:
-                      properties:
-                        IntfName:
-                          type: string
-                        Latency:
-                          format: int64
-                          type: integer
-                        LocalIP:
-                          type: string
-                        PacketLoss:
-                          format: int64
-                          type: integer
-                        RemoteIP:
-                          type: string
-                        RxRate:
-                          format: int64
-                          type: integer
-                        Status:
-                          format: int32
-                          type: integer
-                        TxRate:
-                          format: int64
-                          type: integer
-                      type: object
+                    sliceGatewayRemoteClusterId:
+                      description: Remote Cluster ID
+                      type: string
+                    sliceGatewayRemoteGatewayId:
+                      description: Remote Gateway ID
+                      type: string
+                    sliceGatewayRemoteNodeIps:
+                      description: Remote Node IPs
+                      items:
+                        type: string
+                      type: array
+                    sliceGatewayRemoteNodePorts:
+                      description: Remote Node Port
+                      items:
+                        type: integer
+                      type: array
+                    sliceGatewayRemoteSubnet:
+                      description: Remote Node Subnet
+                      type: string
+                    sliceGatewayRemoteVpnIp:
+                      description: Remote VPN IP
+                      type: string
+                    sliceGatewayServerLBIps:
+                      description: Slice gateway server LB IPs
+                      items:
+                        type: string
+                      type: array
+                    sliceGatewayStatus:
+                      description: SliceGateway status
+                      type: string
+                    sliceGatewaySubnet:
+                      description: Slice gateway subnet range.
+                      type: string
+                    sliceGatewayType:
+                      description: Slice gateway vpn type
+                      enum:
+                        - OpenVPN
+                        - Wireguard
+                      type: string
+                    sliceName:
+                      description: Name of the slice.
+                      type: string
+                    sliceSiteName:
+                      description: Slice gateway subnet range.
+                      type: string
                   type: object
-                type: array
-              peerIp:
-                description: PeerIP is the gateway tunnel peer ip
-                type: string
-              podIps:
-                description: PodIPs is the list of Ip of the gateway pods running
-                  in cluster
-                items:
+                configUpdatedOn:
+                  description: ConfigUpdatedOn is the time when Config updated from
+                    backend
+                  format: int64
+                  type: integer
+                connectionContextUpdatedOn:
+                  description: ConnectionContextUpdated is the time when context updated
+                    in pod
+                  format: int64
+                  type: integer
+                gatewayPodStatus:
+                  description: gatewayPodStatus is a list that consists of status of
+                    individual gatewaypods
+                  items:
+                    properties:
+                      localNsmIP:
+                        type: string
+                      originalPodCreationTS:
+                        description: originalPodCreationTS indicates how old the gw
+                          pod is even if is restarted
+                        format: date-time
+                        type: string
+                      peerPodName:
+                        type: string
+                      podCreationTS:
+                        description: podCreationTS indicates the creation TS of a pod
+                        format: date-time
+                        type: string
+                      podIP:
+                        type: string
+                      podName:
+                        type: string
+                      remotePort:
+                        description: |-
+                          RemotePort is the port number this gw pod is connected to on the remote cluster.
+                          Applicable only for gw clients. Would be set to 0 for gw servers.
+                        format: int32
+                        type: integer
+                      routeRemoved:
+                        format: int32
+                        type: integer
+                      tunnelStatus:
+                        description: TunnelStatus is the status of the tunnel between
+                          this gw pod and its peer
+                        properties:
+                          IntfName:
+                            type: string
+                          Latency:
+                            format: int64
+                            type: integer
+                          LocalIP:
+                            type: string
+                          PacketLoss:
+                            format: int64
+                            type: integer
+                          RemoteIP:
+                            type: string
+                          RxRate:
+                            format: int64
+                            type: integer
+                          Status:
+                            description: 'Status is the status of the tunnel. 0: DOWN,
+                            1: UP'
+                            format: int32
+                            type: integer
+                          TunnelState:
+                            description: 'TunnelState is the state of the tunnel in
+                            string format: UP, DOWN, UNKNOWN'
+                            type: string
+                          TxRate:
+                            format: int64
+                            type: integer
+                        type: object
+                    type: object
+                  type: array
+                peerIp:
+                  description: PeerIP is the gateway tunnel peer ip
                   type: string
-                type: array
-              podName:
-                description: Deprecated PodName is the name of the gateway pod running
-                  in cluster
-                type: string
-              podNames:
-                description: PodNames is the list of names of the gateway pods running
-                  in cluster
-                items:
+                podIps:
+                  description: PodIPs is the list of Ip of the gateway pods running
+                    in cluster
+                  items:
+                    type: string
+                  type: array
+                podName:
+                  description: Deprecated PodName is the name of the gateway pod running
+                    in cluster
                   type: string
-                type: array
-              podStatus:
-                description: PodStatus shows whether gateway pod is healthy
-                type: string
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
+                podNames:
+                  description: PodNames is the list of names of the gateway pods running
+                    in cluster
+                  items:
+                    type: string
+                  type: array
+                podStatus:
+                  description: PodStatus shows whether gateway pod is healthy
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
