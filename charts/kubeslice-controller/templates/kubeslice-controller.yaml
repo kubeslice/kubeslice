@@ -225,6 +225,10 @@ spec:
           spec:
             description: ProjectSpec defines the desired state of Project
             properties:
+              defaultSliceCreation:
+                description: If defaultSliceCreation is true, then the default slice
+                  will be created
+                type: boolean
               serviceAccount:
                 description: ServiceAccount is a field of Project. Edit project_types.go to remove/update
                 properties:
@@ -1640,6 +1644,14 @@ rules:
   - list
   - patch
   - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
   - watch
 - apiGroups:
   - ""
