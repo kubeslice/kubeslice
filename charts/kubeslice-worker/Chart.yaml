@@ -3,8 +3,8 @@ description: Kubeslice operator - A Helm chart for managing life-cycle managemen
 name: kubeslice-worker
 type: application
 maintainers:
-  - name: appscode
-    email: support@appscode.com
+  - name: Avesha
+    email: support@avesha.io
 keywords:
 - multicloud
 - multi cloud
