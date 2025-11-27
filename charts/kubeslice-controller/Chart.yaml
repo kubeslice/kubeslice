@@ -28,6 +28,6 @@ keywords:
 - infrastructure
 - application
 kubeVersion: '>= 1.19.0-0'
-home: https://github.com/kube-slice
-version: v2025.7.31
-appVersion: v1.9.0-ac
+home: https://avesha.io/products/product-slice
+version: 1.5.0
+appVersion: 1.4.0
