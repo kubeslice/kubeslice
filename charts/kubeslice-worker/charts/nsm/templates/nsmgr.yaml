@@ -87,7 +87,7 @@ spec:
       imagePullSecrets:
       - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.nsmgr.imageRegistry }}:{{ .Values.nsmgr.imageTag }}'
+        - image: 'aveshadev/cmd-nsmgr:1.5.7-SNAPSHOT-dbeb7aa0'
           imagePullPolicy: IfNotPresent
           {{- if .Values.global.profile.openshift }}
           securityContext:
@@ -170,7 +170,7 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
             failureThreshold: 25
             periodSeconds: 5
-        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.nsmgr.excludePrefixesImageRegistry }}:{{ .Values.nsmgr.excludePrefixesImageTag }}'
+        - image: 'aveshadev/cmd-exclude-prefixes-k8s:1.5.5-SNAPSHOT-bd13ad67'
           imagePullPolicy: IfNotPresent
           {{- if .Values.global.profile.openshift }}
           securityContext:

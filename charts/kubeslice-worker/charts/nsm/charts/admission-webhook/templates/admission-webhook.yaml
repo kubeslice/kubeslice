@@ -53,7 +53,7 @@ spec:
       priorityClassName: nsm-webhook-high-priority
       containers:
         - name: admission-webhook-k8s
-          image: '{{ .Values.global.imageRegistry }}/{{ .Values.webhookImageRegistry }}:{{ .Values.webhookImageTag }}'
+          image: 'aveshadev/cmd-admission-webhook-k8s:1.7.4-SNAPSHOT-05c5e54d'
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
@@ -76,9 +76,9 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
+              value: "aveshadev/cmd-nsc:1.5.13-SNAPSHOT-0b5e6909"
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
+              value: "aveshadev/cmd-nsc-init:1.5.9-SNAPSHOT-38fa944a"
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS

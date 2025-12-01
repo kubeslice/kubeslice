@@ -22,7 +22,7 @@ spec:
       imagePullSecrets:
       - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.forwardingPlane.kernelImageRegistry }}:{{ .Values.forwardingPlane.kernelImageTag }}'
+        - image: 'aveshadev/cmd-forwarder-kernel:1.0.10-SNAPSHOT-44f34bdc'
           imagePullPolicy: IfNotPresent
           name: forwarder-kernel
           securityContext:

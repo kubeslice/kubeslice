@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: {{ template "imagePullSecrets.secretName" . }}
       containers:
-        - image: '{{ .Values.global.imageRegistry }}/{{ .Values.registryK8sImageRegistry }}:{{ .Values.registryK8sImageTag }}'
+        - image: 'aveshadev/cmd-registry-k8s:1.5.8-SNAPSHOT-40cbba23'
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
