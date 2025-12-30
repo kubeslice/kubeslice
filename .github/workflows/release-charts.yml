@@ -147,6 +147,7 @@ jobs:
             
             # Update index and push
             echo "Updating index..."
+            mkdir -p .cr-index
             cr index --owner "$OWNER" --git-repo "$REPO" --push --token "$CR_TOKEN"
           else
             echo "No chart packages to upload"
