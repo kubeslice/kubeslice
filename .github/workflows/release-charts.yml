@@ -82,7 +82,8 @@ on:
         - 'Yes'
         - 'No'
         
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
   release:
@@ -90,6 +91,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Fetch history
         run: git fetch --prune --unshallow
@@ -116,7 +119,7 @@ jobs:
         if: ${{ github.event.inputs.istio-base == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/istio-base/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -124,7 +127,7 @@ jobs:
         if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/istio-discovery/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -148,7 +151,7 @@ jobs:
         if: ${{ github.event.inputs.prometheus == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/prometheus/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
           
@@ -156,6 +159,6 @@ jobs:
         if: ${{ github.event.inputs.botkube == 'Yes' }}
         uses: helm/chart-releaser-action@v1.7.0
         with:
-          charts_dir: charts/botkube/
+          charts_dir: charts/
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
