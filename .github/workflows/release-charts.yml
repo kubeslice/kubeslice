@@ -130,9 +130,15 @@ jobs:
           export OWNER=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
           export REPO=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
           
-          # Package all charts
+          # Package all charts (find each chart directory and package it)
           echo "Packaging charts..."
-          cr package charts/
+          mkdir -p .cr-release-packages
+          for chart_dir in charts/*/; do
+            if [ -f "$chart_dir/Chart.yaml" ]; then
+              echo "Packaging chart: $chart_dir"
+              cr package "$chart_dir"
+            fi
+          done
           
           # Upload with skip-existing flag to avoid errors on existing releases
           if [ -d .cr-release-packages ] && [ "$(ls -A .cr-release-packages/*.tgz 2>/dev/null)" ]; then
