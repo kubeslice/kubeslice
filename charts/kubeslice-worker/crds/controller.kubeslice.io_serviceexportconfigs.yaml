@@ -1,0 +1,118 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: serviceexportconfigs.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: ServiceExportConfig
+    listKind: ServiceExportConfigList
+    plural: serviceexportconfigs
+    singular: serviceexportconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ServiceExportConfig is the Schema for the serviceexportconfigs
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ServiceExportConfigSpec defines the desired state of ServiceExportConfig
+            properties:
+              aliases:
+                description: |-
+                  Alias names for the exported service. The service could be addressed by the alias names
+                  in addition to the slice.local name.
+                items:
+                  type: string
+                type: array
+              serviceDiscoveryEndpoints:
+                description: the service discovery endpoint array
+                items:
+                  properties:
+                    cluster:
+                      description: The ID of the cluster.
+                      type: string
+                    dnsName:
+                      description: the dns_name of the service
+                      type: string
+                    nsmIp:
+                      description: The NSM IP address.
+                      type: string
+                    podName:
+                      description: The name of the pod.
+                      type: string
+                    port:
+                      description: port of the service
+                      format: int32
+                      type: integer
+                  type: object
+                type: array
+              serviceDiscoveryPorts:
+                description: The ports for the given service.
+                items:
+                  properties:
+                    name:
+                      description: The name of the port.
+                      type: string
+                    port:
+                      description: The target port number.
+                      format: int32
+                      type: integer
+                    protocol:
+                      description: The protocol.
+                      type: string
+                    servicePort:
+                      description: The port exposed by service
+                      format: int32
+                      type: integer
+                    serviceProtocol:
+                      description: The service protocol
+                      type: string
+                  type: object
+                type: array
+              serviceName:
+                description: ServiceName is the name of the service
+                type: string
+              serviceNamespace:
+                type: string
+              sliceName:
+                description: The name of the slice.
+                type: string
+              sourceCluster:
+                description: clusterId is the id of the cluster where the service
+                  is available.
+                type: string
+            required:
+            - serviceName
+            - sliceName
+            - sourceCluster
+            type: object
+          status:
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

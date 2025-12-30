@@ -1,0 +1,250 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: workersliceconfigs.worker.kubeslice.io
+spec:
+  group: worker.kubeslice.io
+  names:
+    kind: WorkerSliceConfig
+    listKind: WorkerSliceConfigList
+    plural: workersliceconfigs
+    singular: workersliceconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: WorkerSliceConfig is the Schema for the slice API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: WorkerSliceConfigSpec defines the desired state of Slice
+            properties:
+              clusterSubnetCIDR:
+                type: string
+              externalGatewayConfig:
+                properties:
+                  egress:
+                    properties:
+                      enabled:
+                        type: boolean
+                    type: object
+                  gatewayType:
+                    enum:
+                    - none
+                    - istio
+                    - envoy
+                    type: string
+                  ingress:
+                    properties:
+                      enabled:
+                        type: boolean
+                    type: object
+                  nsIngress:
+                    properties:
+                      enabled:
+                        type: boolean
+                    type: object
+                  vpcServiceAccess:
+                    properties:
+                      egress:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                    type: object
+                type: object
+              ipamClusterOctet:
+                type: integer
+              namespaceIsolationProfile:
+                properties:
+                  allowedNamespaces:
+                    items:
+                      type: string
+                    type: array
+                  applicationNamespaces:
+                    items:
+                      type: string
+                    type: array
+                  isolationEnabled:
+                    default: false
+                    type: boolean
+                type: object
+              octet:
+                type: integer
+              overlayNetworkDeploymentMode:
+                default: single-network
+                enum:
+                - single-network
+                - multi-network
+                - no-network
+                type: string
+              qosProfileDetails:
+                description: QOSProfile is the QOS Profile configuration from backend
+                properties:
+                  bandwidthCeilingKbps:
+                    type: integer
+                  bandwidthGuaranteedKbps:
+                    type: integer
+                  dscpClass:
+                    enum:
+                    - Default
+                    - AF11
+                    - AF12
+                    - AF13
+                    - AF21
+                    - AF22
+                    - AF23
+                    - AF31
+                    - AF32
+                    - AF33
+                    - AF41
+                    - AF42
+                    - AF43
+                    - EF
+                    type: string
+                  priority:
+                    type: integer
+                  queueType:
+                    default: HTB
+                    type: string
+                  tcType:
+                    type: string
+                type: object
+              sliceGatewayProvider:
+                description: WorkerSliceGatewayProvider defines the configuration
+                  for slicegateway
+                properties:
+                  sliceCaType:
+                    default: Local
+                    type: string
+                  sliceGatewayProtocol:
+                    default: UDP
+                    enum:
+                    - TCP
+                    - UDP
+                    type: string
+                  sliceGatewayServiceType:
+                    default: NodePort
+                    enum:
+                    - NodePort
+                    - LoadBalancer
+                    type: string
+                  sliceGatewayType:
+                    default: OpenVPN
+                    type: string
+                type: object
+              sliceIpamType:
+                default: Static
+                enum:
+                - Static
+                - Dynamic
+                - Local
+                type: string
+              sliceName:
+                type: string
+              sliceSubnet:
+                type: string
+              sliceType:
+                default: Application
+                type: string
+            type: object
+          status:
+            description: WorkerSliceConfigStatus defines the observed state of Slice
+            properties:
+              connectedAppPods:
+                items:
+                  description: AppPod defines the app pods connected to slice
+                  properties:
+                    nsmInterface:
+                      description: NsmInterface is the nsm interface of App
+                      type: string
+                    nsmIp:
+                      description: NsmIP is the nsm ip of App
+                      type: string
+                    nsmPeerIp:
+                      description: PeerIp is the nsm peer ip of gateway
+                      type: string
+                    podIp:
+                      description: PodIP is App Pod IP
+                      type: string
+                    podName:
+                      description: PodName is App Pod Name
+                      type: string
+                    podNamespace:
+                      description: PodNamespace is App Pod Namespace
+                      type: string
+                  type: object
+                type: array
+              onboardedAppNamespaces:
+                items:
+                  properties:
+                    name:
+                      type: string
+                  type: object
+                type: array
+              sliceHealth:
+                description: SliceHealth shows the health of the slice in worker cluster
+                properties:
+                  componentStatuses:
+                    description: ComponentStatuses shows the health status of individual
+                      components in the cluster
+                    items:
+                      properties:
+                        component:
+                          description: Component name
+                          type: string
+                        componentHealthStatus:
+                          enum:
+                          - Normal
+                          - Warning
+                          - Error
+                          type: string
+                      required:
+                      - component
+                      - componentHealthStatus
+                      type: object
+                    type: array
+                  lastUpdated:
+                    description: LastUpdated is the timestamp when healthstatus was
+                      updated
+                    format: date-time
+                    type: string
+                  sliceHealthStatus:
+                    description: SliceHealthStatus shows the overall health status
+                      of the slice
+                    enum:
+                    - Normal
+                    - Warning
+                    type: string
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

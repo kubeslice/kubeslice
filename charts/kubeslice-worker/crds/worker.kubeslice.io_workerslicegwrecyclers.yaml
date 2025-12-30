@@ -1,0 +1,89 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: workerslicegwrecyclers.worker.kubeslice.io
+spec:
+  group: worker.kubeslice.io
+  names:
+    kind: WorkerSliceGwRecycler
+    listKind: WorkerSliceGwRecyclerList
+    plural: workerslicegwrecyclers
+    singular: workerslicegwrecycler
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: WorkerSliceGwRecycler is the Schema for the workerslicegwrecyclers
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: WorkerSliceGwRecyclerSpec defines the desired state of WorkerSliceGwRecycler
+            properties:
+              clientRedundancyNumber:
+                type: integer
+              gwPair:
+                properties:
+                  clientId:
+                    type: string
+                  serverId:
+                    type: string
+                type: object
+              request:
+                type: string
+              serverRedundancyNumber:
+                type: integer
+              sliceGwClient:
+                type: string
+              sliceGwServer:
+                type: string
+              sliceName:
+                type: string
+              state:
+                type: string
+            type: object
+          status:
+            description: WorkerSliceGwRecyclerStatus defines the observed state of
+              WorkerSliceGwRecycler
+            properties:
+              client:
+                properties:
+                  recycledClient:
+                    type: string
+                  response:
+                    type: string
+                type: object
+              recycledServers:
+                items:
+                  type: string
+                type: array
+              serversToRecycle:
+                items:
+                  type: string
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,143 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: sliceipams.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: SliceIpam
+    listKind: SliceIpamList
+    plural: sliceipams
+    singular: sliceipam
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.sliceName
+      name: Slice Name
+      type: string
+    - jsonPath: .spec.sliceSubnet
+      name: Slice Subnet
+      type: string
+    - jsonPath: .spec.subnetSize
+      name: Subnet Size
+      type: integer
+    - jsonPath: .status.availableSubnets
+      name: Available Subnets
+      type: integer
+    - jsonPath: .status.totalSubnets
+      name: Total Subnets
+      type: integer
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SliceIpam is the Schema for the sliceipams API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SliceIpamSpec defines the desired state of SliceIpam
+            properties:
+              sliceName:
+                description: SliceName is the name of the slice for which IPAM is
+                  being managed
+                minLength: 1
+                type: string
+              sliceSubnet:
+                description: SliceSubnet is the CIDR block allocated to the slice
+                pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+                type: string
+              subnetSize:
+                default: 24
+                description: SubnetSize defines the size of subnets to be allocated
+                  to clusters
+                maximum: 30
+                minimum: 16
+                type: integer
+            required:
+            - sliceName
+            - sliceSubnet
+            type: object
+          status:
+            description: SliceIpamStatus defines the observed state of SliceIpam
+            properties:
+              allocatedSubnets:
+                description: AllocatedSubnets contains the list of subnet allocations
+                  for clusters
+                items:
+                  description: ClusterSubnetAllocation represents the subnet allocation
+                    for a specific cluster
+                  properties:
+                    allocatedAt:
+                      description: AllocatedAt is the timestamp when the subnet was
+                        allocated
+                      format: date-time
+                      type: string
+                    clusterName:
+                      description: ClusterName is the name of the cluster
+                      type: string
+                    releasedAt:
+                      description: ReleasedAt is the timestamp when the subnet was
+                        released (only set when status="Released")
+                      format: date-time
+                      type: string
+                    status:
+                      default: Allocated
+                      description: Status represents the current status of the subnet
+                        allocation
+                      enum:
+                      - Allocated
+                      - InUse
+                      - Released
+                      type: string
+                    subnet:
+                      description: Subnet is the CIDR block allocated to the cluster
+                      pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+                      type: string
+                  required:
+                  - allocatedAt
+                  - clusterName
+                  - subnet
+                  type: object
+                type: array
+              availableSubnets:
+                description: AvailableSubnets is the number of available subnets that
+                  can be allocated
+                type: integer
+              lastUpdated:
+                description: LastUpdated is the timestamp when the status was last
+                  updated
+                format: date-time
+                type: string
+              totalSubnets:
+                description: TotalSubnets is the total number of subnets that can
+                  be created from the slice subnet
+                type: integer
+            required:
+            - availableSubnets
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

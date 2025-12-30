@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: serviceexports.networking.kubeslice.io
 spec:
   group: networking.kubeslice.io
@@ -46,14 +44,19 @@ spec:
         description: ServiceExport is the Schema for the serviceexports API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -61,8 +64,9 @@ spec:
             description: ServiceExportSpec defines the desired state of ServiceExport
             properties:
               aliases:
-                description: Alias names for the exported service. The service could
-                  be addressed by the alias names in addition to the slice.local name.
+                description: |-
+                  Alias names for the exported service. The service could be addressed by the alias names
+                  in addition to the slice.local name.
                 items:
                   type: string
                 type: array
@@ -83,9 +87,9 @@ spec:
                       description: Name of the port
                       type: string
                     protocol:
-                      default: TCP
-                      description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
-                        to "TCP".
+                      description: |-
+                        Protocol for port. Must be UDP, TCP, or SCTP.
+                        Defaults to "TCP".
                       type: string
                     servicePort:
                       description: Port number of the exported service
@@ -114,43 +118,45 @@ spec:
                     description: matchExpressions is a list of label selector requirements.
                       The requirements are ANDed.
                     items:
-                      description: A label selector requirement is a selector that
-                        contains values, a key, and an operator that relates the key
-                        and values.
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
                       properties:
                         key:
                           description: key is the label key that the selector applies
                             to.
                           type: string
                         operator:
-                          description: operator represents a key's relationship to
-                            a set of values. Valid operators are In, NotIn, Exists
-                            and DoesNotExist.
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
                           type: string
                         values:
-                          description: values is an array of string values. If the
-                            operator is In or NotIn, the values array must be non-empty.
-                            If the operator is Exists or DoesNotExist, the values
-                            array must be empty. This array is replaced during a strategic
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
                             merge patch.
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: atomic
                       required:
                       - key
                       - operator
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                   matchLabels:
                     additionalProperties:
                       type: string
-                    description: matchLabels is a map of {key,value} pairs. A single
-                      {key,value} in the matchLabels map is equivalent to an element
-                      of matchExpressions, whose key field is "key", the operator
-                      is "In", and the values array contains only "value". The requirements
-                      are ANDed.
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
                     type: object
                 type: object
+                x-kubernetes-map-type: atomic
               slice:
                 description: Slice denotes the slice which the app is part of
                 type: string
@@ -163,8 +169,9 @@ spec:
             description: ServiceExportStatus defines the observed state of ServiceExport
             properties:
               aliases:
-                description: Alias names for the exported service. The service could
-                  be addressed by the alias names in addition to the slice.local name.
+                description: |-
+                  Alias names for the exported service. The service could be addressed by the alias names
+                  in addition to the slice.local name.
                 items:
                   type: string
                 type: array
@@ -178,8 +185,9 @@ spec:
                 description: ExportStatus denotes the export status of the service
                 type: string
               exposedPorts:
-                description: ExposedPorts shows a one line representation of ports
-                  and protocols exposed only used to show as a printercolumn
+                description: |-
+                  ExposedPorts shows a one line representation of ports and protocols exposed
+                  only used to show as a printercolumn
                 type: string
               ingressGwEnabled:
                 description: IngressGwEnabled denotes ingress gw is enabled for the
@@ -235,9 +243,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

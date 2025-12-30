@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: serviceimports.networking.kubeslice.io
 spec:
   group: networking.kubeslice.io
@@ -40,14 +38,19 @@ spec:
         description: ServiceImport is the Schema for the serviceimports API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -55,8 +58,9 @@ spec:
             description: ServiceImportSpec defines the desired state of ServiceImport
             properties:
               aliases:
-                description: Alias names for the exported service. The service could
-                  be addressed by the alias names in addition to the slice.local name.
+                description: |-
+                  Alias names for the exported service. The service could be addressed by the alias names
+                  in addition to the slice.local name.
                 items:
                   type: string
                 type: array
@@ -76,9 +80,9 @@ spec:
                       description: Name of the port
                       type: string
                     protocol:
-                      default: TCP
-                      description: Protocol for port. Must be UDP, TCP, or SCTP. Defaults
-                        to "TCP".
+                      description: |-
+                        Protocol for port. Must be UDP, TCP, or SCTP.
+                        Defaults to "TCP".
                       type: string
                     servicePort:
                       description: Port number of the exported service
@@ -143,8 +147,9 @@ spec:
                   type: object
                 type: array
               exposedPorts:
-                description: ExposedPorts shows a one line representation of ports
-                  and protocols exposed only used to show as a printercolumn
+                description: |-
+                  ExposedPorts shows a one line representation of ports and protocols exposed
+                  only used to show as a printercolumn
                 type: string
               importStatus:
                 description: ImportStatus denotes the status of the imported service
@@ -163,9 +168,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

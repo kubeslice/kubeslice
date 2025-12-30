@@ -1,0 +1,297 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: sliceconfigs.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: SliceConfig
+    listKind: SliceConfigList
+    plural: sliceconfigs
+    singular: sliceconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SliceConfig is the Schema for the sliceconfig API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SliceConfigSpec defines the desired state of SliceConfig
+            properties:
+              clusters:
+                items:
+                  type: string
+                type: array
+              externalGatewayConfig:
+                items:
+                  description: ExternalGatewayConfig is the configuration for external
+                    gateways like 'istio', etc/
+                  properties:
+                    clusters:
+                      items:
+                        type: string
+                      type: array
+                    egress:
+                      properties:
+                        enabled:
+                          type: boolean
+                      type: object
+                    gatewayType:
+                      enum:
+                      - none
+                      - istio
+                      - envoy
+                      type: string
+                    ingress:
+                      properties:
+                        enabled:
+                          type: boolean
+                      type: object
+                    nsIngress:
+                      properties:
+                        enabled:
+                          type: boolean
+                      type: object
+                    vpcServiceAccess:
+                      properties:
+                        egress:
+                          properties:
+                            enabled:
+                              type: boolean
+                          type: object
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                          type: object
+                      type: object
+                  type: object
+                type: array
+              maxClusters:
+                default: 16
+                maximum: 32
+                minimum: 2
+                type: integer
+              namespaceIsolationProfile:
+                properties:
+                  allowedNamespaces:
+                    items:
+                      properties:
+                        clusters:
+                          items:
+                            type: string
+                          type: array
+                        namespace:
+                          type: string
+                      type: object
+                    type: array
+                  applicationNamespaces:
+                    items:
+                      properties:
+                        clusters:
+                          items:
+                            type: string
+                          type: array
+                        namespace:
+                          type: string
+                      type: object
+                    type: array
+                  isolationEnabled:
+                    default: false
+                    type: boolean
+                type: object
+              overlayNetworkDeploymentMode:
+                default: single-network
+                enum:
+                - single-network
+                - multi-network
+                - no-network
+                type: string
+              qosProfileDetails:
+                description: The custom QOS Profile Details
+                properties:
+                  bandwidthCeilingKbps:
+                    type: integer
+                  bandwidthGuaranteedKbps:
+                    type: integer
+                  dscpClass:
+                    enum:
+                    - Default
+                    - AF11
+                    - AF12
+                    - AF13
+                    - AF21
+                    - AF22
+                    - AF23
+                    - AF31
+                    - AF32
+                    - AF33
+                    - AF41
+                    - AF42
+                    - AF43
+                    - EF
+                    type: string
+                  priority:
+                    type: integer
+                  queueType:
+                    default: HTB
+                    type: string
+                  tcType:
+                    default: BANDWIDTH_CONTROL
+                    type: string
+                required:
+                - bandwidthCeilingKbps
+                - bandwidthGuaranteedKbps
+                - dscpClass
+                - priority
+                - queueType
+                - tcType
+                type: object
+              renewBefore:
+                description: RenewBefore is used for renew now!
+                format: date-time
+                type: string
+              rotationInterval:
+                default: 30
+                maximum: 90
+                minimum: 30
+                type: integer
+              sliceGatewayProvider:
+                description: WorkerSliceGatewayProvider defines the configuration
+                  for slicegateway
+                properties:
+                  sliceCaType:
+                    default: Local
+                    type: string
+                  sliceGatewayServiceType:
+                    items:
+                      properties:
+                        cluster:
+                          type: string
+                        protocol:
+                          default: UDP
+                          enum:
+                          - TCP
+                          - UDP
+                          type: string
+                        type:
+                          default: NodePort
+                          enum:
+                          - NodePort
+                          - LoadBalancer
+                          type: string
+                      required:
+                      - cluster
+                      - protocol
+                      - type
+                      type: object
+                    type: array
+                  sliceGatewayType:
+                    default: OpenVPN
+                    enum:
+                    - OpenVPN
+                    - Wireguard
+                    type: string
+                required:
+                - sliceCaType
+                - sliceGatewayType
+                type: object
+              sliceIpamType:
+                default: Static
+                enum:
+                - Static
+                - Dynamic
+                - Local
+                type: string
+              sliceSubnet:
+                type: string
+              sliceType:
+                default: Application
+                type: string
+              standardQosProfileName:
+                type: string
+              vpnConfig:
+                description: VPNConfiguration defines the additional (optional) VPN
+                  Configuration to customise
+                properties:
+                  cipher:
+                    default: AES-256-CBC
+                    enum:
+                    - AES-256-CBC
+                    - AES-128-CBC
+                    type: string
+                required:
+                - cipher
+                type: object
+            required:
+            - maxClusters
+            type: object
+          status:
+            description: SliceConfigStatus defines the observed state of SliceConfig
+            properties:
+              kubesliceEvents:
+                items:
+                  properties:
+                    action:
+                      description: Trigger action. Examples - CLUSTER_OFFBOARDING,
+                        NAMESPCE_OFFBOARDING etc
+                      type: string
+                    components:
+                      description: list of effected components on which action failed
+                      items:
+                        type: string
+                      type: array
+                    event:
+                      description: Event name (from monitoring framework schema)
+                      type: string
+                    identifier:
+                      description: Identifier of the component for which the action
+                        was triggered
+                      type: string
+                    isEventRaised:
+                      default: false
+                      description: Flag to determine if kubernetes event is already
+                        raised
+                      type: boolean
+                    reason:
+                      description: Reason message for the event
+                      type: string
+                    timestamp:
+                      description: Timestamp of the event
+                      format: date-time
+                      type: string
+                    type:
+                      description: Type of the event. Can be one of Error, Success
+                        or InProgress
+                      type: string
+                  required:
+                  - event
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

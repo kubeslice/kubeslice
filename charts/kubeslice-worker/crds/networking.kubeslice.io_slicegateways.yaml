@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: slicegateways.networking.kubeslice.io
 spec:
   group: networking.kubeslice.io
@@ -38,14 +36,19 @@ spec:
         description: SliceGateway is the Schema for the slicegateways API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -127,6 +130,12 @@ spec:
                   sliceGatewaySubnet:
                     description: Slice gateway subnet range.
                     type: string
+                  sliceGatewayType:
+                    description: Slice gateway vpn type
+                    enum:
+                    - OpenVPN
+                    - Wireguard
+                    type: string
                   sliceName:
                     description: Name of the slice.
                     type: string
@@ -166,10 +175,18 @@ spec:
                       type: string
                     podName:
                       type: string
+                    remotePort:
+                      description: |-
+                        RemotePort is the port number this gw pod is connected to on the remote cluster.
+                        Applicable only for gw clients. Would be set to 0 for gw servers.
+                      format: int32
+                      type: integer
                     routeRemoved:
                       format: int32
                       type: integer
                     tunnelStatus:
+                      description: TunnelStatus is the status of the tunnel between
+                        this gw pod and its peer
                       properties:
                         IntfName:
                           type: string
@@ -187,8 +204,14 @@ spec:
                           format: int64
                           type: integer
                         Status:
+                          description: 'Status is the status of the tunnel. 0: UP,
+                            1: DOWN'
                           format: int32
                           type: integer
+                        TunnelState:
+                          description: 'TunnelState is the state of the tunnel in
+                            string format: UP, DOWN, UNKNOWN'
+                          type: string
                         TxRate:
                           format: int64
                           type: integer
@@ -223,9 +246,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

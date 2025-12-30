@@ -505,7 +505,7 @@ data:
     kind: CustomResourceDefinition
     metadata:
       annotations:
-        controller-gen.kubebuilder.io/version: v0.7.0
+        controller-gen.kubebuilder.io/version: v0.17.3
       creationTimestamp: null
       name: slicegateways.networking.kubeslice.io
     spec:
@@ -627,6 +627,12 @@ data:
                         type: string
                       sliceGatewaySubnet:
                         description: Slice gateway subnet range.
+                        type: string
+                      sliceGatewayType:
+                        description: Slice gateway vpn type
+                        enum:
+                        - OpenVPN
+                        - Wireguard
                         type: string
                       sliceName:
                         description: Name of the slice.
@@ -973,7 +979,7 @@ spec:
       serviceAccountName: kubeslice-install-crds
       containers:
         - name: kubectl
-          image: "alpine/k8s:1.22.9"
+          image: "{{ .Values.global.imageRegistry }}/{{ .Values.kubectlImage }}:{{ .Values.kubectlImageTag }}"
           command:
             - /bin/sh
             - -c

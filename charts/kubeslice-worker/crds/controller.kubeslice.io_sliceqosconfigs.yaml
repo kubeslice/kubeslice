@@ -1,0 +1,88 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: sliceqosconfigs.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: SliceQoSConfig
+    listKind: SliceQoSConfigList
+    plural: sliceqosconfigs
+    singular: sliceqosconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SliceQoSConfig is the Schema for the sliceqosconfigs API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SliceQoSConfigSpec defines the desired state of SliceQoSConfig
+            properties:
+              bandwidthCeilingKbps:
+                type: integer
+              bandwidthGuaranteedKbps:
+                type: integer
+              dscpClass:
+                enum:
+                - Default
+                - AF11
+                - AF12
+                - AF13
+                - AF21
+                - AF22
+                - AF23
+                - AF31
+                - AF32
+                - AF33
+                - AF41
+                - AF42
+                - AF43
+                - EF
+                type: string
+              priority:
+                type: integer
+              queueType:
+                enum:
+                - HTB
+                type: string
+              tcType:
+                enum:
+                - BANDWIDTH_CONTROL
+                type: string
+            required:
+            - bandwidthCeilingKbps
+            - bandwidthGuaranteedKbps
+            - dscpClass
+            - priority
+            - queueType
+            - tcType
+            type: object
+          status:
+            description: SliceQoSConfigStatus defines the observed state of SliceQoSConfig
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

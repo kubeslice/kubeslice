@@ -76,9 +76,9 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
+              value: "{{ .Values.global.fullImageRegistry }}/{{ .Values.nsmInjectContainerImageRegistry }}:{{ .Values.nsmInjectContainerImageTag }}"
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: "{{ .Values.global.imageRegistry }}/{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
+              value: "{{ .Values.global.fullImageRegistry }}/{{ .Values.nsmInjectInitContainerImageRegistry }}:{{ .Values.nsmInjectInitContainerImageTag }}"
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS

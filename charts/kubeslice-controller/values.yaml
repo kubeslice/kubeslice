@@ -5,17 +5,17 @@
 kubeslice:
   rbacproxy:
     image: gcr.io/kubebuilder/kube-rbac-proxy
-    tag: v0.8.0
+    tag: v0.16.0
   controller:
     logLevel: debug
     rbacResourcePrefix: kubeslice-rbac
     projectnsPrefix: kubeslice
     endpoint:
-    image: docker.io/aveshasystems/kubeslice-controller
-    tag: 1.4.0
+    image: harbor.saas1.smart-scaler.io/avesha/aveshasystems/kubeslice-controller
+    tag: 1.5.0
     pullPolicy: IfNotPresent
   ovpnJob:
-    image: aveshasystems/gateway-certs-generator
-    tag: 0.5.0
+    image: harbor.saas1.smart-scaler.io/avesha/aveshasystems/gateway-certs-generator
+    tag: 0.9.0
   events:
     disabled: false

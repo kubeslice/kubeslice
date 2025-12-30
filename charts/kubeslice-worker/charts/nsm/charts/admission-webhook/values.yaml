@@ -12,13 +12,15 @@ global:
     username: ''
     password: ''
     email: ''
-  imageRegistry: docker.io/aveshasystems
+  imageRegistry: aveshasystems #ghcr.io/kube-slice
+  # Full registry path for harbor images (used in env vars)
+  fullImageRegistry: harbor.saas1.smart-scaler.io/avesha/aveshasystems
 
 webhookImageRegistry: cmd-admission-webhook-k8s
-webhookImageTag: 1.7.3
+webhookImageTag: 1.7.4
 
 nsmInjectContainerImageRegistry: cmd-nsc
-nsmInjectContainerImageTag: 1.5.13
+nsmInjectContainerImageTag: 1.5.15
 
 nsmInjectInitContainerImageRegistry: cmd-nsc-init
 nsmInjectInitContainerImageTag: 1.5.9

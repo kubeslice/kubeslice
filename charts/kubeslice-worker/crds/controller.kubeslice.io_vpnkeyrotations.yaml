@@ -1,0 +1,110 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.3
+  name: vpnkeyrotations.controller.kubeslice.io
+spec:
+  group: controller.kubeslice.io
+  names:
+    kind: VpnKeyRotation
+    listKind: VpnKeyRotationList
+    plural: vpnkeyrotations
+    singular: vpnkeyrotation
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: VpnKeyRotation is the Schema for the vpnkeyrotations API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VpnKeyRotationSpec defines the desired state of VpnKeyRotation
+            properties:
+              certificateCreationTime:
+                description: CertificateCreationTime is a time when certificate for
+                  all the gateway pairs is created/updated
+                format: date-time
+                type: string
+              certificateExpiryTime:
+                description: CertificateExpiryTime is a time when certificate for
+                  all the gateway pairs will expire
+                format: date-time
+                type: string
+              clusterGatewayMapping:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                description: |-
+                  ClusterGatewayMapping represents a map where key is cluster name and value is array of gateways present on that cluster.
+                  This is used to avoid unnecessary reconciliation in worker-operator.
+                type: object
+              clusters:
+                description: clusters contains the list of clusters attached to this
+                  slice
+                items:
+                  type: string
+                type: array
+              rotationCount:
+                description: RotationCount represent the number of times rotation
+                  has been already performed.
+                type: integer
+              rotationInterval:
+                type: integer
+              sliceName:
+                type: string
+            type: object
+          status:
+            description: VpnKeyRotationStatus defines the observed state of VpnKeyRotation
+            properties:
+              currentRotationState:
+                additionalProperties:
+                  description: StatusOfKeyRotation represent per gateway status
+                  properties:
+                    lastUpdatedTimestamp:
+                      format: date-time
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                description: This is map of gateway name to the current rotation state
+                type: object
+              statusHistory:
+                additionalProperties:
+                  items:
+                    description: StatusOfKeyRotation represent per gateway status
+                    properties:
+                      lastUpdatedTimestamp:
+                        format: date-time
+                        type: string
+                      status:
+                        type: string
+                    type: object
+                  type: array
+                description: This is circular array of last n number of rotation status.
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
