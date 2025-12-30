@@ -115,59 +115,35 @@ jobs:
           else
             echo "token=${{ github.token }}" >> $GITHUB_OUTPUT
           fi
+
+      - name: Install chart-releaser
+        run: |
+          curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/v1.7.0/chart-releaser_1.7.0_linux_amd64.tar.gz"
+          tar -xzf cr.tar.gz
+          sudo mv cr /usr/local/bin/cr
+          chmod +x /usr/local/bin/cr
           
-      - name: Run cert-manager chart-releaser
-        if: ${{ github.event.inputs.cert-manager == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
+      - name: Run chart-releaser
+        if: ${{ github.event.inputs.cert-manager == 'Yes' || github.event.inputs.istio-base == 'Yes' || github.event.inputs.istio-discovery == 'Yes' || github.event.inputs.kubeslice-controller == 'Yes' || github.event.inputs.kubeslice-worker == 'Yes' || github.event.inputs.prometheus == 'Yes' || github.event.inputs.botkube == 'Yes' }}
+        run: |
+          export CR_TOKEN="${{ steps.set-token.outputs.token }}"
+          export OWNER=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
+          export REPO=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
           
-      - name: Run istio-base chart-releaser
-        if: ${{ github.event.inputs.istio-base == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
+          # Package all charts
+          echo "Packaging charts..."
+          cr package charts/
           
-      - name: Run istio-discovery chart-releaser
-        if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
-          
-      - name: Run kubeslice-controller chart-releaser
-        if: ${{ github.event.inputs.kubeslice-controller == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
-          
-      - name: Run kubeslice-worker chart-releaser
-        if: ${{ github.event.inputs.kubeslice-worker == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
-          
-      - name: Run prometheus chart-releaser
-        if: ${{ github.event.inputs.prometheus == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
-        env:
-          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
-          
-      - name: Run botkube chart-releaser
-        if: ${{ github.event.inputs.botkube == 'Yes' }}
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          charts_dir: charts/
+          # Upload with skip-existing flag to avoid errors on existing releases
+          if [ -d .cr-release-packages ] && [ "$(ls -A .cr-release-packages/*.tgz 2>/dev/null)" ]; then
+            echo "Uploading chart packages (skipping existing releases)..."
+            cr upload --skip-existing --owner "$OWNER" --git-repo "$REPO" --token "$CR_TOKEN"
+            
+            # Update index and push
+            echo "Updating index..."
+            cr index --owner "$OWNER" --git-repo "$REPO" --push --token "$CR_TOKEN"
+          else
+            echo "No chart packages to upload"
+          fi
         env:
           CR_TOKEN: "${{ steps.set-token.outputs.token }}"
