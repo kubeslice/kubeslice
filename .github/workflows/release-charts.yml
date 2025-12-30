@@ -106,6 +106,15 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: v3.8.1
+
+      - name: Set CR_TOKEN
+        id: set-token
+        run: |
+          if [ -n "${{ secrets.TOKEN }}" ]; then
+            echo "token=${{ secrets.TOKEN }}" >> $GITHUB_OUTPUT
+          else
+            echo "token=${{ github.token }}" >> $GITHUB_OUTPUT
+          fi
           
       - name: Run cert-manager chart-releaser
         if: ${{ github.event.inputs.cert-manager == 'Yes' }}
@@ -113,7 +122,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run istio-base chart-releaser
         if: ${{ github.event.inputs.istio-base == 'Yes' }}
@@ -121,7 +130,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run istio-discovery chart-releaser
         if: ${{ github.event.inputs.istio-discovery == 'Yes' }}
@@ -129,7 +138,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run kubeslice-controller chart-releaser
         if: ${{ github.event.inputs.kubeslice-controller == 'Yes' }}
@@ -137,7 +146,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run kubeslice-worker chart-releaser
         if: ${{ github.event.inputs.kubeslice-worker == 'Yes' }}
@@ -145,7 +154,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run prometheus chart-releaser
         if: ${{ github.event.inputs.prometheus == 'Yes' }}
@@ -153,7 +162,7 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
           
       - name: Run botkube chart-releaser
         if: ${{ github.event.inputs.botkube == 'Yes' }}
@@ -161,4 +170,4 @@ jobs:
         with:
           charts_dir: charts/
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ steps.set-token.outputs.token }}"
