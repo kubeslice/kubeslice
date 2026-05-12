@@ -4,7 +4,7 @@ metadata:
   labels:
     control-plane: controller-manager
   name: kubeslice-operator
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -165,5 +165,5 @@ metadata:
   labels:
     name: event-schema
   name: kubeslice-worker-event-schema-conf
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 
