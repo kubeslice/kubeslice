@@ -83,7 +83,7 @@ metadata:
 data:
   kubeslice-cleanup.sh: |-
     #!/usr/bin/env bash
-    NAMESPACES=(spire kubeslice-system)
+    NAMESPACES=(spire {{ .Release.Namespace }})
     for ns in ${NAMESPACES[@]}
     do
       kubectl get ns $ns -o name  

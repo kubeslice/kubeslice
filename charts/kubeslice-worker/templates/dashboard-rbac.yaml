@@ -17,7 +17,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kubeslice-kubernetes-dashboard
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
 secrets:
   - name: kubeslice-kubernetes-dashboard-creds
 ---
@@ -32,7 +32,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kubeslice-kubernetes-dashboard
-    namespace: kubeslice-system
+    namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: Secret

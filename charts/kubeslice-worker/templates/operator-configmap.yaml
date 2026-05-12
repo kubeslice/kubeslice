@@ -15,4 +15,4 @@ data:
 kind: ConfigMap
 metadata:
   name: kubeslice-manager-config
-  namespace: kubeslice-system
+  namespace: {{ .Release.Namespace }}
