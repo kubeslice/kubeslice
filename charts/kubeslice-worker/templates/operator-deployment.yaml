@@ -55,7 +55,7 @@ spec:
                 name: kubeslice-hub
                 key: namespace
           - name: CLUSTER_NAME
-            value: {{ .Values.cluster.name }}
+            value: {{ required "cluster.name is required" .Values.cluster.name | quote }}
           - name: AVESHA_VL3_ROUTER_IMAGE
             value: "{{ .Values.router.image }}:{{ .Values.router.tag }}"
           - name: AVESHA_VL3_ROUTER_PULLPOLICY
@@ -65,7 +65,7 @@ spec:
           - name: AVESHA_VL3_SIDECAR_IMAGE_PULLPOLICY
             value: {{ .Values.routerSidecar.pullPolicy }}
           - name: CLUSTER_ENDPOINT
-            value: "{{ .Values.cluster.endpoint }}"
+            value: {{ required "cluster.endpoint is required" .Values.cluster.endpoint | quote }}
           - name: AVESHA_GW_SIDECAR_IMAGE
             value: '{{ .Values.gateway.image }}:{{ .Values.gateway.tag }}'
           - name: AVESHA_GW_SIDECAR_IMAGE_PULLPOLICY
