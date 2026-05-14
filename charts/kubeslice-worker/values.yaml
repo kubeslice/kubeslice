@@ -3,6 +3,9 @@ operator:
   pullPolicy: IfNotPresent
   logLevel: INFO
   tag: 1.4.0
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 ## Base64 encoded secret values from controller cluster
 controllerSecret:
