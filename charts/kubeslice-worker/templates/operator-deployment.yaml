@@ -117,6 +117,8 @@ spec:
           - mountPath: /etc/webhook/certs
             name: webhook-certs
             readOnly: true
+          - name: kubeslice-worker-event-schema-conf
+            mountPath: /events/event-schema/
       serviceAccountName: kubeslice-controller-manager
       terminationGracePeriodSeconds: 10
       volumes:
