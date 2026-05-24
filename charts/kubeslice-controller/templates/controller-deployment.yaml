@@ -16,6 +16,9 @@ spec:
         kubectl.kubernetes.io/default-container: manager
         prometheus.io/port: "18080"
         prometheus.io/scrape: "true"
+        {{- with .Values.kubeslice.controller.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         control-plane: controller-manager
     spec:
@@ -85,6 +88,21 @@ spec:
         runAsNonRoot: true
       serviceAccountName: kubeslice-controller-controller-manager
       terminationGracePeriodSeconds: 10
+      {{- with .Values.kubeslice.controller.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubeslice.controller.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubeslice.controller.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubeslice.controller.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
       volumes:
         - name: kubeslice-controller-event-schema-conf
           configMap:
