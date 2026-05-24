@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "kubeslice": {
+      "type": "object",
+      "required": ["controller"],
+      "properties": {
+        "rbacproxy": {
+          "type": "object",
+          "properties": {
+            "image": { "type": "string" },
+            "tag": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "controller": {
+          "type": "object",
+          "required": ["logLevel", "rbacResourcePrefix", "projectnsPrefix"],
+          "properties": {
+            "logLevel": { "type": "string" },
+            "rbacResourcePrefix": { "type": "string" },
+            "projectnsPrefix": { "type": "string" },
+            "endpoint": { "type": ["string", "null"] },
+            "image": { "type": "string" },
+            "tag": { "type": "string" },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "ovpnJob": {
+          "type": "object",
+          "properties": {
+            "image": { "type": "string" },
+            "tag": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "events": {
+          "type": "object",
+          "properties": {
+            "disabled": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
