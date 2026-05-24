@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "operator": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] },
+        "logLevel": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "controllerSecret": {
+      "type": "object",
+      "properties": {
+        "namespace": { "type": ["string", "null"] },
+        "endpoint": { "type": ["string", "null"] },
+        "ca.crt": { "type": ["string", "null"] },
+        "token": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "cluster": {
+      "type": "object",
+      "properties": {
+        "name": { "type": ["string", "null"] },
+        "nodeIp": { "type": ["string", "null"] },
+        "endpoint": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "router": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+      },
+      "additionalProperties": false
+    },
+    "routerSidecar": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+      },
+      "additionalProperties": false
+    },
+    "gateway": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] },
+        "logLevel": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "gatewayEdge": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "openvpn": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "type": "object",
+          "properties": {
+            "image": { "type": "string" },
+            "tag": { "type": "string" },
+            "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+          },
+          "additionalProperties": false
+        },
+        "client": {
+          "type": "object",
+          "properties": {
+            "image": { "type": "string" },
+            "tag": { "type": "string" },
+            "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "dns": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] }
+      },
+      "additionalProperties": false
+    },
+    "workerInstaller": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "kubectl": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "jaeger": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "object",
+      "properties": {
+        "disabled": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "imagePullSecrets": { "type": "array" },
+    "controllerNamespace": { "type": "string" },
+    "global": {
+      "type": "object",
+      "properties": {
+        "imageRegistry": { "type": "string" },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "openshift": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "kubesliceNetworking": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "nsm": { "type": "object" }
+  }
+}
