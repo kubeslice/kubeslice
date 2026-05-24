@@ -85,7 +85,7 @@ spec:
 
           {{- if .Values.imagePullSecrets }}
           - name: IMAGE_PULL_SECRET_NAME
-            value: ""
+            value: {{ (index .Values.imagePullSecrets 0).name | quote }}
           {{- end }}
           
         livenessProbe:
